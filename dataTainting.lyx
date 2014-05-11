@@ -1,0 +1,3056 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language british
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command bibtex
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip smallskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Part*
+Static Data Tainting in JavaScript
+\end_layout
+
+\begin_layout Standard
+We may utilise the concept of data tainting 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "vogt2007cross"
+
+\end_inset
+
+ in order to detect cases where private data may be accessed from within
+ JavaScript.
+ Briefly, data tainting is a concept whereby we mark a particular set of
+ initial functions and operations as being tainted, and then any operations
+ which depend on something tainted also become tainted.
+ In our particular case, we may mark functions which have the potential
+ to retrieve private information as being tainted.
+ This information can then be used to detect whether private information
+ is being used inappropriately; for example, we could check if the arguments
+ to an AJAX call are tainted, indicating that private data could be transmitted
+ to a server.
+\end_layout
+
+\begin_layout Standard
+We will use the concept of 
+\emph on
+static
+\emph default
+ data tainting, as opposed to 
+\emph on
+dynamic
+\emph default
+ data tainting.
+ The former involves performing a pre-runtime analysis of the code itself,
+ while the latter involves analysing the code as it is running.
+ Dynamic data tainting has the property of only analysing the code that
+ is actually executed, whereas static analysis examines all possible execution
+ paths.
+ Which of those is preferable is a matter of point of view - the dynamic
+ approach is technically more precise, in that it only detects that which
+ is 
+\emph on
+actually
+\emph default
+ tainted; however, the static approach allows the program to examine the
+ 
+\emph on
+intent
+\emph default
+ of the program, even if that intent is not carried out.
+ For our purposes, the choice to use static analysis is made largely because
+ it is easier to describe and implement, and has a lower performance overhead.
+\end_layout
+
+\begin_layout Standard
+In order to perform static taint analysis, the first thing we require is
+ some reasonably formal description of data taint, and it's propagation
+ in JavaScript.
+\end_layout
+
+\begin_layout Section*
+Tainted Entities
+\end_layout
+
+\begin_layout Standard
+A 
+\emph on
+tainted entity
+\emph default
+ shall be defined as any JavaScript data construct (that is: variables,
+ functions, objects, and arrays, and anything else which may be represented
+ by an identifier) which has been marked as tainted.
+\end_layout
+
+\begin_layout Section*
+Expressions
+\end_layout
+
+\begin_layout Standard
+**TODO: Be more precise.**
+\end_layout
+
+\begin_layout Standard
+For our purposes, an expression will be defined as some chain of 
+\emph on
+operators
+\emph default
+ (+, *, -, /, &&, ||, etc) and 
+\emph on
+operands
+\emph default
+ (constants, variables, function calls, etc).
+ If any of the operands is a tainted entity, then the expression as a whole
+ shall be considered tainted, although operands which are not already tainted
+ will not be marked as tainted as a result of this.
+\end_layout
+
+\begin_layout Standard
+For example, if the variable 
+\family typewriter
+foo
+\family default
+ is tainted, and 
+\family typewriter
+bar
+\family default
+ is not, then the expression
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+42 * foo + bar;
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+will be tainted as a whole.
+ However, the variable 
+\family typewriter
+bar
+\family default
+ will remain untainted.
+\end_layout
+
+\begin_layout Subsection*
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Function-Calls"
+
+\end_inset
+
+Function Calls
+\end_layout
+
+\begin_layout Standard
+For our purposes, a function call is something of the form
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+func(arg1, arg2, ...);
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where `arg1, arg2, ...' represents some a finite number of arguments to the
+ function call.
+ Each argument may be an expression in its own right.
+ If any of the arguments is tainted, then the whole function 
+\emph on
+call
+\emph default
+ is considered tainted - although the function 
+\emph on
+itself
+\emph default
+ is not marked at tainted as a result of this.
+\end_layout
+
+\begin_layout Section*
+Assignments
+\end_layout
+
+\begin_layout Standard
+For our purposes, an assignment operation is anything of the form
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+identifier = expression;
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If the 
+\family typewriter
+expression
+\family default
+ portion of the operation is tainted, then 
+\emph on
+everything
+\emph default
+ in the assignment portion of the operation is also considered tainted.
+ In particular, assume that in the following code listings, 
+\family typewriter
+x
+\family default
+ is already tainted.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "numbers=left"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+var foo = x;
+\end_layout
+
+\begin_layout Plain Layout
+
+foo = x;
+\end_layout
+
+\begin_layout Plain Layout
+
+foo[i] = x;
+\end_layout
+
+\begin_layout Plain Layout
+
+foo.bar = x;
+\end_layout
+
+\begin_layout Plain Layout
+
+foo = bar = x;
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In line 1, the new variable 
+\family typewriter
+foo
+\family default
+ is marked as tainted.
+ 
+\end_layout
+
+\begin_layout Standard
+In line 2, the existing variable 
+\family typewriter
+foo
+\family default
+ is marked as tainted, regardless of whether it previously was.
+ 
+\end_layout
+
+\begin_layout Standard
+In lines 3 and 4 the variable 
+\family typewriter
+foo
+\family default
+ is marked as tainted; 
+\family typewriter
+foo[i]
+\family default
+ and 
+\family typewriter
+foo.bar
+\family default
+ would technically also be marked as tainted, but this is subsumed by the
+ marking on the parent entity.
+\end_layout
+
+\begin_layout Standard
+In line 5, both 
+\family typewriter
+foo
+\family default
+ and 
+\family typewriter
+bar
+\family default
+ will be marked as tainted.
+\end_layout
+
+\begin_layout Standard
+If an identifier is currently marked as tainted, but is assigned an untainted
+ expression, then the tainted marking will be removed from that identifier
+ from that point forward in the program (unless it is within a tainted scope,
+ see below), until it is assigned another tainted value.
+\end_layout
+
+\begin_layout Section*
+Tainted Scopes
+\end_layout
+
+\begin_layout Standard
+In general, if a block-level statement in some way depends upon a tainted
+ entity or expression, then we create a 
+\emph on
+tainted scope
+\emph default
+ covering the entire scope of the statement, such that the results of all
+ statements within that scope become tainted.
+ Entities which become tainted within a tainted scope remain tainted after
+ the scope ends.
+\end_layout
+
+\begin_layout Standard
+The specific statements this applies to are:
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+if ..
+ else
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+for
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+for ..
+ in
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+for each ..
+ in
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+while
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+do ..
+ while
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+switch
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+with
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+try ..
+ catch ..
+ finally
+\end_layout
+
+\begin_layout Section*
+If ..
+ Else Statements
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+If ..
+ else
+\family default
+ statements are of the form 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+if (conditionalExpression) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	statement1A;
+\end_layout
+
+\begin_layout Plain Layout
+
+	statement2A;
+\end_layout
+
+\begin_layout Plain Layout
+
+	...
+\end_layout
+
+\begin_layout Plain Layout
+
+} else {
+\end_layout
+
+\begin_layout Plain Layout
+
+	statement1B;
+\end_layout
+
+\begin_layout Plain Layout
+
+	statement2B;
+\end_layout
+
+\begin_layout Plain Layout
+
+	...
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+with the usual proviso that the 
+\family typewriter
+else
+\family default
+ section is optional.
+\end_layout
+
+\begin_layout Standard
+If 
+\family typewriter
+conditionaExpression
+\family default
+ is tainted, then we create a tainted scope across both branches of the
+ statement, such that the results of all statements within both branches
+ are considered tainted.
+\end_layout
+
+\begin_layout Standard
+We must also consider the results if 
+\family typewriter
+conditionaExpression
+\family default
+ is not tainted.
+ If some entity is tainted in either branch, this that entity is considered
+ tainted after the if-statement.
+ However, the analysis of that entity in one branch cannot affect the analysis
+ of it in the other branch.
+ For example, suppose that the identifier 
+\family typewriter
+x
+\family default
+ is already tainted, but 
+\family typewriter
+foo
+\family default
+, 
+\family typewriter
+y
+\family default
+, and 
+\family typewriter
+z
+\family default
+ are not:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+var foo = 0;
+\end_layout
+
+\begin_layout Plain Layout
+
+if(y > z) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	foo = x;
+\end_layout
+
+\begin_layout Plain Layout
+
+	...
+\end_layout
+
+\begin_layout Plain Layout
+
+} else {
+\end_layout
+
+\begin_layout Plain Layout
+
+	foo = 42;
+\end_layout
+
+\begin_layout Plain Layout
+
+	...
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Within the 
+\family typewriter
+if
+\family default
+-branch (i.e.
+ when 
+\family typewriter
+y > z
+\family default
+) 
+\family typewriter
+foo
+\family default
+ will be marked as tainted, and this taint may be propagated to other statements
+ in the 
+\family typewriter
+if
+\family default
+-branch.
+ However, 
+\family typewriter
+foo
+\family default
+ is 
+\emph on
+not
+\emph default
+ tainted in the 
+\family typewriter
+else
+\family default
+-branch (i.e.
+ when 
+\family typewriter
+y <= z
+\family default
+), and thus it may not taint other statements in the 
+\family typewriter
+else
+\family default
+-branch (assuming some other statement does not taint it further down that
+ branch).
+\end_layout
+
+\begin_layout Standard
+Furthermore, after the 
+\family typewriter
+if ..
+ else
+\family default
+ statement as a whole is analysed, 
+\family typewriter
+foo
+\family default
+ will be marked as tainted, as it was tainted in at least one branch.
+\end_layout
+
+\begin_layout Section*
+Switch Statements
+\end_layout
+
+\begin_layout Standard
+Tainting of 
+\family typewriter
+switch
+\family default
+ statements behaves similarly to 
+\family typewriter
+if ..
+ then
+\family default
+ statements.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+switch (expression) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	cases;
+\end_layout
+
+\begin_layout Plain Layout
+
+	...
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If 
+\family typewriter
+expression
+\family default
+ is tainted, then we generate a tainted scope across the body of the 
+\family typewriter
+switch
+\family default
+ statement.
+\end_layout
+
+\begin_layout Section*
+Loop Statements
+\end_layout
+
+\begin_layout Standard
+Loop statements, (
+\family typewriter
+for
+\family default
+, 
+\family typewriter
+for ..
+ in
+\family default
+, 
+\family typewriter
+for each ..
+ in
+\family default
+, 
+\family typewriter
+while
+\family default
+, 
+\family typewriter
+do ..
+ while
+\family default
+) behave quite similarly to one another, and to conditional statements.
+ 
+\end_layout
+
+\begin_layout Subsection*
+While Loops
+\end_layout
+
+\begin_layout Standard
+The simplest cases are the 
+\family typewriter
+while
+\family default
+ and 
+\family typewriter
+do ..
+ while
+\family default
+ statements:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+while (condition) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	statements;
+\end_layout
+
+\begin_layout Plain Layout
+
+	...
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+do {
+\end_layout
+
+\begin_layout Plain Layout
+
+	statements;
+\end_layout
+
+\begin_layout Plain Layout
+
+	...
+\end_layout
+
+\begin_layout Plain Layout
+
+} while (condition);
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In both cases, if 
+\family typewriter
+condition
+\family default
+ is tainted, then we generate a tainted scope across the body of the loop.
+\end_layout
+
+\begin_layout Standard
+In 
+\series bold
+all
+\series default
+ cases of loop statements, if the loop invariants are 
+\series bold
+not
+\series default
+ tainted, it is still necessary to perform an analysis of the loop body
+ more than once.
+ This is due to the possibility that there exists an entity which is not
+ tainted prior to the loop being analysed, but which becomes tainted during
+ the loop analysis.
+ Such an entity could conceivably taint entities syntactically above it
+ during subsequent passes of the loop.
+ For example:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+var foo = untainted-entity;
+\end_layout
+
+\begin_layout Plain Layout
+
+var bar = untainted-entity;
+\end_layout
+
+\begin_layout Plain Layout
+
+while(untainted-condition) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	var baz = bar;
+\end_layout
+
+\begin_layout Plain Layout
+
+	bar = foo;
+\end_layout
+
+\begin_layout Plain Layout
+
+	foo = tainted-entity;
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In this example, neither 
+\family typewriter
+bar
+\family default
+ nor 
+\family typewriter
+baz
+\family default
+ would not be tainted during an initial analysis of the loop, as neither
+ the loop condition, nor 
+\family typewriter
+foo
+\family default
+ is initially tainted.
+ However, 
+\family typewriter
+foo
+\family default
+ becomes tainted before the end of the loop, and thus 
+\family typewriter
+bar
+\family default
+ would become tainted on a second loop pass loop pass.
+ Similarly, 
+\family typewriter
+baz
+\family default
+ would become tainted on a third loop pass.
+ It is trivially possible to construct cases whereby some entity would only
+ become tainted after an arbitrarily large number of passes, though such
+ a number would be fixed for each specific loop instance.
+\end_layout
+
+\begin_layout Standard
+Me must therefore repeatedly analyse the loop until we reach a point whereby
+ the taint status of all entities within both the body and the loop invariant(s)
+ do not change between analysis iterations.
+\end_layout
+
+\begin_layout Subsection*
+For Loops
+\end_layout
+
+\begin_layout Standard
+In the case of a 
+\family typewriter
+for
+\family default
+ loop:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+for (initialisation; condition; final-expression) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	statements;
+\end_layout
+
+\begin_layout Plain Layout
+
+	...
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If any of 
+\family typewriter
+initialisation
+\family default
+, 
+\family typewriter
+condition
+\family default
+, or 
+\family typewriter
+final-expression
+\family default
+ are tainted, then we generate a tainted scope across the body of the loop.
+\end_layout
+
+\begin_layout Standard
+In the case of 
+\family typewriter
+for ..
+ in
+\family default
+, and 
+\family typewriter
+for each ..
+ in
+\family default
+ loops:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+for (var in object) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	statements;
+\end_layout
+
+\begin_layout Plain Layout
+
+	...
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+for each (var in object) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	statements;
+\end_layout
+
+\begin_layout Plain Layout
+
+	...
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If 
+\family typewriter
+object
+\family default
+ is tainted, then we generate a tainted scope across the body of the loop.
+\end_layout
+
+\begin_layout Standard
+***TODO: These may be the only loops where it isn't necessary to generate
+ a tainted scope.
+ May be sufficient to taint var.
+ Should check.***
+\end_layout
+
+\begin_layout Section*
+Try ..
+ Catch ..
+ Finally Statements
+\end_layout
+
+\begin_layout Standard
+**TODO: This is a bit complicated due to exceptions**
+\end_layout
+
+\begin_layout Section*
+With Statements
+\end_layout
+
+\begin_layout Standard
+**TODO**
+\end_layout
+
+\begin_layout Section*
+Functions
+\end_layout
+
+\begin_layout Standard
+**TODO: This bit is kind of messy**
+\end_layout
+
+\begin_layout Standard
+JavaScript's functions are a heavily overloaded construct
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+To put it mildly.
+\end_layout
+
+\end_inset
+
+, so their behaviour with respect to data tainting deserves special care
+ and consideration.
+\end_layout
+
+\begin_layout Standard
+Firstly, as we defined in the section on 
+\begin_inset CommandInset ref
+LatexCommand nameref
+reference "sub:Function-Calls"
+
+\end_inset
+
+, if a function is 
+\emph on
+called
+\emph default
+ with tainted arguments, then its return value will also be considered tainted.
+ This is on the principle that the result of any function a programmer would
+ actually write almost certainly depends upon its arguments, and if this
+ is not the case, they are always capable of rewriting it.
+\end_layout
+
+\begin_layout Standard
+Secondly, we must consider the possibility of an object being modified via
+ pass-by-reference.
+ JavaScript does not possess an explicit pass-by-reference mechanism (there
+ is nothing analogous to a C pointer).
+ However, it will implicitly pass objects and arrays by reference.
+ More accurately, it will pass a copy of their location in the runtime's
+ memory, but the effect is still what is generally considered pass-by-reference.
+ Thus we must deal functions such as
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+function foo(obj) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	obj.bar = taintedEntity;
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Here, 
+\family typewriter
+obj.bar
+\family default
+ becomes tainted within the function.
+ Any object the function is called on should therefore become tainted outside
+ the function.
+ 
+\end_layout
+
+\begin_layout Standard
+In general, if a parameter is treated as an object or array within a function,
+ and as a result becomes tainted, then we must treated the parameter itself
+ as tainted.
+ The result is arguments to such parameters in a call of that function must
+ also become tainted.
+ For example
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+var anObject = {bar : "Hello", baz: "World"};
+\end_layout
+
+\begin_layout Plain Layout
+
+foo(anOject);
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Before the call to 
+\family typewriter
+foo
+\family default
+, 
+\family typewriter
+anObject
+\family default
+ is not tainted.
+ After the call it is, because 
+\family typewriter
+foo
+\family default
+'s first parameter is tainted.
+\end_layout
+
+\begin_layout Standard
+It is worth noting that even if a parameter is an object or array, only
+ altering its members has an effect outside the array.
+ Reassigning the parameter itself will not.
+ Thus:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+var obj1 = {foo : "hello"};
+\end_layout
+
+\begin_layout Plain Layout
+
+(function (a) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	a = {foo: "goodbye"};
+\end_layout
+
+\begin_layout Plain Layout
+
+})(obj1);
+\end_layout
+
+\begin_layout Plain Layout
+
+alert(obj1.foo); //Will alert "hello"
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This is important, as it means we may detect whether a parameter is an object
+ or array by the way it is treated within the function - i.e.
+ by use of 
+\family typewriter
+a.b
+\family default
+ or 
+\family typewriter
+a[b]
+\family default
+ notation - and if it is not treated as such, then it does not matter if
+ it is an object or array.
+ **TODO: Make sure this is actually true.**
+\end_layout
+
+\begin_layout Standard
+Just as an object may become tainted via pass-by-reference, we must also
+ consider the possibility whereby arguments taint each other.
+ For example:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+var obj1 = {foo : taintedEntity};
+\end_layout
+
+\begin_layout Plain Layout
+
+var obj2 = {foo : untaintedEntity};
+\end_layout
+
+\begin_layout Plain Layout
+
+(function (a, b) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	var tmp = a.foo;
+\end_layout
+
+\begin_layout Plain Layout
+
+	a.foo = b.foo;
+\end_layout
+
+\begin_layout Plain Layout
+
+	b.foo = tmp;
+\end_layout
+
+\begin_layout Plain Layout
+
+})(obj1,obj2);
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Here, 
+\family typewriter
+obj1
+\family default
+ will become tainted by 
+\family typewriter
+obj2
+\family default
+.
+ 
+\end_layout
+
+\begin_layout Standard
+The solution is to create a relation between the parameters of a particular
+ function.
+ For parameters 
+\begin_inset Formula $p_{1}\ldots\, p_{n}$
+\end_inset
+
+.
+ we say that 
+\begin_inset Formula $\forall i,j\in\left\{ 1\dots\, n\right\} :\, p_{i}\overset{\text{taints}}{\to}p_{j}\iff(p_{j}$
+\end_inset
+
+ is an object or array, and 
+\begin_inset Formula $p_{i}$
+\end_inset
+
+ being tainted at the beginning of the function results in 
+\begin_inset Formula $p_{j}$
+\end_inset
+
+ being tainted at the end of the function
+\begin_inset Formula $)$
+\end_inset
+
+.
+ Because of the idempotent nature of the taint property, and they way in
+ which it spreads, it is sufficient to test each of the function parameters
+ in turn - that is, mark one parameter as tainted and observe its effects
+ upon the other parameters, then un-mark it and repeat for the next parameter.
+\end_layout
+
+\begin_layout Standard
+Once this set of relations is computed, whenever we encounter a call to
+ a function, we may observe which arguments are initially tainted, look
+ up the relations for those arguments, and taint the other function arguments
+ appropriately.
+\end_layout
+
+\begin_layout Section*
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Initially-Tainted-Functions"
+
+\end_inset
+
+Initially Tainted Functions
+\end_layout
+
+\begin_layout Standard
+The ***nth*** thing we require for this approach is to define a set of initial
+ tainted functions.
+ Broadly, this is defined as any function with the capability to retrieve
+ private information from the DOM.
+ To the extent that I have been able to research, the only functions with
+ this capability reside within the DOM API, although there are a 
+\emph on
+lot
+\emph default
+ of APIs available to the browser
+\begin_inset CommandInset citation
+LatexCommand cite
+key "WebAPIs"
+
+\end_inset
+
+, so it is possible that there exist other functions with the capability.
+ In either case, we shall focus our attention on the DOM API, as it is contains
+ by far the most widely used set of functions known to have the capability,
+ and the principles we shall use can easily be extended to other functions
+ and APIs.
+\end_layout
+
+\begin_layout Standard
+The aim is to define the set of initially tainted functions as narrowly
+ as possible, as it is preferable to be as unrestrictive as is safely possible.
+ I do not claim that I have actually 
+\emph on
+achieved
+\emph default
+ this, however - it is likely that there is room to either remove functions,
+ or find a different but equally safe formulation.
+\end_layout
+
+\begin_layout Subsection*
+Specific Functions
+\end_layout
+
+\begin_layout Standard
+**TODO: Work out how to work around the fact that 
+\family typewriter
+document
+\family default
+ itself is unsafe by the standards I'm using here.
+ Probably need to narrow scope a little.**
+\end_layout
+
+\begin_layout Standard
+**TODO: Cross-reference Mozilla DOM ref., and time-permitting W3C specs,
+ to ensure I've got all relevant functions**
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="23" columns="3">
+<features islongtable="true" longtabularalignment="center">
+<column alignment="center" valignment="middle" width="0">
+<column alignment="left" valignment="middle" width="0">
+<column alignment="left" valignment="middle" width="50col%">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+DOM API Object
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Function/Attribute
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Specific Risk
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="3" alignment="center" valignment="middle" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+document
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+anchors
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns an array of all <a> elements in the DOM
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+body
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the 
+\family typewriter
+<body>
+\family default
+ node, which may contain private information.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+documentElement
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the 
+\family typewriter
+<html>
+\family default
+ node, which may contain private information.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+forms
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns an array of all 
+\family typewriter
+<form>
+\family default
+ elements in the DOM.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+getElementsById
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the element with a specified ID
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+getElementsByName
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns all elements with a specified name.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+getElementsByTagName
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns all elements of a specific tag.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+links
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns an array of all links in the DOM.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="3" alignment="center" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+element
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+childNodes
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns an array of the child nodes of an element.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+firstChild
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the first child node of an element.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+getElementsByTagName
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the child node so of an element that are a specific tag.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+id
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns an elements ID attribute.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+innerHTML
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the HTML within an element.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+isEqualNode
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Tests if two nodes are equal.
+ Could be used to compare a node against one containing private data.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+lastChild
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the last child node of an element.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+nextSibling
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Gets the next sibling element of a node.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+nodeValue
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the value of an element, which may include private text.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+parentNode
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the parent node of an element.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+previousSibling
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Gets the previous sibling element of a node.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+removeChild
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the element removed.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+replaceChild
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the element replaced.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+textContent
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the textual content of a node, including all child nodes.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Preventing-Data-Laundering"
+
+\end_inset
+
+Preventing Data Laundering via the DOM
+\end_layout
+
+\begin_layout Standard
+It is relatively simple to write a tainted value to the DOM and then read
+ it back into JavaScript, storing it in an untainted variable in the process.
+ It is also 
+\emph on
+not
+\emph default
+ easy to detect this case using static analysis techniques, as doing so
+ seems to require (at minimum) knowledge of the DOM structure, due to the
+ many different ways it is possible to read in the same DOM node.
+ If we are to use purely static analysis, then it becomes necessary to treat
+ all read operations from the DOM as tainted - or at least, all read operations
+ that occur after a known tainted write.
+\end_layout
+
+\begin_layout Standard
+This is an instance where dynamic data tainting has a substantial advantage
+ over the static case, as using dynamic data tainting would allow us to
+ mark DOM nodes themselves as tainted, thus neatly dealing with this issue.
+\end_layout
+
+\begin_layout Standard
+Because of this problem, need to include the functions listed in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:Additional-tainted-functions."
+
+\end_inset
+
+ in our set of initially tainted functions.
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="19" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top" width="0pt">
+<column alignment="left" valignment="top" width="0pt">
+<column alignment="left" valignment="top" width="50col%">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+DOM API Object
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Function/Object
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Specific Risk
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="3" alignment="center" valignment="middle" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+document
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+images
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns an array of all 
+\family typewriter
+<img>
+\family default
+ elements in the DOM.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+title
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the 
+\family typewriter
+<title>
+\family default
+ element.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="3" alignment="center" valignment="middle" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+element
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+attributes
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns an array of the attributes of an element.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+className
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the class of an element.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+getAttribute
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the value of a particular attribute of an element.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+getAttributeNode
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns a node for a particular attribute of an element.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+hasAttribute
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Checks if an element has a specific attribute.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+hasAttributes
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Checks if an element has any attributes.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+hasChildNodes
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Checks if an element has any child nodes.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+lang
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Can be used to set and get the language code of an element.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+removeAttributeNode
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the attribute node that it removes.
+ Same risks as getAttributeNode.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+style
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Sets or returns the style attribute of an element.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+tabIndex
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Sets or returns the tab index of an element.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+title
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Sets or returns the title attribute of an element.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="3" alignment="center" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+attribute
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+value
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns or sets the value of an attribute.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+getNamedItem
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the attribute node with a specific name.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+removeNamedItem
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the attribute node that it removes.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+setNamedItem
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returned the replaced attribute node.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Additional tainted functions.
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:Additional-tainted-functions."
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Putting The Usability Back In
+\end_layout
+
+\begin_layout Standard
+If we were to mark all the functions mentioned in the 
+\begin_inset CommandInset ref
+LatexCommand nameref
+reference "sec:Initially-Tainted-Functions"
+
+\end_inset
+
+ section as tainted, without offering some form of workaround, it would
+ be virtually impossible to write any meaningfully useful application in
+ JavaScript that was did not (under that model) violate a user's privacy.
+ We therefore need to offer some way that developers may use as many of
+ those functions as possible, but in a way that we can be sure does not
+ violate privacy.
+\end_layout
+
+\begin_layout Standard
+The approach I would put forward is to wrap each of the tainted functions
+ in function which - when run - checks to see if the attempted operation
+ is actually trying to retrieve private data.
+ In the case where private data would not be retrieved, the function would
+ behave in the same was as its unchecked function.
+ In the case where it would be retrieved, the wrapper function would be
+ required to not return the private data.
+ However, there are a number of different ways we could handle the specific
+ behaviour of such functions:
+\end_layout
+
+\begin_layout Standard
+The first is to fail silently - i.e.
+ return 
+\family typewriter
+null
+\family default
+, or some equally non-informative value.
+ This is probably not a good approach, as some of the tainted functions
+ return 
+\family typewriter
+null
+\family default
+ on failure anyway, so it would be difficult for a developer to distinguish
+ why a function had failed.
+ On the other hand, it would present a uniform mode of failure.
+\end_layout
+
+\begin_layout Standard
+The second approach is to fail with feedback - i.e.
+ return some special predefined value (or an exception) indicating failure,
+ and type of failure.
+\end_layout
+
+\begin_layout Standard
+In the case where an array or object is returned, only some elements of
+ which may be private, there also exists the option to remove the private
+ items, while leaving the rest intact.
+ Again, we may either do so silently, or provide notification that items
+ were removed.
+\end_layout
+
+\begin_layout Standard
+Additionally, these possibilities are not mutually exclusive - it would
+ be relatively simple to allow developers to specify the desired behaviour
+ of the wrapper functions as one of the inputs to said functions.
+\end_layout
+
+\begin_layout Standard
+Algorithm 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:A-privacy-safe-version"
+
+\end_inset
+
+ provides a simplistic example of how we might go about wrapping the 
+\family typewriter
+getElementByID
+\family default
+ function.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+function safeGetElementById(id) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  var elem = document.getElementById(id);
+\end_layout
+
+\begin_layout Plain Layout
+
+  var class = elem.className;
+\end_layout
+
+\begin_layout Plain Layout
+
+  if(class.indexOf("private") == -1) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    return elem;
+\end_layout
+
+\begin_layout Plain Layout
+
+  } else {
+\end_layout
+
+\begin_layout Plain Layout
+
+    return null;
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+A privacy-safe version of 
+\family typewriter
+getElementById
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:A-privacy-safe-version"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The result of this is the creation of a set of functions with similar functional
+ity to our set of tainted functions, but providing the guarantee that no
+ private data will be returned by them.
+ This allows developers to utilise said functions without either the developer
+ or the user being concerned about violation of privacy.
+\end_layout
+
+\begin_layout Standard
+It is still necessary to allow use of the tainted functions, as there are
+ legitimate cases where a developer might wish to retrieve private information
+ from the DOM.
+ For example, one might wish to develop an index of private data on the
+ client side, such that it may be quickly searched later.
+ Such an index could be encrypted and stored in the same way as other private
+ data, and updated as needed.
+\end_layout
+
+\begin_layout Subsection*
+Dealing With Writes
+\end_layout
+
+\begin_layout Standard
+As mentioned in the section on 
+\begin_inset CommandInset ref
+LatexCommand nameref
+reference "sub:Preventing-Data-Laundering"
+
+\end_inset
+
+, there exists a problem whereby tainted data may be written back to the
+ DOM, and then read back in, in order to remove the tainted designation.
+ This is not as easily dealt with as merely reading private data from the
+ DOM is, as such data will not necessarily be designated as private when
+ it is written.
+\end_layout
+
+\begin_layout Standard
+We therefore create another set of wrapper functions, this time to guard
+ writes to the DOM.
+ Specifically, the designate any data written via them as being private.
+ This enables our read functions to detect privacy, and act accordingly.
+\end_layout
+
+\begin_layout Standard
+On the data taint detection side, we outright disallow the use of unwrapped
+ write functions on tainted data.
+ The unwrapped functions may still be used on untainted data.
+\end_layout
+
+\begin_layout Standard
+This should not present a problem for developers, as it is always possible
+ to simply keep the tainted data within the JavaScript runtime, instead
+ of using a write-and-read-back pattern, and the private designation - by
+ design - should not have an effect on the way the DOM itself behaves.
+\end_layout
+
+\begin_layout Standard
+**TODO: Specify which functions this affects**
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "LitReview/dataTaint,LitReview/webApis"
+options "plain"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

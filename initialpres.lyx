@@ -1,0 +1,320 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass beamer
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip smallskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+End to End Encryption of Internet Services
+\end_layout
+
+\begin_layout Author
+Joshua Korner-Godsiff - u4685222
+\end_layout
+
+\begin_layout Institute
+Australian National University
+\end_layout
+
+\begin_layout Date
+2013-08-19
+\end_layout
+
+\begin_layout BeginFrame
+
+\end_layout
+
+\begin_layout Standard
+\align center
+The NSA is spying on everyone.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+
+\end_layout
+
+\begin_layout Standard
+\align left
+They've got
+\end_layout
+
+\begin_layout Itemize
+Facebook
+\end_layout
+
+\begin_layout Itemize
+Email
+\end_layout
+
+\begin_layout Itemize
+Skype
+\end_layout
+
+\begin_layout Itemize
+Search
+\end_layout
+
+\begin_layout Itemize
+Phone calls
+\end_layout
+
+\begin_layout Itemize
+Pretty much all unencrypted internet traffic that passes through a US border.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+
+\end_layout
+
+\begin_layout Standard
+\align left
+A number of other countries have similar operations - notably GCHQ in the
+ UK.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+
+\end_layout
+
+\begin_layout Standard
+\align left
+I'd rather they didn't do this.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+
+\end_layout
+
+\begin_layout Standard
+\align left
+Need a solution which obscures data not only from interception, but also
+ (in so far as possible) the server.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+
+\end_layout
+
+\begin_layout Standard
+\align left
+Basic Idea: Encrypt data on the client.
+ Decrypt on a (possibly different) client.
+ Never transmit the decryption keys.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+
+\end_layout
+
+\begin_layout Itemize
+Problem: Has been tried previously, to varying, limited degrees of success.
+\end_layout
+
+\begin_layout Itemize
+Most attempts have been based on stand-alone clients that needed to be set
+ up and operated by the user.
+\end_layout
+
+\begin_layout Itemize
+Fine for specific users, but highly incompatible with the mass-market 
+\begin_inset Quotes eld
+\end_inset
+
+Don't make me think
+\begin_inset Quotes erd
+\end_inset
+
+ approach of most large websites.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+
+\end_layout
+
+\begin_layout Standard
+Need:
+\end_layout
+
+\begin_layout Itemize
+To deliver crypto-code to the user,
+\end_layout
+
+\begin_layout Itemize
+With minimal user involvement and inconvenience,
+\end_layout
+
+\begin_layout Itemize
+In a mass distributable way,
+\end_layout
+
+\begin_layout Itemize
+And not to interfere with business models (if possible).
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+
+\end_layout
+
+\begin_layout Standard
+We need services to deliver JavaScript based crypto code, that's going to
+ be run in a web-browser, and make this somehow secure, and something services
+ would actually do.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+
+\end_layout
+
+\begin_layout Standard
+What could possibly go wrong!
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+
+\end_layout
+
+\begin_layout Standard
+Basic frameworks for this are starting to be implemented in industry.
+ However, we need to examine:
+\end_layout
+
+\begin_layout Itemize
+Where we can actually apply this.
+\end_layout
+
+\begin_layout Itemize
+The whole range of security issues regarding this sort of approach.
+ Particularly, we don't want to cut off server-side data collection if we're
+ just opening it up client side.
+\end_layout
+
+\begin_layout Itemize
+Trust issues.
+ (How do you get around the fact that the server is the one delivering the
+ code).
+\end_layout
+
+\begin_layout Itemize
+Economic/business issues.
+ (Particularly data-mining and targeted advertising).
+\end_layout
+
+\begin_layout Itemize
+Usability issues.
+ (Password recovery, server-side indexing).
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+
+\end_layout
+
+\begin_layout Standard
+And that's what I'm looking at.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\end_body
+\end_document

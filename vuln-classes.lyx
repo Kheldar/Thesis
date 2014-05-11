@@ -1,0 +1,268 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip smallskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Part*
+Vulnerability Classes
+\end_layout
+
+\begin_layout Section*
+Returns document element
+\end_layout
+
+\begin_layout Subsection*
+Description:
+\end_layout
+
+\begin_layout Standard
+Can/does return an element of the document which could potentially contain
+ private information.
+\end_layout
+
+\begin_layout Subsection*
+Definite Cases:
+\end_layout
+
+\begin_layout Itemize
+Document object
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+body
+\end_layout
+
+\begin_layout Itemize
+documentElement
+\end_layout
+
+\begin_layout Itemize
+forms
+\end_layout
+
+\begin_layout Itemize
+getElementBy* functions
+\end_layout
+
+\begin_layout Itemize
+links
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Element object
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+childNodes
+\end_layout
+
+\begin_layout Itemize
+cloneNode
+\end_layout
+
+\begin_layout Itemize
+firstChild
+\end_layout
+
+\begin_layout Itemize
+getElementsByTagName
+\end_layout
+
+\begin_layout Itemize
+innerHTML
+\end_layout
+
+\begin_layout Itemize
+lastChild
+\end_layout
+
+\begin_layout Itemize
+nextSibling
+\end_layout
+
+\begin_layout Itemize
+nodeValue
+\end_layout
+
+\begin_layout Itemize
+parentNode
+\end_layout
+
+\begin_layout Itemize
+previousSibling
+\end_layout
+
+\begin_layout Itemize
+removeChild
+\end_layout
+
+\begin_layout Itemize
+replaceChild
+\end_layout
+
+\begin_layout Itemize
+textContent
+\end_layout
+
+\begin_layout Itemize
+ownerDocument
+\end_layout
+
+\end_deeper
+\begin_layout Subsection*
+Possible Cases
+\end_layout
+
+\begin_layout Itemize
+Document object
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+title
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Element object
+\end_layout
+
+\begin_layout Section*
+Arbitrary Writes to DOM
+\end_layout
+
+\begin_layout Subsection*
+Description
+\end_layout
+
+\begin_layout Standard
+Allows writing novel elements to the DOM, particularly including loading
+ external resources, or executable code.
+\end_layout
+
+\begin_layout Subsection*
+Definite cases
+\end_layout
+
+\begin_layout Itemize
+Document object
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+write
+\end_layout
+
+\begin_layout Itemize
+writeln
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Element object
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+appendChild
+\end_layout
+
+\begin_layout Itemize
+insertBefore
+\end_layout
+
+\begin_layout Itemize
+setAttribute
+\end_layout
+
+\end_deeper
+\begin_layout Subsection*
+Possible Cases
+\end_layout
+
+\begin_layout Itemize
+Document object
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+create* functions.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Element object
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+attributes
+\end_layout
+
+\begin_layout Itemize
+getAttributeNode
+\end_layout
+
+\end_deeper
+\end_body
+\end_document

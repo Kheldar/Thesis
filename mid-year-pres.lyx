@@ -1,0 +1,1093 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass beamer
+\use_default_options true
+\maintain_unincluded_children false
+\language british
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip smallskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+End to End Encryption of Internet Services
+\end_layout
+
+\begin_layout Author
+Joshua Korner-Godsiff - u4685222
+\begin_inset Newline newline
+\end_inset
+
+Supervisor: Roger Clarke
+\end_layout
+
+\begin_layout Institute
+Australian National University
+\end_layout
+
+\begin_layout Date
+2013-11-29
+\end_layout
+
+\begin_layout BeginFrame
+Problem
+\end_layout
+
+\begin_layout Standard
+Private information is increasingly ending up in the hands of unauthorised
+ third parties.
+\end_layout
+
+\begin_layout Standard
+A substantial amount of this information is gained (by third parties) via
+ online services (e.g.
+ Facebook, Google), whom the owner 
+\emph on
+has
+\emph default
+ granted access to.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Problem
+\end_layout
+
+\begin_layout Standard
+Terrible from a privacy perspective.
+ 
+\end_layout
+
+\begin_layout Standard
+Since the Snowden leaks, not great from a business perspective, either.
+\end_layout
+
+\begin_layout Standard
+We seek a way by which users can continue to use these services, without
+ risking their information being accessed by third parties.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Approach
+\end_layout
+
+\begin_layout Standard
+A possible solution to this problem is to encrypt all user data on said
+ user's machine, and not decrypt it (nor provide the decryption mechanism(s)),
+ except to the intended recipient.
+\end_layout
+
+\begin_layout Standard
+This is generally known as 
+\series bold
+end-to-end encryption
+\series default
+.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Approach
+\end_layout
+
+\begin_layout Standard
+Want to have a low barrier to entry, and encrypt as widely as possible.
+\end_layout
+
+\begin_layout Standard
+Do not want to disrupt current browser-centric model of accessing web services.
+\end_layout
+
+\begin_layout Standard
+Suggests a solution distributed by the service itself.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Research Question
+\end_layout
+
+\begin_layout Standard
+Is it feasible to provide end-to-end encryption of internet services via
+ a web-browser, if the cryptography mechanisms are supplied by the service?
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Threat Model
+\end_layout
+
+\begin_layout Standard
+We wish to protect against unauthorised third-parties gaining access to
+ user data
+\end_layout
+
+\begin_layout Itemize
+either on the server, or 
+\end_layout
+
+\begin_layout Itemize
+via manipulating the server in order to get the user (or the user's machine)
+ to disclose the data.
+\end_layout
+
+\begin_layout Standard
+Threats which fit this model are capable of gathering huge quantities of
+ data in one go.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Threat Model
+\end_layout
+
+\begin_layout Standard
+We are not concerned with the security of the connection between the server
+ and user.
+ 
+\end_layout
+
+\begin_layout Itemize
+TLS/SSL works very well, and if an attacker has broken that, everything
+ else will likely fail, anyway.
+\end_layout
+
+\begin_layout Standard
+We are also not concerned with the user machine being compromised.
+ 
+\end_layout
+
+\begin_layout Itemize
+Encryption cannot really help there.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Threat Model
+\end_layout
+
+\begin_layout Standard
+We necessarily must prevent the service itself from having access to the
+ unencrypted user-data.
+ 
+\end_layout
+
+\begin_layout Itemize
+We are trying to protect against server compromise, so we do not want clear-text
+ stored with the server.
+\end_layout
+
+\begin_layout Standard
+However, the service is also a willing participant in enabling the encryption.
+ We therefore treat them, not as a threat, but as an ally that we are unable
+ to trust.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Secure Service Model
+\end_layout
+
+\begin_layout Itemize
+We generate an asymmetric key pair on the client machine.
+ 
+\end_layout
+
+\begin_layout Itemize
+Public key is transmitted to the server.
+\end_layout
+
+\begin_layout Itemize
+Private key is encrypted using a randomly generated symmetric master key.
+\end_layout
+
+\begin_layout Itemize
+The master key is encrypted using a hash derived from the user's password.
+\end_layout
+
+\begin_layout Itemize
+Both the encrypted master key and private key are transmitted to the server.
+\end_layout
+
+\begin_layout Itemize
+The password is 
+\emph on
+not
+\emph default
+ transmitted.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Secure Service Model
+\end_layout
+
+\begin_layout Itemize
+User data is encrypted using a randomly generated symmetric key on the client
+ machine.
+\end_layout
+
+\begin_layout Itemize
+Encrypted data is transmitted to server.
+\end_layout
+
+\begin_layout Itemize
+Symmetric key is encrypted using user's master key, and this encrypted form
+ is also transmitted to the server.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Secure Service Model
+\end_layout
+
+\begin_layout Standard
+Simplest case: The user is the only one to ever retrieve the data
+\end_layout
+
+\begin_layout Itemize
+The server has no way of obtaining the cleartext other than by cracking
+ the password/encryption.
+\end_layout
+
+\begin_layout Standard
+Becomes more complicated when users other than the original need to access
+ the data.
+ (Later).
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Verifiable vs Guaranteed Security
+\end_layout
+
+\begin_layout Standard
+In a model where the service provides the cryptography, we cannot guarantee
+ that security will be provided to every user.
+\end_layout
+
+\begin_layout Itemize
+Not every user of a service will have the means of checking (nor wants to).
+\end_layout
+
+\begin_layout Standard
+What we want is for the security to be verifiable - that is, if a user 
+\emph on
+does
+\emph default
+ want to check, then that is possible.
+\end_layout
+
+\begin_layout Standard
+Trying to create digital `herd immunity'.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Client Side Encryption
+\end_layout
+
+\begin_layout Standard
+There are several possibilities for 
+\emph on
+in-browser
+\emph default
+ cryptography.
+\end_layout
+
+\begin_layout Itemize
+Embed it in the browser.
+\end_layout
+
+\begin_layout Itemize
+Provide it via a plugin.
+\end_layout
+
+\begin_layout Itemize
+Provide it via JavaScript.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Cryptography via Browser
+\end_layout
+
+\begin_layout Standard
+Ideal solution.
+ 
+\end_layout
+
+\begin_layout Standard
+Is 
+\emph on
+slowly
+\emph default
+ happening.
+ All major browsers now support a cryptographically secure RNG.
+\end_layout
+
+\begin_layout Standard
+Requires working through the W3C and browser vendors.
+\end_layout
+
+\begin_layout Standard
+Not feasible in the short term.
+\end_layout
+
+\begin_layout Standard
+Website must provide graceful degradation if the browser does not support
+ it.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Cryptography via Plugin
+\end_layout
+
+\begin_layout Standard
+Good, in that the server cannot mess with it.
+\end_layout
+
+\begin_layout Standard
+Bad, in that it requires active participation from the user (they have to
+ download and install the plugin).
+\end_layout
+
+\begin_layout Standard
+May not be present (so still need to provide graceful degradation).
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Cryptography via JavaScript
+\end_layout
+
+\begin_layout Standard
+Universal solution - works for anyone with JS turned on.
+\end_layout
+
+\begin_layout Standard
+Does not require user participation.
+\end_layout
+
+\begin_layout Standard
+Serious security problem, in that the server is the one providing the crypto-cod
+e.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Cryptography via JavaScript
+\end_layout
+
+\begin_layout Standard
+Two problems:
+\end_layout
+
+\begin_layout Itemize
+Delivering code safely.
+\end_layout
+
+\begin_layout Itemize
+Delivering safe code.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Delivering Code Safely
+\end_layout
+
+\begin_layout Standard
+We need ways to ensure that the code which the user eventually runs is the
+ code which the service intended for them to run.
+\end_layout
+
+\begin_layout Standard
+There are two main points that code could be modified at:
+\end_layout
+
+\begin_layout Itemize
+Before transmission (someone changes the code on the server).
+\end_layout
+
+\begin_layout Itemize
+During transmission (man-in-the-middle).
+\end_layout
+
+\begin_layout Standard
+What happens after transmission will be discussed under the section on safe
+ code.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Delivering Code Safely - Server Side
+\end_layout
+
+\begin_layout Standard
+Take a hash of each JS file.
+ 
+\end_layout
+
+\begin_layout Standard
+Check the hash on the client-side (e.g.
+ via third-party a plugin).
+\end_layout
+
+\begin_layout Standard
+Ensure that having access to the server does not in itself provide a means
+ to update the hash.
+\end_layout
+
+\begin_layout Standard
+For example, use a third party notary (which also provides the plugin to
+ check the hash).
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Delivering Code Safely - In Transmission
+\end_layout
+
+\begin_layout Standard
+TLS/SSL is your only (non-plugin) option.
+\end_layout
+
+\begin_layout Itemize
+Tends to work fairly well.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Delivering Safe Code
+\end_layout
+
+\begin_layout Standard
+Assuming that code is delivered safely, still necessary to ensure that the
+ code does not violate the user's privacy.
+ 
+\end_layout
+
+\begin_layout Standard
+Difficult problem even with static code.
+ If the code can change unpredictably at runtime, it is downright impossible.
+\end_layout
+
+\begin_layout Itemize
+JS is 
+\emph on
+notorious
+\emph default
+ for the malleability of its code.
+\end_layout
+
+\begin_layout Itemize
+Therefore need to eliminate ways in which the code can change unpredictably.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Delivering Safe Code - Code Injection
+\end_layout
+
+\begin_layout Standard
+Badly written JavaScript is easy to inject code into.
+\end_layout
+
+\begin_layout Itemize
+The 
+\family typewriter
+eval
+\family default
+ function, and string arguments to 
+\family typewriter
+setTimeout
+\family default
+ and 
+\family typewriter
+setInterval
+\family default
+ will simply 
+\emph on
+execute
+\emph default
+ whatever is given to them.
+\end_layout
+
+\begin_layout Itemize
+If arguments to these calls can be manipulated, arbitrary code can be executed
+ on the client browser.
+\end_layout
+
+\begin_layout Standard
+The easiest work around is to ban such calls outright.
+ Thankfully, you don't actually lose much.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Delivering Safe Code - Code Injection
+\end_layout
+
+\begin_layout Standard
+We also need to ban:
+\end_layout
+
+\begin_layout Itemize
+Inline JavaScript (
+\family typewriter
+<script>...</script>
+\family default
+).
+\end_layout
+
+\begin_layout Itemize
+DOM-events such as 
+\family typewriter
+onclick
+\family default
+.
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+href
+\family default
+ attributes beginning with 
+\family typewriter
+javascript:
+\family default
+.
+\end_layout
+
+\begin_layout Standard
+As they also enable arbitrary code execution, and are easily modifiable
+ by the server.
+\end_layout
+
+\begin_layout Standard
+Again, very little is lost.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{frame}[fragile]
+\backslash
+frametitle{HTML Manipulation}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Even if you have static JS code, it may still be possible to manipulate
+ the HTML page in order to retrieve private user data.
+ For example, suppose I have the following jQuery code:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "comment={[l]{//}},commentstyle={\color{purple}\ttfamily},identifierstyle={\color{black}},keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},keywordstyle={\color{blue}\bfseries},morecomment={[s]{/*}{*/}},ndkeywords={class, export, boolean, throw, implements, import, this},ndkeywordstyle={\color{darkgray}\bfseries},sensitive=false,stringstyle={\color{red}\ttfamily}"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+//Gets everything inside 
+\end_layout
+
+\begin_layout Plain Layout
+
+//the tag with id "innocent-id"
+\end_layout
+
+\begin_layout Plain Layout
+
+$("#innocent-id").html();
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{frame}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{frame}[fragile]
+\backslash
+frametitle{HTML Manipulation}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+And HTML code:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "keywordstyle={\color{blue}},language=HTML"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+<html>
+\end_layout
+
+\begin_layout Plain Layout
+
+<head>
+\end_layout
+
+\begin_layout Plain Layout
+
+   <!-- Load JavaScript, etc -->
+\end_layout
+
+\begin_layout Plain Layout
+
+</head>
+\end_layout
+
+\begin_layout Plain Layout
+
+<body>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <div id="innocent-id">
+\end_layout
+
+\begin_layout Plain Layout
+
+    Innocuous text.
+\end_layout
+
+\begin_layout Plain Layout
+
+  </div>
+\end_layout
+
+\begin_layout Plain Layout
+
+  <div id="sensitive-data"> 
+\end_layout
+
+\begin_layout Plain Layout
+
+    Private information.
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+  </div>
+\end_layout
+
+\begin_layout Plain Layout
+
+</body>
+\end_layout
+
+\begin_layout Plain Layout
+
+</html>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{frame}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout BeginFrame
+HTML Manipulation
+\end_layout
+
+\begin_layout Standard
+Then it is trivial to retrieve the sensitive information simply by switching
+ the IDs in the HTML.
+\end_layout
+
+\begin_layout Standard
+As HTML is almost always different on a per-user and per-page basis, this
+ is virtually undetectable.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+HTML Manipulation
+\end_layout
+
+\begin_layout Standard
+The fact that we are trying to grab 
+\emph on
+something
+\emph default
+ is detectable though.
+\end_layout
+
+\begin_layout Standard
+The number of core functions capable of this is necessarily limited, 
+\end_layout
+
+\begin_layout Itemize
+Functionality is provided via browser API, not language itself.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+HTML Manipulation - Potential Solution
+\end_layout
+
+\begin_layout Standard
+On decrypting any user data, flag the surrounding DOM element as private
+ (e.g.
+ by attaching a `private' class to it).
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+HTML Manipulation - Potential Solution
+\end_layout
+
+\begin_layout Standard
+Wrap appropriate API calls in functions which check for `private' flag.
+ 
+\end_layout
+
+\begin_layout Itemize
+In the case where no flag is found, operates normally.
+\end_layout
+
+\begin_layout Itemize
+What to do when we 
+\emph on
+do
+\emph default
+ encounter such a flag is unclear.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+HTML Manipulation - Potential Solution
+\end_layout
+
+\begin_layout Itemize
+Simplest case: Don't allow access.
+\end_layout
+
+\begin_layout Itemize
+Problem: A lot of really useful functionality is enabled by allowing access
+ to these elements.
+\end_layout
+
+\begin_layout Itemize
+Example: Indexing.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+HTML Manipulation - Potential Solution
+\end_layout
+
+\begin_layout Itemize
+Possible solution?: Anything derived from decrypted data must itself be
+ encrypted before being sent to the server.
+ 
+\end_layout
+
+\begin_layout Itemize
+How to guarantee that?
+\end_layout
+
+\begin_layout Itemize
+What do we lose by doing that?
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Particularly, can we still do targeted ads?
+\end_layout
+
+\end_deeper
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Key Exchange Problem
+\end_layout
+
+\begin_layout Standard
+Say two users want to exchange/share some private information via a service.
+\end_layout
+
+\begin_layout Standard
+To send the information securely, each needs the other's public key.
+\end_layout
+
+\begin_layout Standard
+The service is quite capable of supplying this (acting as a de-facto PKI).
+ However, it could also substitute its own public key(s), allowing it to
+ read the data before passing it on, without the knowledge of either party.
+\end_layout
+
+\begin_layout Standard
+Need some way to verify accurate key exchange external to the service.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Password Recovery Problem
+\end_layout
+
+\begin_layout Standard
+The fact that a user's password is never communicated to the server makes
+ the problem of password recovery much more difficult.
+ 
+\end_layout
+
+\begin_layout Standard
+Compounded by the fact that losing a password also means losing access to
+ all data that has been encrypted up to that point.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Where I'm going from here.
+\end_layout
+
+\begin_layout Itemize
+Investigate any other ways JS's malleability can problematic.
+\end_layout
+
+\begin_layout Itemize
+Fully define (and code) a `safe' model for JS (as outlined above).
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Insofar as possible, actually check that it is safe.
+\end_layout
+
+\begin_layout Itemize
+Determine the consequences of those restrictions.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Have a crack at the key-exchange problem.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Seems like a fairly classic Man-in-the-Middle, so I'm imagine someone else
+ has solved it.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Also try and solve the password recovery problem.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\end_body
+\end_document

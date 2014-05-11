@@ -1,0 +1,5327 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass book
+\begin_preamble
+\usepackage{url}
+\usepackage[palatino]{anuthesis}
+\usepackage{graphicx}
+\usepackage{makeidx}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language british
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip smallskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Title Goes Here
+\end_layout
+
+\begin_layout Author
+Joshua Korner-Godsiff - u4685222
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Chapter
+Introduction
+\end_layout
+
+\begin_layout Standard
+In the course of using a web-based service, users will often disclose an
+ enormous amount of personal and private information to that service, without
+ necessarily realising where that information may ultimately end up, or
+ how it may be used.
+ Despite the best assurances of these services, their users often have no
+ guarantee - legal, technical, or otherwise - that their data will not end
+ up in the hands of some third party.
+ Such third parties can include anyone from advertising firms, to hackers,
+ to government agencies.
+ The means by which they may acquire such data is similarly varied, from
+ being willingly handed it by the service operator, to acquiring it illegally
+ by compromising the security of the server, to compelling the service operator
+ to disclose it via legal means.
+ As a result of that final avenue in particular, even if a service is committed
+ to protecting the privacy of its users, and takes all reasonable security
+ precautions, it logically cannot guarantee its users privacy so long as
+ it itself has the ability to access the data.
+\end_layout
+
+\begin_layout Standard
+Concern over these potential intrusions has been greatly heightened within
+ the previous several years.
+ The leaks from Edward Snowden **TODO: Reference** have revealed that the
+ United States' National Security Agency (NSA), and Britain's Government
+ Communications Headquarters (GCHQ) have been engaging in almost carte blanche
+ surveillance of internet activity.
+ They reportedly have access to data related to users of Facebook, Google,
+ Microsoft, Apples, Yahoo, and a number of other companies.
+ While most such companies have stated that they only turn over data in
+ response to a legally binding order or subpoena, it has been alleged that
+ the access by intelligence agencies to their data is far more streamlined
+ and direct.
+\end_layout
+
+\begin_layout Standard
+Many other nations' intelligence agencies - notably that of Canada, Australia,
+ and New Zealand, which together with the US and Britain makeup the so-called
+ 
+\begin_inset Quotes eld
+\end_inset
+
+Five Eyes
+\begin_inset Quotes erd
+\end_inset
+
+ alliance, but also including that of Austria, India, Netherlands, Russia,
+ China, Iran, and Syria - are all either known or alleged to be participating
+ in this activity to varying degrees.
+\end_layout
+
+\begin_layout Standard
+Of further concern is the reality that companies and other organisations
+ can be compelled by a court to turn over their encryption keys 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "LavaBitCourtDocs,WiredLavaBitCryptoKeys"
+
+\end_inset
+
+ to a government, an action which undermines one of the cornerstones upon
+ which internet security is based.
+\end_layout
+
+\begin_layout Standard
+**TODO: Credit Card details stolen from Target**
+\end_layout
+
+\begin_layout Standard
+A potential solution lies in the idea of encrypting all sensitive information
+ prior to transmission (for example, in the user's web-browser), and only
+ storing the encrypted data on the server
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+That is, do not store passwords, encryption keys, or plain-text data on
+ the server.
+\end_layout
+
+\end_inset
+
+.
+ Under such a model, even if the server or the service operator is completely
+ compromised, the private data of the users would remain private, as whomever
+ had compromised the server would lack access to the necessary decryption
+ keys.
+ Such a model has already been adopted (at least in some form) by a number
+ of web-based services.
+ Examples include Mega.co.nz 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Mega"
+
+\end_inset
+
+, ***TODO: other examples***
+\end_layout
+
+\begin_layout Standard
+It must be noted that while such an idea has the potential to neatly deal
+ with all three primary threats to privacy (hackers, advertisers, and intelligen
+ce agencies), it is only the last of those which necessitates it.
+ Server-side encryption, combined with proper security procedures, is generally
+ sufficient to mitigate a technical threat from hackers - at least to the
+ point where the difficulties of client-side encryption are not worth the
+ security gain.
+ Legalistic means (either via legislation, or via the service's privacy
+ policy) have the potential to remove the possibility of data being handed
+ to third parties, although many nations lack sufficient protections to
+ make this a reality, and privacy policies may not be sufficiently protective
+ (or enforceable).
+ 
+\end_layout
+
+\begin_layout Standard
+Governments, on the other hand, can exercise considerable power and influence
+ over corporations and other organisations under their jurisdiction
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+I should probably note, at this point, that I don't actually object to governmen
+ts being 
+\emph on
+able
+\emph default
+ to exercise such power.
+ I object to the what they specifically doing with it, and particularly
+ the 
+\emph on
+scope
+\emph default
+ of what they're doing with it.
+\end_layout
+
+\end_inset
+
+, forcing them to act in ways they otherwise would not, including circumventing
+ their own security measures.
+\end_layout
+
+\begin_layout Standard
+The government
+\begin_inset Formula $\leftrightarrow$
+\end_inset
+
+corporation power dynamic is not even the only one to have these concerns
+ - merely the most obvious one.
+ In certain parts of the world, such as Russia, South-East Asia, and Central/Lat
+in America, it is quite conceivable that organised crime syndicates could
+ exercise a similar degree of leverage over internet companies, and other
+ organisations with large amounts of sensitive data.
+\end_layout
+
+\begin_layout Standard
+In this paper, a model sufficient to protect user data against arbitrary
+ server compromises will be presented.
+ The naive version of such a model suffers from a number of serious security
+ concerns which (if unsolved) undermine its core purpose.
+ Potential solutions to the most egregious and foreseeable of these problems
+ will therefore also be presented.
+\end_layout
+
+\begin_layout Standard
+**TODO: The rest of this**
+\end_layout
+
+\begin_layout Section
+Thesis Structure
+\end_layout
+
+\begin_layout Standard
+In Chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Problem-Definition"
+
+\end_inset
+
+, we will 
+\end_layout
+
+\begin_layout Chapter
+Problem Definition
+\begin_inset CommandInset label
+LatexCommand label
+name "chap:Problem-Definition"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Definition of Terms
+\end_layout
+
+\begin_layout Standard
+**TODO: Work out if I actually want to limit this to the WWW.**
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+\noindent
+\align block
+
+\series bold
+Web-Service
+\series default
+ A piece of software, or collection of pieces of software, which provide
+ a service to end users, specifically via the world-wide-web.
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+\noindent
+\align block
+
+\series bold
+Web-Service
+\begin_inset space ~
+\end_inset
+
+Provider
+\series default
+ A company or other organisation responsible for the operation of a web-service.
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+\noindent
+\align block
+
+\series bold
+Server
+\series default
+ The hardware and underlying software stack (OS, web server, database server,
+ etc) upon which the `server-side' portion of a web-service runs.
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+\noindent
+\align block
+
+\series bold
+User
+\series default
+ A person who uses a web-service.
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+\noindent
+\align block
+
+\series bold
+Client
+\series default
+ The hardware and underlying software stack that a user uses to access and
+ interact with a web-service.
+ In applicable cases, includes the browser.
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+\noindent
+\align block
+
+\series bold
+Browser
+\series default
+ A piece of software capable of interpreting HTML, CSS, and JavaScript,
+ and other relevant data in order to render an holistic web page.
+ For our purposes, it is assumed to run on the client, and is used by a
+ user.
+ Examples include Firefox, Chrome, Internet Explorer, Safari, and Opera.
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+
+\series bold
+Sensitive
+\begin_inset space ~
+\end_inset
+
+Data
+\series default
+ Data belonging to and/or originating from the user, and which the user
+ would prefer to be kept private, and/or which could exploited to the user's
+ detriment if it were in the hands of a third party.
+\end_layout
+
+\begin_layout Labeling
+\labelwidthstring 00.00.0000
+
+\series bold
+Service
+\begin_inset space ~
+\end_inset
+
+Critical
+\begin_inset space ~
+\end_inset
+
+Data 
+\series default
+Data without which a web-service is logically unable to perform its intended
+ function.
+ Examples include search terms for a search engine web-service, and the
+ address field in an email.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Quotes eld
+\end_inset
+
+Web-Service
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+Web-Service Provider
+\begin_inset Quotes erd
+\end_inset
+
+ will sometimes be shortened to simply 
+\begin_inset Quotes eld
+\end_inset
+
+Service
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+Service Provider
+\begin_inset Quotes erd
+\end_inset
+
+ throughout this text.
+\end_layout
+
+\begin_layout Section
+Goal
+\end_layout
+
+\begin_layout Standard
+Our overarching goal is to define a model under which the sensitive data
+ that a user supplies to a web-service 
+\emph on
+cannot
+\emph default
+, as a result of supplying it to the service, fall into the hands of any
+ party to whom the user has not granted access.
+ This goal should be achievable without the user's active participation
+ in achieving it.
+ That is to say, all users receive protection, whether or not they seek
+ it.
+\end_layout
+
+\begin_layout Standard
+Furthermore, we seek to allow users to verify that they are receiving such
+ protections.
+ In the case of those users who do not wish to verify it, or who lack the
+ technical competency to verify it, we rely on the existence of other users
+ will do perform the verification.
+ In essence, we seek to create a digital version of the concept of herd
+ immunity, whereby those users who verify their own protection by extension
+ provide some measure of protection to those who are only who do not, under
+ the assumption that the service or any third party would be unable to tell
+ the two apart.
+\end_layout
+
+\begin_layout Standard
+**TODO: Rationale, re: usability**
+\end_layout
+
+\begin_layout Standard
+**TODO: Look into whether navigator.plugins breaks this assumption.**
+\end_layout
+
+\begin_layout Section
+Threat Model
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Threat-Model"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Here we will define the specific range of threats that we seek to protect
+ against.
+ Many of these threats are interrelated in some way.
+\end_layout
+
+\begin_layout Subsection
+Web-Service Provider Compromise
+\end_layout
+
+\begin_layout Standard
+It is assumed to be possible for a third party to either convince or compel
+ the service provider to disclose arbitrary sensitive data that it possesses.
+\end_layout
+
+\begin_layout Standard
+Additionally, it is assumed to be possible for a third party to convince
+ or compel the service provider to alter the operation of the service, in
+ any way, resulting in a the web service being compromised.
+ This includes, but is not limited to, the disclosure of the service-provider's
+ own encryption keys and security certificates, if any, to the third party.
+\end_layout
+
+\begin_layout Standard
+The consequence of these assumptions is that any sensitive data that the
+ service provider possesses cannot be assumed to be secure, even if the
+ service provider has encrypted it.
+\end_layout
+
+\begin_layout Subsection
+Web Service Compromise
+\end_layout
+
+\begin_layout Standard
+It is assumed to be possible for a third party to arbitrarily alter the
+ operation of the web service software, either by modifying the code which
+ runs upon the web server, or by modifying the code which is sent to the
+ client.
+ This could be made possible by compromising the service provider, or by
+ compromising the server, or by compromising the transmission medium; however,
+ which of those vectors is used is not relevant.
+\end_layout
+
+\begin_layout Standard
+The consequence of this assumption is that the operation of the service
+ - including any parts of that software which are sent to the client - may
+ not be that which either the service operator or the user expect it to
+ be, and may in some way be malicious.
+\end_layout
+
+\begin_layout Subsection
+Server Compromise
+\end_layout
+
+\begin_layout Standard
+It is assumed to be possible for a third party to gain full control of the
+ server(s), and all software operating upon it.
+\end_layout
+
+\begin_layout Standard
+The consequence of this assumption is that the third party may then compromise
+ the web service.
+ It may also acquire any sensitive data stored on the server(s).
+\end_layout
+
+\begin_layout Subsection
+Client Compromise
+\end_layout
+
+\begin_layout Standard
+It is assumed that the user's own machine is 
+\emph on
+not
+\emph default
+ compromised by a third party.
+ Protecting against that possibility is beyond the scope of what I am trying
+ to accomplish here; moreover, in the event that the user's machine is compromis
+ed, any attempt to protect sensitive data created on that machine is essentially
+ moot, anyway.
+\end_layout
+
+\begin_layout Standard
+However, we 
+\emph on
+do
+\emph default
+ consider the possibility that a 
+\emph on
+different
+\emph default
+ user's machine is compromised.
+ While it similarly would not be possible to protect the data belonging
+ to this different user, it may be possible to protect the data of the original
+ user from disclosure via the compromised user's machine.
+ **TODO: Do I actually want to do this?**
+\end_layout
+
+\begin_layout Subsection
+Transmission Layer Compromise
+\end_layout
+
+\begin_layout Standard
+It is assumed that transmissions between the client and server may be both
+ intercepted and modified by a third party, including in the case where
+ the connection is encrypted (e.g.
+ by TLS/SSL).
+ This is largely an extension of the possibility that the server/service
+ could be compromised, or the service provider's encryption keys could be
+ discovered.
+\end_layout
+
+\begin_layout Standard
+For sanity's sake, we will not assume that the entire TLS/SSL system is
+ broken
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Recent bugs in OpenSSL to the contrary.
+\end_layout
+
+\end_inset
+
+, since if that is gone, the internet has vastly bigger problems than what
+ we are attempting to address here.
+ 
+\end_layout
+
+\begin_layout Subsection
+Threat Model Summary
+\end_layout
+
+\begin_layout Standard
+We assume that the server; any software running upon it, including the service
+ itself; and the service provider as an organisation may be compromised.
+ We seek to ensure that even under this eventuality, the confidentiality
+ of sensitive data is not compromised.
+\end_layout
+
+\begin_layout Standard
+It must be noted that it is not assumed that the service provider sets out
+ to create a service which intentionally distributes sensitive data, although
+ that is to some extent covered under the threat model.
+ Instead, we assume that the initial intention of the service provider is
+ to create a service which preserves the confidentiality of sensitive data,
+ but that some third party - or indeed, the service provider itself - may
+ attempt to subvert this intention further down the road.
+\end_layout
+
+\begin_layout Standard
+**TODO: Rewrite the below, and put it somewhere appropriate.**
+\end_layout
+
+\begin_layout Standard
+We seek to guarantee that even if the server and/or service is completely
+ compromised, the private data of the service's users will not be available
+ to the server, nor to any attacker controlling it.
+ We may only actually guarantee this in the case where the user is willing
+ and able to perform some verification - for example, by installing a plugin
+ to ensure that their private data is not being transmitted to the server.
+ Where this is not the case, we seek to create a digital form of `herd immunity'
+, whereby those users who do perform verification are sufficient to detect
+ generalised server compromise, and bring it to the attention either of
+ those users who do not, or of the appropriate authorities
+\end_layout
+
+\begin_layout Standard
+In essence, we do not trust the server to deliver what the user expects
+ it to deliver.
+ However, it must be noted that this does not come from an inherent distrust
+ of the service, nor those who created it - in fact, it is assumed that
+ the service and its creators intend to create a secure application - it
+ is simply the fact that we cannot outright trust them.
+\end_layout
+
+\begin_layout Section
+Requirements
+\end_layout
+
+\begin_layout Standard
+As per the threat model (§
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Threat-Model"
+
+\end_inset
+
+), the server and/or the web-service provider is the primary vector through
+ which third parties may acquire sensitive data.
+ Some means of acquiring such data - particularly legal means - cannot be
+ defended against by technical measures if the service has the capability
+ to read the data.
+ Given this, we require a model under which neither the web-service software,
+ nor the server upon which it operates, nor the service provider have the
+ capability to read a user's sensitive data.
+\end_layout
+
+\begin_layout Standard
+Additionally to this, we seek to ensure that compromise of the server, the
+ web-service software, or the operations of the service provider by any
+ third party, in any way, does not jeopardise our ability to guarantee that
+ sensitive data will not end up in the hands of a third party.
+\end_layout
+
+\begin_layout Standard
+An exception is made in the case of service critical data.
+ Even if such data is sensitive, if the user does not supply the data in
+ a readable form to the service, then the service cannot perform its function.
+ We therefore leave protection of such data entirely to the user, in the
+ form of their choice of whether or not to utilise the service.
+\end_layout
+
+\begin_layout Chapter
+Literature Review
+\begin_inset CommandInset label
+LatexCommand label
+name "chap:Literature-Review"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Previous/other work in the area
+\end_layout
+
+\begin_layout Standard
+While there has certainly been work related to many of the individual aspects
+ presented in this paper, with one exception there appears to be a dearth
+ of literature on the topic as a whole.
+\end_layout
+
+\begin_layout Standard
+That exception is a paper entitled 
+\begin_inset Quotes eld
+\end_inset
+
+Building web applications on top of encrypted data using Mylar
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Mylar"
+
+\end_inset
+
+, which contains a 
+\emph on
+substantial
+\emph default
+ overlap with the work presented here
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+It must be noted that the paper was only published in April 2014 (i.e.
+ 4/5ths of the way through this project), leaving insufficient time to significa
+ntly diverge the two.
+\end_layout
+
+\end_inset
+
+.
+ In particular, it presents a model 
+\begin_inset Quotes eld
+\end_inset
+
+to protect data confidentiality in a wide range of web applications against
+ arbitrary server compromises,
+\begin_inset Quotes erd
+\end_inset
+
+ which is equivalent to the goals of this paper, and it reaches many of
+ the same conclusions.
+ The paper covers four main areas: an architecture for protecting users'
+ sensitive data, the sharing of sensitive data between users, the verification
+ of application code, and computation over encrypted data.
+\end_layout
+
+\begin_layout Subsection
+Data Tainting
+\end_layout
+
+\begin_layout Standard
+Data tainting - sometimes also called taint checking - is a well established
+ method of analysing a program to determine which aspects of it are influenced
+ by user input, or other external data sources **TODO: Ref**.
+ Traditionally, it is used as a means to detect vulnerabilities in the program;
+ for example, it can be used to determine if user input (or some derivative
+ thereof) is being fed directly to a SQL database, or as a command to an
+ operating system.
+ However, the same technique may be used to determine if data derived from
+ an HTML DOM is being fed into an XML HTTP Request via JavaScript, which
+ is a use-case we are far more interested in.
+\end_layout
+
+\begin_layout Standard
+To perform taint checking on a piece of software requires four distinct
+ things:
+\end_layout
+
+\begin_layout Enumerate
+The software's source-code.
+\end_layout
+
+\begin_layout Enumerate
+A set of initially tainted data sources - traditionally, this is anything
+ which may contain unsanitised user input.
+\end_layout
+
+\begin_layout Enumerate
+A taint propagation model for the particular programming language(s) that
+ the software is written in, which is used to determine which sets of data
+ throughout the program are (or may be) tainted.
+\end_layout
+
+\begin_layout Enumerate
+A set of `taint-sink' functions - functions which we wish to avoid calling
+ with tainted values.
+\end_layout
+
+\begin_layout Standard
+Data tainting in JavaScript (which we are specifically interested in) has
+ a somewhat sketchy history.
+ Versions 3 and 4 of Netscape Navigator provided in-browser support for
+ the concept, albeit for quite specific security purposes.
+ This support was extended to some versions of Internet Explorer and Opera,
+ but the overall feature was deprecated in JavaScript 1.2, and is no longer
+ officially supported in any major browser **TODO: Ref W3Schools taintEnabled()*
+*.
+\end_layout
+
+\begin_layout Standard
+There are plenty of more modern attempts at implementing some form of taint
+ analysis for JavaScript 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "bloomgarden2012dataflow,DataTainting,DataTaintingJS"
+
+\end_inset
+
+.
+ All of the ones I encountered while researching this used a dynamic analysis
+ approach - that is, they analysed the application as it was running, and
+ only analysed those data paths that were actually executed.
+ This is in contrast to the concept of static analysis, which analyses a
+ program's source code before it is run, and examines all control flow paths.
+ The former is more precise, while the latter is more thorough, and easier
+ to implement.
+\end_layout
+
+\begin_layout Subsection
+Storing Sensitive Data
+\end_layout
+
+\begin_layout Subsection
+Sharing Sensitive Data
+\end_layout
+
+\begin_layout Standard
+**TODO: Public Key Crypto**
+\end_layout
+
+\begin_layout Standard
+Many web-services provide functionality whereby information - including
+ potentially sensitive information - can be shared between users
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Facebook and email being examples
+\end_layout
+
+\end_inset
+
+.
+ If we wish to hide such data from all the intermediaries between the users
+ - including the server - then it becomes necessary to encrypt the data.
+ The question then becomes: how do we distribute those keys to the user(s)
+ at the other end?
+\end_layout
+
+\begin_layout Standard
+The so-called 
+\begin_inset Quotes eld
+\end_inset
+
+key exchange problem
+\begin_inset Quotes erd
+\end_inset
+
+ is a well trodden field of cryptography and security.
+ The Diffie-Hellman key-exchange algorithm 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "DiffieHellman"
+
+\end_inset
+
+ provides a generally sound method of exchanging keys; however, it suffers
+ from two flaws which are critical to our application:
+\end_layout
+
+\begin_layout Itemize
+It fails to provide a method for one user to establish the identity of another.
+\end_layout
+
+\begin_layout Itemize
+It assumes that even if the channel by which keys are exchanged is monitored,
+ it may not be tampered with by a third party (i.e.
+ the channel is not vulnerable to an man-in-the-middle attack).
+\end_layout
+
+\begin_layout Standard
+The second flaw is a particular problem in our case, since the server necessaril
+y facilitates communication between users, and it is assumed to be compromised.
+\end_layout
+
+\begin_layout Standard
+There exists a number of methods which attempt to mitigate this problem.
+ The most prominent is the idea of a centralised public key infrastructure
+ (PKI) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "OpenPGP"
+
+\end_inset
+
+.
+ Under a PKI scheme, a central known entity - generally termed the certificate
+ authority (CA) - maintains a binding between public keys and the identifies
+ of the user(s) they belong to.
+ The public keys of the CA are distributed along with any software that
+ uses it, allowing the software to establish a secure connection between
+ itself and the CA.
+ This in turn allows such software to both look up the public key belonging
+ to a particular identity, and to verify that a particular public key does
+ in fact belong to a particular user.
+\end_layout
+
+\begin_layout Standard
+The downside of a centralised PKI is that it requires trust of the CA.
+ This is not necessarily a bad thing - most secure communications on the
+ internet work on this basis - it is still not ideal.
+\end_layout
+
+\begin_layout Standard
+There also exists the concept of a 
+\emph on
+de
+\emph default
+centralised PKI, often termed a 
+\begin_inset Quotes eld
+\end_inset
+
+web of trust
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "OpenPGP"
+
+\end_inset
+
+.
+ Under such a scheme, the users themselves issue certificates binding their
+ public keys to their identity.
+ These certificates are then signed by other users, based on whether or
+ not they trust the key to be valid.
+ Given sufficient users signing each others' keys, it becomes possible to
+ establish the identity and public key of a particular user based on who
+ signs their certificate, and who in turn signs 
+\emph on
+those
+\emph default
+ users' certificates, and so forth.
+\end_layout
+
+\begin_layout Standard
+Like most decentralised systems, web of trusts do not actually preclude
+ working with a central authority, provided most people in the system trust
+ that authority.
+ The downside to web of trust systems is that they are considerably more
+ difficult to set up and maintain than a centralised one.
+\end_layout
+
+\begin_layout Section
+Industry Review
+\end_layout
+
+\begin_layout Standard
+Despite persistent searching, there nevertheless seems to exists a dearth
+ of academic literature on some of the topics covered in this paper.
+ It was the activity of the internet-application industry which first led
+ me to investigate the possibility of end-to-end encryption in a browser,
+ and the industry does 
+\emph on
+not
+\emph default
+ seem to lack interest or activity in this area - particularly since the
+ Edward Snowden leaks **TODO: Reference**.
+ Because of this, it seems prudent to touch on the major points of interest
+ that exist on the industrial side, and from less traditional sources.
+\end_layout
+
+\begin_layout Standard
+**TODO: Everything below here needs to be restructured/rewritten.**
+\end_layout
+
+\begin_layout Subsection*
+MEGA
+\end_layout
+
+\begin_layout Standard
+Mega.co.nz has created a file storage/sharing service which attempts to ensure
+ privacy by using in-browser end-to-end encryption.
+ It encrypts the files it stores using randomly generated symmetric keys.
+ These keys are in turn encrypted with a symmetric master key, which is
+ itself encrypted using a hash derived from the user's password.
+ This allows the encryption keys to be stored on the company's servers without
+ actually disclosing them.
+\begin_inset CommandInset citation
+LatexCommand cite
+key "MegaDoc"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Additionally, each user has account has an RSA key pair associated with
+ it.
+ The private portion is encrypted with the symmetric master key, allowing
+ it to also be stored on the server.
+ The key pair is used to allow users to exchange files, and also for authenticat
+ion.
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Mega"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Mega identifies three large-scale security vulnerabilities with respect
+ to their service.
+\end_layout
+
+\begin_layout Itemize
+A man-in-the-middle attack, involving 
+\begin_inset Quotes eld
+\end_inset
+
+issuing a valid duplicate SSL certificate in combination with DNS forging
+ and/or attacks on our BGP routes
+\begin_inset Quotes erd
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "MegaSecurityAndPrivacy"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+A third party gaining access to the servers hosting https://mega.co.nz/index.html,
+ and replacing that file with a forged version.
+\end_layout
+
+\begin_layout Itemize
+A third party gaining access to their servers, and creating forged key requests
+ for existing data shares.
+\end_layout
+
+\begin_layout Standard
+They claim that the latter two vulnerabilities are detectable in the client.
+\end_layout
+
+\begin_layout Subsection*
+Existing Criticisms
+\end_layout
+
+\begin_layout Standard
+Matasano Security offers a number of valid (and not so valid) criticisms
+ of JavaScript based cryptography 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "MatasanoJSCryptoHarmful"
+
+\end_inset
+
+.
+ Their main concern is what they term the 
+\begin_inset Quotes eld
+\end_inset
+
+chicken-egg problem
+\begin_inset Quotes erd
+\end_inset
+
+ of a service delivering crypto code to the browser.
+ They argue that if you cannot trust a network to deliver a password, or
+ do not trust a server to keep a user's secrets, then you cannot trust that
+ same server or network to deliver security code.
+\end_layout
+
+\begin_layout Standard
+I agree that this is the most substantial problem blocking widespread uptake
+ of the idea.
+ However, it may not be insurmountable.
+ The network-delivery problem (as they readily admit) can be solved using
+ TLS/SSL.
+ Trusting the code that is delivered is another matter, and requires finding
+ some way to verify that what is being delivered is both the correct code
+ (i.e.
+ unmodified by some third party), and not itself malicious.
+\end_layout
+
+\begin_layout Standard
+Another substantial criticism they level is the lack of a cryptographically
+ secure RNG in JavaScript.
+ However, I believe this problem has been solved (or at least, is in the
+ process of being solved) by 
+\family typewriter
+window.crypto.getRandomValues
+\family default
+ - a secure RNG, which is a part of the WebCryptoAPI specification currently
+ being developed by the W3C
+\begin_inset CommandInset citation
+LatexCommand cite
+key "W3CWebCryptoAPI"
+
+\end_inset
+
+, and which has been implemented in current or upcoming versions of all
+ major browsers 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "MozGetRandomValues"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+They also claim that the 
+\begin_inset Quotes eld
+\end_inset
+
+view-source transparency is illusory
+\begin_inset Quotes erd
+\end_inset
+
+.
+ That is, that the inherently open-source nature of browser-executed JavaScript
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+All browsers that I am aware of provide a tool to view the source-code.
+\end_layout
+
+\end_inset
+
+ does not actually help, since even a skilled cryptographer would have difficult
+y determining if a given piece of JavaScript code is secure - particularly
+ due to JavaScript's malleable runtime environment.
+ While this is partially correct, it is also disingenuous - the benefit
+ of view-source transparency is that a person can read the code, and 
+\emph on
+know
+\emph default
+ that it is the same code being executed in the browser - something impossible
+ with compiled binaries 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ThoughtsOnJSCrypto"
+
+\end_inset
+
+.
+ The result is that analysis and verification of the code - both by automated
+ tools and by third-parties - is possible, particularly if some of the malleabil
+ity of JavaScript is disallowed (for example, by disallowing the use of
+ the 
+\family typewriter
+eval
+\family default
+ function).
+\end_layout
+
+\begin_layout Subsection*
+Man In The Middle Attack
+\end_layout
+
+\begin_layout Standard
+In any service where users may exchange data using the service, there is
+ the potential for a man-in-the-middle attack to be executed by the service
+ (or by some third party who as gained access to their servers)
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ThoughtsOnJSCrypto"
+
+\end_inset
+
+.
+ Because the server must also act as a de facto public key infrastructure
+ - in that it facilitates the exchange of public keys between users - it
+ has the capability to provide a public key for which it controls the private
+ key to the user sending information, and decrypt the information for itself
+ before forwarding it on to the receiving user.
+ 
+\end_layout
+
+\begin_layout Standard
+In order to negate this possibility, it is necessary for there to be some
+ way to verify that a particular public key belongs to the user that the
+ service claims it belongs to.
+\end_layout
+
+\begin_layout Subsection*
+The Assumed Security of SSL
+\end_layout
+
+\begin_layout Standard
+Most discussions of internet- and web-centric security seem to assume that
+ TLS/SSL is as secure as it reasonably can be.
+ However, there is reason to believe that this is not necessarily the case.
+ Recently unsealed court documents show that FBI demanded (via the court)
+ that LavaBit.com hand over its SSL keys 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "LavaBitCourtDocs,WiredLavaBitCryptoKeys"
+
+\end_inset
+
+, presumably in an attempt to monitor or pursue Edward Snowden, who was
+ known to have used the service.
+\end_layout
+
+\begin_layout Standard
+Possession of the SSL keys would in principle allow the FBI to intercept
+ any traffic to and from LavaBit.com.
+ It would also permit the undetected impersonation of LavaBit's server,
+ allowing for material not originating from LavaBit.com to be sent to its
+ users.
+\end_layout
+
+\begin_layout Subsection*
+Cost to Business
+\end_layout
+
+\begin_layout Standard
+The revelations about the extent and reach of the U.S.
+ surveillance apparatus is expected to harm the profitability of businesses
+ involved in cloud-computing which host their data within the United States'
+ jurisdiction.
+ A recent report by the Information Technology and Innovation foundation
+ puts the cost (in terms of lost revenue) to the U.S.
+ cloud computing industry at $22 to $35 billion over the three years from
+ August 2013 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "PRISMCostToIndustry"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+Client-Side Security Holes
+\end_layout
+
+\begin_layout Standard
+**TODO: Find References**
+\end_layout
+
+\begin_layout Standard
+Assuming some way of securely delivering JavaScript code to the browser,
+ we still require some way to check whether the code is doing something
+ we would prefer it not to (for example, sending encryption keys or user
+ data back to the server once it has decrypted).
+\end_layout
+
+\begin_layout Standard
+Suppose we wish to analyse (either automatically or manually) the JavaScript
+ code for a particular webpage, and having done so certify that that particular
+ code is `safe'.
+ To do this in any sane way, we first need to ensure that the code is reasonably
+ static - that is, the code that is analysed is the code that will actually
+ be run on the user's machine.
+ There are a number of barriers that first need to be overcome, before we
+ can do this - most of them to do with how malleable browser-executed JavaScript
+ can be.
+ These are
+\end_layout
+
+\begin_layout Itemize
+The 
+\family typewriter
+eval
+\family default
+ function, which accepts an arbitrary string, and will attempt to evaluate
+ (i.e.
+ execute) it in the JavaScript runtime environment.
+ In other words, it enables arbitrary code execution.
+ Even if the rest of the code is entirely static, if the server or some
+ third party is able to manipulate the string(s) passed to 
+\family typewriter
+eval
+\family default
+, then all other analysis is useless.
+ Thankfully, it is rarely actually necessary to use the 
+\family typewriter
+eval
+\family default
+ function (most of what it's used for can easily be done in some other way),
+ and most coding standards and security policies ban its use.
+ The same may be said for string arguments to 
+\family typewriter
+setTimeout
+\family default
+ and 
+\family typewriter
+setInterval
+\family default
+.
+\end_layout
+
+\begin_layout Itemize
+Inline JavaScript (e.g.
+ 
+\family typewriter
+<script>...</script>
+\family default
+), allowing the embedding of arbitrary JavaScript into the HTML page itself.
+ As this can be added/modified by the server at any time, it negates any
+ other analysis that has been done.
+ However, to the best of my knowledge there is nothing that can be accomplished
+ by inline JavaScript that cannot also be accomplished by an external JavaScript
+ file.
+ The same can be said of DOM events such as 
+\family typewriter
+onclick
+\family default
+, and of links with an 
+\family typewriter
+href
+\family default
+ attribute beginning with 
+\family typewriter
+javascript:
+\family default
+.
+\end_layout
+
+\begin_layout Itemize
+It is possible to dynamically load in scripts by appending a new 
+\family typewriter
+<script>
+\family default
+ tag to the DOM, with the 
+\family typewriter
+src
+\family default
+ attribute pointing to some external URI.
+ Again, there are few circumstances where this is actually necessary.
+ Generally it is merely convenient, and can thus generally be disallowed.
+\end_layout
+
+\begin_layout Chapter
+Service Model
+\begin_inset CommandInset label
+LatexCommand label
+name "chap:Service-Model"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+***TODO: Brief discussion on Homomorphic Encryption***
+\end_layout
+
+\begin_layout Section*
+Actors
+\end_layout
+
+\begin_layout Itemize
+The user.
+\end_layout
+
+\begin_layout Itemize
+The user's computer, or similar device (the 
+\begin_inset Quotes eld
+\end_inset
+
+client
+\begin_inset Quotes erd
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Itemize
+Intermediaries (ISPs, and other systems between the client and server).
+\end_layout
+
+\begin_layout Itemize
+The service provider's computer (the 
+\begin_inset Quotes eld
+\end_inset
+
+server
+\begin_inset Quotes erd
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Section*
+Connection
+\end_layout
+
+\begin_layout Itemize
+All communications between the client and server are assumed to take place
+ over a secured connection (e.g.
+ HTTPS).
+\end_layout
+
+\begin_layout Itemize
+Any intermediaries are assumed not to be able to decrypt data sent between
+ the client and server (due to the use of HTTPS).
+ There is the possibility that they will collect meta-data about the transmissio
+n, but attempting to avoid that is outside the scope of this project.
+\end_layout
+
+\begin_layout Section*
+Software/Website Model
+\end_layout
+
+\begin_layout Itemize
+We will model our service as a typical multi-page HTML+JavaScript-based
+ website, accessed via a web-browser.
+\end_layout
+
+\begin_layout Section*
+Encryption Scheme
+\end_layout
+
+\begin_layout Standard
+Our security model uses a moderately complex encryption scheme, visualised
+ in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Encryption Scheme"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+All encryption described under this scheme is performed on the client (e.g.
+ in a web-browser).
+\end_layout
+
+\begin_layout Standard
+The entities involved in this encryption scheme are:
+\end_layout
+
+\begin_layout Itemize
+The User.
+\end_layout
+
+\begin_layout Itemize
+The User's Password.
+\end_layout
+
+\begin_layout Itemize
+A symmetric Master Key.
+\end_layout
+
+\begin_layout Itemize
+An asymmetric Public/Private key-pair.
+\end_layout
+
+\begin_layout Itemize
+Many symmetric Local Keys.
+\end_layout
+
+\begin_layout Itemize
+Many instances of distinct private data.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename Diagrams/Encrypt.eps
+	lyxscale 50
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Diagram of encryption scheme dependencies.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Encryption Scheme"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Under our model, the User provides their password to the encryption software
+ (e.g.
+ via a password input in the browser).
+ The password is then hashed, and this resulting hash may then be used to
+ encrypt/decrypt the Master Key.
+\end_layout
+
+\begin_layout Standard
+The Master key is a symmetric key, which is used to encrypt/decrypt the
+ Private key, and all Local Keys.
+ 
+\end_layout
+
+\begin_layout Standard
+The Local Keys are symmetric keys, which correspond one-to-one with an instance
+ of private data, which they may be used to encrypt/decrypt.
+\end_layout
+
+\begin_layout Standard
+The Public/Private key-pair may be used to encrypt/decrypt information that
+ the other key in the pair encrypts/decrypts, as is typical under asymmetric
+ encryption schemes.
+ The Public key is never encrypted, since it is as the name suggests intended
+ to be publicly available.
+\end_layout
+
+\begin_layout Standard
+The Public/Private keys are necessary in order to send private information
+ to other users.
+ The local keys are necessary in order to only send specific data, as opposed
+ to sending more data than is desired.
+\end_layout
+
+\begin_layout Standard
+The Master key could potentially be replaced by the Public/Private pair.
+ However, asymmetric encryption schemes tend to be much slower than symmetric
+ ones, so it is preferable to minimise the use of the asymmetric pair to
+ only when they are actually needed.
+\end_layout
+
+\begin_layout Section*
+Common Elements
+\end_layout
+
+\begin_layout Standard
+All pages and procedures are assumed to have the following steps in common:
+\end_layout
+
+\begin_layout Enumerate
+The client uses a JavaScript-enabled web-browser or similar program to make
+ an HTTP request to the server for the appropriate page.
+\end_layout
+
+\begin_layout Enumerate
+The server responds, sending the corresponding HTML.
+\end_layout
+
+\begin_layout Enumerate
+The client interprets the HTML, and makes additional requests to the server
+ as appropriate for required resources (Images, CSS, JavaScript etc).
+\end_layout
+
+\begin_layout Enumerate
+The server responds by sending the appropriate resources.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Among the JavaScript sent to the client is code for performing the cryptographic
+ operations, described below.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways true
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename Diagrams/common.eps
+	scale 45
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Common Elements
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+User Signup and Key Generation
+\end_layout
+
+\begin_layout Enumerate
+The client requests and receives a sign-up page.
+\end_layout
+
+\begin_layout Enumerate
+On the client, a public-private key-pair is generated (e.g.
+ by use of the RSA algorithm).
+\end_layout
+
+\begin_layout Enumerate
+On the client, a randomly generated symmetric 
+\begin_inset Quotes eld
+\end_inset
+
+master key
+\begin_inset Quotes erd
+\end_inset
+
+ is created.
+\end_layout
+
+\begin_layout Enumerate
+On the client, the private key is encrypted using this master key.
+\end_layout
+
+\begin_layout Enumerate
+On the client, the user fills out a web-form, supplying at minimum a unique
+ identifier (e.g.
+ username, email) and password.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+This may happen concurrent to steps 5-7.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+The master key is encrypted using a hash derived from the password.
+\end_layout
+
+\begin_layout Enumerate
+The public key, the encrypted private key, and the encrypted master key
+ and are all transmitted to the server, along with any other signup information.
+ These are then stored on the server.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+The unencrypted private key, the unencrypted master key, and the password
+ (or any derivation of it) are 
+\emph on
+not
+\emph default
+ transmitted to the server.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways true
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename Diagrams/signup.eps
+	scale 45
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+User Signup and Key Generation
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Authentication and Log-In
+\end_layout
+
+\begin_layout Enumerate
+The client requests and receives a page containing a login form.
+\end_layout
+
+\begin_layout Enumerate
+The user fills out the log-in form with their unique identifier and password.
+\end_layout
+
+\begin_layout Enumerate
+The user submits the form, which causes the client to send the unique identifier
+ to the server.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+But 
+\emph on
+not
+\emph default
+ the password.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+The server responds with the encrypted private key, encrypted master key
+ and public key corresponding to the unique identifier, and a random session
+ token which has been encrypted using the public key of the corresponding
+ unique identifier.
+\end_layout
+
+\begin_layout Enumerate
+The client decrypts the master key using a hash of the supplied password,
+ then decrypts private key using the master key, and finally decrypts the
+ session key using the private key.
+\end_layout
+
+\begin_layout Enumerate
+The decrypted session key is then sent to the server, and the user is considered
+ authenticated if the key matches the original on the server.
+\end_layout
+
+\begin_layout Enumerate
+The session key is then set as a cookie, so that the session may be tracked
+ across pages.
+\end_layout
+
+\begin_layout Enumerate
+The decrypted private key, master key and public key are saved to the JavaScript
+ 
+\family typewriter
+localStorage
+\family default
+ object.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+This is so that they persist across pages, but in a manner not opaquely
+ available to the server (in contrast with cookies).
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways true
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename Diagrams/login.eps
+	scale 45
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Authentication and Log-In
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Storing Private Information
+\end_layout
+
+\begin_layout Enumerate
+The client requests and receives a page which may be used to supply and
+ encrypt private information.
+\end_layout
+
+\begin_layout Enumerate
+The user supplies the private information they wish encrypted and stored
+ to the JavaScript runtime, in some manner applicable to the type on information.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Different types of information may use different forms of input.
+ The specifics are not relevant, other than that it reaches the JavaScript
+ runtime in a useable fashion.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+On the client, randomly generated symmetric keys (the 
+\begin_inset Quotes eld
+\end_inset
+
+local keys
+\begin_inset Quotes erd
+\end_inset
+
+) are created for each distinct piece of information to be encrypted.
+\end_layout
+
+\begin_layout Enumerate
+The JavaScript runtime encrypts the information using the local keys.
+\end_layout
+
+\begin_layout Enumerate
+The encrypted information is transmitted to the server.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+The unencrypted information is 
+\emph on
+not
+\emph default
+ transmitted to the server.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+The local key(s) are encrypted with the master key, and transmitted to the
+ server.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+The unencrypted local keys are 
+\emph on
+not
+\emph default
+ transmitted to the server.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways true
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename Diagrams/saveInfo.eps
+	scale 45
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Storing Private Information
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Retrieving Private Information
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Retrieving-Private-Information"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+The client requests and receives a page which may contain encrypted private
+ information.
+\end_layout
+
+\begin_layout Enumerate
+This may contain encrypted private information, including the encrypted
+ local key(s) corresponding to said information.
+\end_layout
+
+\begin_layout Enumerate
+In place of, or in addition to the encrypted information sent in step 2,
+ the client requests and receives encrypted private information, including
+ the encrypted local key(s) corresponding to said information.
+\end_layout
+
+\begin_layout Enumerate
+The encrypted local keys are decrypted using the master key.
+ The encrypted information is then decrypted using the local keys.
+\end_layout
+
+\begin_layout Enumerate
+The information is made available to the user in whatever format is appropriate
+ to the information.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways true
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename Diagrams/retrieveInfo.eps
+	scale 45
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Retrieving Private Information
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Making Private Information Available to Other Users
+\end_layout
+
+\begin_layout Enumerate
+The client requests and receives a page which facilitates making private
+ information available to other users.
+\end_layout
+
+\begin_layout Enumerate
+The user indicates the specific information they would like to make available
+ to other users.
+\end_layout
+
+\begin_layout Enumerate
+The user indicates the specific user(s) they would like to make the information
+ available to (using the unique identifier associated with each user).
+\end_layout
+
+\begin_layout Enumerate
+The public key corresponding to each of the specified unique identifiers
+ is requested from, and supplied by the server.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+There is obvious potential for a man-in-the-middle attack here, which will
+ be addressed later.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+The local keys corresponding to each of the specified pieces of information
+ are retrieved by the server, and decrypted using the user's master key.
+\end_layout
+
+\begin_layout Enumerate
+The local keys are then re-encrypted using the retrieved public keys.
+\end_layout
+
+\begin_layout Enumerate
+These re-encrypted version are then sent to the server.
+\end_layout
+
+\begin_layout Enumerate
+On the receiving end, the process works as described under the 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand nameref
+reference "sec:Retrieving-Private-Information"
+
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ section.
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+\begin_inset Float figure
+wide false
+sideways true
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+
+\lang english
+\begin_inset Graphics
+	filename Diagrams/shareInfo.eps
+	scale 45
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+\lang english
+Making Private Information Available to Others
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Chapter
+
+\lang english
+Plugin Model
+\end_layout
+
+\begin_layout Section*
+Static Data Tainting in JavaScript
+\end_layout
+
+\begin_layout Standard
+We may utilise the concept of data tainting 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "DataTainting"
+
+\end_inset
+
+ in order to detect cases where private data may be accessed from within
+ JavaScript.
+ Briefly, data tainting is a concept whereby we mark a particular set of
+ initial functions and operations as being tainted, and then any operations
+ which depend on something tainted also become tainted.
+ In our particular case, we may mark functions which have the potential
+ to retrieve private information as being tainted.
+ This information can then be used to detect whether private information
+ is being used inappropriately; for example, we could check if the arguments
+ to an AJAX call are tainted, indicating that private data could be transmitted
+ to a server.
+\end_layout
+
+\begin_layout Standard
+We will use the concept of 
+\emph on
+static
+\emph default
+ data tainting, as opposed to 
+\emph on
+dynamic
+\emph default
+ data tainting.
+ The former involves performing a pre-runtime analysis of the code itself,
+ while the latter involves analysing the code as it is running.
+ Dynamic data tainting has the property of only analysing the code that
+ is actually executed, whereas static analysis examines all possible execution
+ paths.
+ Which of those is preferable is a matter of point of view - the dynamic
+ approach is technically more precise, in that it only detects that which
+ is 
+\emph on
+actually
+\emph default
+ tainted; however, the static approach allows the program to examine the
+ 
+\emph on
+intent
+\emph default
+ of the program, even if that intent is not carried out.
+ For our purposes, the choice to use static analysis is made largely because
+ it is easier to describe and implement, and has a lower performance overhead.
+\end_layout
+
+\begin_layout Standard
+In order to perform static taint analysis, the first thing we require is
+ some reasonably formal description of data taint, and it's propagation
+ in JavaScript.
+\end_layout
+
+\begin_layout Subsection*
+Tainted Entities
+\end_layout
+
+\begin_layout Standard
+A 
+\emph on
+tainted entity
+\emph default
+ shall be defined as any JavaScript data construct (that is: variables,
+ functions, objects, and arrays, and anything else which may be represented
+ by an identifier) which has been marked as tainted.
+\end_layout
+
+\begin_layout Subsection*
+Expressions
+\end_layout
+
+\begin_layout Standard
+**TODO: Be more precise.**
+\end_layout
+
+\begin_layout Standard
+For our purposes, an expression will be defined as some chain of 
+\emph on
+operators
+\emph default
+ (+, *, -, /, &&, ||, etc) and 
+\emph on
+operands
+\emph default
+ (constants, variables, function calls, etc).
+ If any of the operands is a tainted entity, then the expression as a whole
+ shall be considered tainted, although operands which are not already tainted
+ will not be marked as tainted as a result of this.
+\end_layout
+
+\begin_layout Standard
+For example, if the variable 
+\family typewriter
+foo
+\family default
+ is tainted, and 
+\family typewriter
+bar
+\family default
+ is not, then the expression
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+42 * foo + bar;
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+will be tainted as a whole.
+ However, the variable 
+\family typewriter
+bar
+\family default
+ will remain untainted.
+\end_layout
+
+\begin_layout Subsubsection*
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Function-Calls"
+
+\end_inset
+
+Function Calls
+\end_layout
+
+\begin_layout Standard
+For our purposes, a function call is something of the form
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+func(arg1, arg2, ...);
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+where `arg1, arg2, ...' represents some a finite number of arguments to the
+ function call.
+ Each argument may be an expression in its own right.
+ If any of the arguments is tainted, then the whole function 
+\emph on
+call
+\emph default
+ is considered tainted - although the function 
+\emph on
+itself
+\emph default
+ is not marked at tainted as a result of this.
+\end_layout
+
+\begin_layout Subsection*
+Assignments
+\end_layout
+
+\begin_layout Standard
+For our purposes, an assignment operation is anything of the form
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+identifier = expression;
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If the 
+\family typewriter
+expression
+\family default
+ portion of the operation is tainted, then 
+\emph on
+everything
+\emph default
+ in the assignment portion of the operation is also considered tainted.
+ In particular, assume that in the following code listings, 
+\family typewriter
+x
+\family default
+ is already tainted.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "numbers=left"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+var foo = x;
+\end_layout
+
+\begin_layout Plain Layout
+
+foo = x;
+\end_layout
+
+\begin_layout Plain Layout
+
+foo[i] = x;
+\end_layout
+
+\begin_layout Plain Layout
+
+foo.bar = x;
+\end_layout
+
+\begin_layout Plain Layout
+
+foo = bar = x;
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In line 1, the new variable 
+\family typewriter
+foo
+\family default
+ is marked as tainted.
+ 
+\end_layout
+
+\begin_layout Standard
+In line 2, the existing variable 
+\family typewriter
+foo
+\family default
+ is marked as tainted, regardless of whether it previously was.
+ 
+\end_layout
+
+\begin_layout Standard
+In lines 3 and 4 the variable 
+\family typewriter
+foo
+\family default
+ is marked as tainted; 
+\family typewriter
+foo[i]
+\family default
+ and 
+\family typewriter
+foo.bar
+\family default
+ would technically also be marked as tainted, but this is subsumed by the
+ marking on the parent entity.
+\end_layout
+
+\begin_layout Standard
+In line 5, both 
+\family typewriter
+foo
+\family default
+ and 
+\family typewriter
+bar
+\family default
+ will be marked as tainted.
+\end_layout
+
+\begin_layout Standard
+If an identifier is currently marked as tainted, but is assigned an untainted
+ expression, then the tainted marking will be removed from that identifier
+ from that point forward in the program (unless it is within a tainted scope,
+ see below), until it is assigned another tainted value.
+\end_layout
+
+\begin_layout Subsection*
+References
+\end_layout
+
+\begin_layout Standard
+Suppose we have a identifier which is really just a reference to another
+ variable.
+ If one of these entities becomes tainted, the other must also become tainted.
+ For example:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+var a = {foo: "Hello"}
+\end_layout
+
+\begin_layout Plain Layout
+
+var b = a;
+\end_layout
+
+\begin_layout Plain Layout
+
+b.foo = taintedEntity;
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In the above example, the variable 
+\family typewriter
+a
+\family default
+ must be tainted if b is (and vice-versa).
+\end_layout
+
+\begin_layout Subsection*
+Tainted Scopes
+\end_layout
+
+\begin_layout Standard
+In general, if a block-level statement in some way depends upon a tainted
+ entity or expression, then we create a 
+\emph on
+tainted scope
+\emph default
+ covering the entire scope of the statement, such that the results of all
+ statements within that scope become tainted.
+ Entities which become tainted within a tainted scope remain tainted after
+ the scope ends.
+\end_layout
+
+\begin_layout Standard
+The specific statements this applies to are:
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+if ..
+ else
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+for
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+for ..
+ in
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+for each ..
+ in
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+while
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+do ..
+ while
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+switch
+\end_layout
+
+\begin_layout Itemize
+
+\family typewriter
+try ..
+ catch ..
+ finally
+\end_layout
+
+\begin_layout Standard
+Technically it could also apply to 
+\family typewriter
+with
+\family default
+ statements; however, those are disallowed under this model (see subsection
+ on 
+\begin_inset CommandInset ref
+LatexCommand nameref
+reference "sub:With-Statements"
+
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Subsection*
+If ..
+ Else Statements
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+If ..
+ else
+\family default
+ statements are of the form 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+if (conditionalExpression) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	statement1A;
+\end_layout
+
+\begin_layout Plain Layout
+
+	statement2A;
+\end_layout
+
+\begin_layout Plain Layout
+
+	...
+\end_layout
+
+\begin_layout Plain Layout
+
+} else {
+\end_layout
+
+\begin_layout Plain Layout
+
+	statement1B;
+\end_layout
+
+\begin_layout Plain Layout
+
+	statement2B;
+\end_layout
+
+\begin_layout Plain Layout
+
+	...
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+with the usual proviso that the 
+\family typewriter
+else
+\family default
+ section is optional.
+\end_layout
+
+\begin_layout Standard
+If 
+\family typewriter
+conditionaExpression
+\family default
+ is tainted, then we create a tainted scope across both branches of the
+ statement, such that the results of all statements within both branches
+ are considered tainted.
+\end_layout
+
+\begin_layout Standard
+We must also consider the results if 
+\family typewriter
+conditionaExpression
+\family default
+ is not tainted.
+ If some entity is tainted in either branch, this that entity is considered
+ tainted after the if-statement.
+ However, the analysis of that entity in one branch cannot affect the analysis
+ of it in the other branch.
+ For example, suppose that the identifier 
+\family typewriter
+x
+\family default
+ is already tainted, but 
+\family typewriter
+foo
+\family default
+, 
+\family typewriter
+y
+\family default
+, and 
+\family typewriter
+z
+\family default
+ are not:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+var foo = 0;
+\end_layout
+
+\begin_layout Plain Layout
+
+if(y > z) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	foo = x;
+\end_layout
+
+\begin_layout Plain Layout
+
+	...
+\end_layout
+
+\begin_layout Plain Layout
+
+} else {
+\end_layout
+
+\begin_layout Plain Layout
+
+	foo = 42;
+\end_layout
+
+\begin_layout Plain Layout
+
+	...
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Within the 
+\family typewriter
+if
+\family default
+-branch (i.e.
+ when 
+\family typewriter
+y > z
+\family default
+) 
+\family typewriter
+foo
+\family default
+ will be marked as tainted, and this taint may be propagated to other statements
+ in the 
+\family typewriter
+if
+\family default
+-branch.
+ However, 
+\family typewriter
+foo
+\family default
+ is 
+\emph on
+not
+\emph default
+ tainted in the 
+\family typewriter
+else
+\family default
+-branch (i.e.
+ when 
+\family typewriter
+y <= z
+\family default
+), and thus it may not taint other statements in the 
+\family typewriter
+else
+\family default
+-branch (assuming some other statement does not taint it further down that
+ branch).
+\end_layout
+
+\begin_layout Standard
+Furthermore, after the 
+\family typewriter
+if ..
+ else
+\family default
+ statement as a whole is analysed, 
+\family typewriter
+foo
+\family default
+ will be marked as tainted, as it was tainted in at least one branch.
+\end_layout
+
+\begin_layout Subsection*
+Switch Statements
+\end_layout
+
+\begin_layout Standard
+Tainting of 
+\family typewriter
+switch
+\family default
+ statements behaves similarly to 
+\family typewriter
+if ..
+ then
+\family default
+ statements.
+ 
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+switch (expression) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	cases;
+\end_layout
+
+\begin_layout Plain Layout
+
+	...
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If 
+\family typewriter
+expression
+\family default
+ is tainted, then we generate a tainted scope across the body of the 
+\family typewriter
+switch
+\family default
+ statement.
+\end_layout
+
+\begin_layout Subsection*
+Loop Statements
+\end_layout
+
+\begin_layout Standard
+Loop statements, (
+\family typewriter
+for
+\family default
+, 
+\family typewriter
+for ..
+ in
+\family default
+, 
+\family typewriter
+for each ..
+ in
+\family default
+, 
+\family typewriter
+while
+\family default
+, 
+\family typewriter
+do ..
+ while
+\family default
+) behave quite similarly to one another, and to conditional statements.
+ 
+\end_layout
+
+\begin_layout Subsection*
+While Loops
+\end_layout
+
+\begin_layout Standard
+The simplest cases are the 
+\family typewriter
+while
+\family default
+ and 
+\family typewriter
+do ..
+ while
+\family default
+ statements:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+while (condition) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	statements;
+\end_layout
+
+\begin_layout Plain Layout
+
+	...
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+do {
+\end_layout
+
+\begin_layout Plain Layout
+
+	statements;
+\end_layout
+
+\begin_layout Plain Layout
+
+	...
+\end_layout
+
+\begin_layout Plain Layout
+
+} while (condition);
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In both cases, if 
+\family typewriter
+condition
+\family default
+ is tainted, then we generate a tainted scope across the body of the loop.
+\end_layout
+
+\begin_layout Standard
+In 
+\series bold
+all
+\series default
+ cases of loop statements, if the loop invariants are 
+\series bold
+not
+\series default
+ tainted, it is still necessary to perform an analysis of the loop body
+ more than once.
+ This is due to the possibility that there exists an entity which is not
+ tainted prior to the loop being analysed, but which becomes tainted during
+ the loop analysis.
+ Such an entity could conceivably taint entities syntactically above it
+ during subsequent passes of the loop.
+ For example:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+var foo = untainted-entity;
+\end_layout
+
+\begin_layout Plain Layout
+
+var bar = untainted-entity;
+\end_layout
+
+\begin_layout Plain Layout
+
+while(untainted-condition) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	var baz = bar;
+\end_layout
+
+\begin_layout Plain Layout
+
+	bar = foo;
+\end_layout
+
+\begin_layout Plain Layout
+
+	foo = tainted-entity;
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+In this example, neither 
+\family typewriter
+bar
+\family default
+ nor 
+\family typewriter
+baz
+\family default
+ would not be tainted during an initial analysis of the loop, as neither
+ the loop condition, nor 
+\family typewriter
+foo
+\family default
+ is initially tainted.
+ However, 
+\family typewriter
+foo
+\family default
+ becomes tainted before the end of the loop, and thus 
+\family typewriter
+bar
+\family default
+ would become tainted on a second loop pass loop pass.
+ Similarly, 
+\family typewriter
+baz
+\family default
+ would become tainted on a third loop pass.
+ It is trivially possible to construct cases whereby some entity would only
+ become tainted after an arbitrarily large number of passes, though such
+ a number would be fixed for each specific loop instance.
+\end_layout
+
+\begin_layout Standard
+Me must therefore repeatedly analyse the loop until we reach a point whereby
+ the taint status of all entities within both the body and the loop invariant(s)
+ do not change between analysis iterations.
+\end_layout
+
+\begin_layout Subsection*
+For Loops
+\end_layout
+
+\begin_layout Standard
+In the case of a 
+\family typewriter
+for
+\family default
+ loop:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+for (initialisation; condition; final-expression) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	statements;
+\end_layout
+
+\begin_layout Plain Layout
+
+	...
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If any of 
+\family typewriter
+initialisation
+\family default
+, 
+\family typewriter
+condition
+\family default
+, or 
+\family typewriter
+final-expression
+\family default
+ are tainted, then we generate a tainted scope across the body of the loop.
+\end_layout
+
+\begin_layout Standard
+In the case of 
+\family typewriter
+for ..
+ in
+\family default
+, and 
+\family typewriter
+for each ..
+ in
+\family default
+ loops:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+for (var in object) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	statements;
+\end_layout
+
+\begin_layout Plain Layout
+
+	...
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+for each (var in object) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	statements;
+\end_layout
+
+\begin_layout Plain Layout
+
+	...
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+If 
+\family typewriter
+object
+\family default
+ is tainted, then we generate a tainted scope across the body of the loop.
+\end_layout
+
+\begin_layout Standard
+***TODO: These may be the only loops where it isn't necessary to generate
+ a tainted scope.
+ May be sufficient to taint var.
+ Should check.***
+\end_layout
+
+\begin_layout Subsection*
+Try ..
+ Catch ..
+ Finally Statements
+\end_layout
+
+\begin_layout Standard
+**TODO: This is a bit complicated due to exceptions**
+\end_layout
+
+\begin_layout Subsection*
+With Statements
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:With-Statements"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+With
+\family default
+ statements are disallowed under our model.
+ This is due to the fact that they create behaviour which is at best very
+ difficult to analyse without actually executing it.
+ Take for example:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+var obj1 = {b: "Hello"};
+\end_layout
+
+\begin_layout Plain Layout
+
+var obj2 = {foo: "World"};
+\end_layout
+
+\begin_layout Plain Layout
+
+(function (a, b) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	with (a) {
+\end_layout
+
+\begin_layout Plain Layout
+
+        b = "Goodbye";
+\end_layout
+
+\begin_layout Plain Layout
+
+	}
+\end_layout
+
+\begin_layout Plain Layout
+
+})(obj1,obj2);
+\end_layout
+
+\begin_layout Plain Layout
+
+alert(obj1.b); //alerts "Goodbye"
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The above will alert 
+\begin_inset Quotes eld
+\end_inset
+
+Goodbye
+\begin_inset Quotes erd
+\end_inset
+
+.
+ However, the function 
+\emph on
+cannot
+\emph default
+ be analysed in isolation, since in isolation it is impossible to know if
+ the identifier 
+\family typewriter
+b
+\family default
+ refers to the formal parameter of the function, or to a member of 
+\family typewriter
+a
+\family default
+.
+\end_layout
+
+\begin_layout Standard
+Thankfully, 
+\family typewriter
+with
+\family default
+ is a convenience statement
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+And a rather poor one, by my own option.
+\end_layout
+
+\end_inset
+
+, rather than one that is necessary to the use of the language, so we lose
+ very little by disallowing it.
+\end_layout
+
+\begin_layout Subsection*
+Functions
+\end_layout
+
+\begin_layout Standard
+**TODO: This bit is kind of messy**
+\end_layout
+
+\begin_layout Standard
+JavaScript's functions are a heavily overloaded construct
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+To put it mildly.
+\end_layout
+
+\end_inset
+
+, so their behaviour with respect to data tainting deserves special care
+ and consideration.
+\end_layout
+
+\begin_layout Standard
+Firstly, as we defined in the section on 
+\begin_inset CommandInset ref
+LatexCommand nameref
+reference "sub:Function-Calls"
+
+\end_inset
+
+, if a function is 
+\emph on
+called
+\emph default
+ with tainted arguments, then its return value will also be considered tainted.
+ This is on the principle that the result of any function a programmer would
+ actually write almost certainly depends upon its arguments, and if this
+ is not the case, they are always capable of rewriting it.
+\end_layout
+
+\begin_layout Standard
+Secondly, we must consider the possibility of an object being modified via
+ pass-by-reference.
+ JavaScript does not possess an explicit pass-by-reference mechanism (there
+ is nothing analogous to a C pointer).
+ However, it will implicitly pass objects and arrays by reference.
+ More accurately, it will pass a copy of their location in the runtime's
+ memory, but the effect is still what is generally considered pass-by-reference.
+ Thus we must deal with functions such as
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+function foo(obj) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	obj.bar = taintedEntity;
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Here, 
+\family typewriter
+obj.bar
+\family default
+ becomes tainted within the function.
+ Any object the function is called on should therefore become tainted outside
+ the function.
+ 
+\end_layout
+
+\begin_layout Standard
+In general, if a parameter is treated as an object or array within a function,
+ and as a result becomes tainted, then we must treated the parameter itself
+ as tainted.
+ The result is arguments to such parameters in a call of that function must
+ also become tainted.
+ For example
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+var anObject = {bar : "Hello", baz: "World"};
+\end_layout
+
+\begin_layout Plain Layout
+
+foo(anOject);
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Before the call to 
+\family typewriter
+foo
+\family default
+, 
+\family typewriter
+anObject
+\family default
+ is not tainted.
+ After the call it is, because 
+\family typewriter
+foo
+\family default
+'s first parameter is tainted.
+\end_layout
+
+\begin_layout Standard
+It is worth noting that even if a parameter is an object or array, only
+ altering its members has an effect outside the function.
+ Reassigning the parameter itself will not.
+ Thus:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+var obj1 = {foo : "hello"};
+\end_layout
+
+\begin_layout Plain Layout
+
+(function (a) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	a = {foo: "goodbye"};
+\end_layout
+
+\begin_layout Plain Layout
+
+})(obj1);
+\end_layout
+
+\begin_layout Plain Layout
+
+alert(obj1.foo); //Will alert "hello"
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This is important, as it means we may detect whether a parameter is an object
+ or array by the way it is treated within the function - i.e.
+ by use of 
+\family typewriter
+a.b
+\family default
+ or 
+\family typewriter
+a[b]
+\family default
+ notation - and if it is not treated as such, then it does not matter if
+ it is an object or array.
+ **TODO: Make sure this is actually true.**
+\end_layout
+
+\begin_layout Standard
+Just as an object may become tainted via pass-by-reference, we must also
+ consider the possibility whereby arguments taint each other.
+ For example:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+var obj1 = {foo : taintedEntity};
+\end_layout
+
+\begin_layout Plain Layout
+
+var obj2 = {foo : untaintedEntity};
+\end_layout
+
+\begin_layout Plain Layout
+
+(function (a, b) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	var tmp = a.foo;
+\end_layout
+
+\begin_layout Plain Layout
+
+	a.foo = b.foo;
+\end_layout
+
+\begin_layout Plain Layout
+
+	b.foo = tmp;
+\end_layout
+
+\begin_layout Plain Layout
+
+})(obj1,obj2);
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Here, 
+\family typewriter
+obj2
+\family default
+ will become tainted by 
+\family typewriter
+obj1
+\family default
+.
+ 
+\end_layout
+
+\begin_layout Standard
+The solution is to create a relation between the parameters of a particular
+ function.
+ For parameters 
+\begin_inset Formula $p_{1}\ldots\, p_{n}$
+\end_inset
+
+.
+ we say that 
+\begin_inset Formula $\forall i,j\in\left\{ 1\dots\, n\right\} :\, p_{i}\overset{\text{taints}}{\to}p_{j}\iff(p_{j}$
+\end_inset
+
+ is an object or array, and 
+\begin_inset Formula $p_{i}$
+\end_inset
+
+ being tainted at the beginning of the function results in 
+\begin_inset Formula $p_{j}$
+\end_inset
+
+ being tainted at the end of the function
+\begin_inset Formula $)$
+\end_inset
+
+.
+ Because of the idempotent nature of the taint property, and they way in
+ which it spreads, it is sufficient to test each of the function parameters
+ in turn - that is, mark one parameter as tainted and observe its effects
+ upon the other parameters, then un-mark it and repeat for the next parameter.
+\end_layout
+
+\begin_layout Standard
+Once this set of relations is computed, whenever we encounter a call to
+ a function, we may observe which arguments are initially tainted, look
+ up the relations for those arguments, and taint the other function arguments
+ appropriately.
+\end_layout
+
+\begin_layout Subsection*
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Initially-Tainted-Functions"
+
+\end_inset
+
+Initially Tainted Functions
+\end_layout
+
+\begin_layout Standard
+The ***nth*** thing we require for this approach is to define a set of initial
+ tainted functions.
+ Broadly, this is defined as any function with the capability to retrieve
+ private information from the DOM.
+ To the extent that I have been able to research, the only functions with
+ this capability reside within the DOM API, although there are a 
+\emph on
+lot
+\emph default
+ of APIs available to the browser 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "WebAPIs"
+
+\end_inset
+
+, so it is possible that there exist other functions with the capability.
+ In either case, we shall focus our attention on the DOM API, as it is contains
+ by far the most widely used set of functions known to have the capability,
+ and the principles we shall use can easily be extended to other functions
+ and APIs.
+\end_layout
+
+\begin_layout Standard
+The aim is to define the set of initially tainted functions as narrowly
+ as possible, as it is preferable to be as unrestrictive as is safely possible.
+ I do not claim that I have actually 
+\emph on
+achieved
+\emph default
+ this, however - it is likely that there is room to either remove functions,
+ or find a different but equally safe formulation.
+\end_layout
+
+\begin_layout Subsubsection*
+Specific Functions
+\end_layout
+
+\begin_layout Standard
+**TODO: Work out how to work around the fact that 
+\family typewriter
+document
+\family default
+ itself is unsafe by the standards I'm using here.
+ Probably need to narrow scope a little.**
+\end_layout
+
+\begin_layout Standard
+**TODO: Cross-reference Mozilla DOM ref., and time-permitting W3C specs,
+ to ensure I've got all relevant functions**
+\end_layout
+
+\begin_layout Standard
+\begin_inset Tabular
+<lyxtabular version="3" rows="23" columns="3">
+<features islongtable="true" longtabularalignment="center">
+<column alignment="center" valignment="middle" width="0">
+<column alignment="left" valignment="middle" width="0">
+<column alignment="left" valignment="middle" width="50col%">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+DOM API Object
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Function/Attribute
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Specific Risk
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="3" alignment="center" valignment="middle" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+document
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+anchors
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns an array of all <a> elements in the DOM
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+body
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the 
+\family typewriter
+<body>
+\family default
+ node, which may contain private information.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+documentElement
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the 
+\family typewriter
+<html>
+\family default
+ node, which may contain private information.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+forms
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns an array of all 
+\family typewriter
+<form>
+\family default
+ elements in the DOM.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+getElementsById
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the element with a specified ID
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+getElementsByName
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns all elements with a specified name.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+getElementsByTagName
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns all elements of a specific tag.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+links
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns an array of all links in the DOM.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="3" alignment="center" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+element
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+childNodes
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns an array of the child nodes of an element.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+firstChild
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the first child node of an element.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+getElementsByTagName
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the child node so of an element that are a specific tag.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+id
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns an elements ID attribute.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+innerHTML
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the HTML within an element.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+isEqualNode
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Tests if two nodes are equal.
+ Could be used to compare a node against one containing private data.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+lastChild
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the last child node of an element.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+nextSibling
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Gets the next sibling element of a node.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+nodeValue
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the value of an element, which may include private text.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+parentNode
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the parent node of an element.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+previousSibling
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Gets the previous sibling element of a node.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+removeChild
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the element removed.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+replaceChild
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the element replaced.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+textContent
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the textual content of a node, including all child nodes.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Preventing-Data-Laundering"
+
+\end_inset
+
+Preventing Data Laundering via the DOM
+\end_layout
+
+\begin_layout Standard
+It is relatively simple to write a tainted value to the DOM and then read
+ it back into JavaScript, storing it in an untainted variable in the process.
+ It is also 
+\emph on
+not
+\emph default
+ easy to detect this case using static analysis techniques, as doing so
+ seems to require (at minimum) knowledge of the DOM structure, due to the
+ many different ways it is possible to read in the same DOM node.
+ If we are to use purely static analysis, then it becomes necessary to treat
+ all read operations from the DOM as tainted - or at least, all read operations
+ that occur after a known tainted write.
+\end_layout
+
+\begin_layout Standard
+This is an instance where dynamic data tainting has a substantial advantage
+ over the static case, as using dynamic data tainting would allow us to
+ mark DOM nodes themselves as tainted, thus neatly dealing with this issue.
+\end_layout
+
+\begin_layout Standard
+Because of this problem, need to include the functions listed in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:Additional-tainted-functions."
+
+\end_inset
+
+ in our set of initially tainted functions.
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Float table
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Tabular
+<lyxtabular version="3" rows="19" columns="3">
+<features tabularvalignment="middle">
+<column alignment="center" valignment="top" width="0pt">
+<column alignment="left" valignment="top" width="0pt">
+<column alignment="left" valignment="top" width="50col%">
+<row>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+DOM API Object
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Function/Object
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Specific Risk
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="3" alignment="center" valignment="middle" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+document
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+images
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns an array of all 
+\family typewriter
+<img>
+\family default
+ elements in the DOM.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+title
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the 
+\family typewriter
+<title>
+\family default
+ element.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="3" alignment="center" valignment="middle" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+element
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+attributes
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns an array of the attributes of an element.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+className
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the class of an element.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+getAttribute
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the value of a particular attribute of an element.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+getAttributeNode
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns a node for a particular attribute of an element.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+hasAttribute
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Checks if an element has a specific attribute.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+hasAttributes
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Checks if an element has any attributes.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+hasChildNodes
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Checks if an element has any child nodes.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+lang
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Can be used to set and get the language code of an element.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+removeAttributeNode
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the attribute node that it removes.
+ Same risks as getAttributeNode.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+style
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Sets or returns the style attribute of an element.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+tabIndex
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Sets or returns the tab index of an element.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+title
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Sets or returns the title attribute of an element.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="3" alignment="center" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+attribute
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+value
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns or sets the value of an attribute.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+getNamedItem
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the attribute node with a specific name.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+removeNamedItem
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returns the attribute node that it removes.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+setNamedItem
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Returned the replaced attribute node.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+</lyxtabular>
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Additional tainted functions.
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:Additional-tainted-functions."
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection*
+Putting The Usability Back In
+\end_layout
+
+\begin_layout Standard
+If we were to mark all the functions mentioned in the 
+\begin_inset CommandInset ref
+LatexCommand nameref
+reference "sec:Initially-Tainted-Functions"
+
+\end_inset
+
+ section as tainted, without offering some form of workaround, it would
+ be virtually impossible to write any meaningfully useful application in
+ JavaScript that was did not (under that model) violate a user's privacy.
+ We therefore need to offer some way that developers may use as many of
+ those functions as possible, but in a way that we can be sure does not
+ violate privacy.
+\end_layout
+
+\begin_layout Standard
+The approach I would put forward is to wrap each of the tainted functions
+ in function which - when run - checks to see if the attempted operation
+ is actually trying to retrieve private data.
+ In the case where private data would not be retrieved, the function would
+ behave in the same was as its unchecked function.
+ In the case where it would be retrieved, the wrapper function would be
+ required to not return the private data.
+ However, there are a number of different ways we could handle the specific
+ behaviour of such functions:
+\end_layout
+
+\begin_layout Standard
+The first is to fail silently - i.e.
+ return 
+\family typewriter
+null
+\family default
+, or some equally non-informative value.
+ This is probably not a good approach, as some of the tainted functions
+ return 
+\family typewriter
+null
+\family default
+ on failure anyway, so it would be difficult for a developer to distinguish
+ why a function had failed.
+ On the other hand, it would present a uniform mode of failure.
+\end_layout
+
+\begin_layout Standard
+The second approach is to fail with feedback - i.e.
+ return some special predefined value (or an exception) indicating failure,
+ and type of failure.
+\end_layout
+
+\begin_layout Standard
+In the case where an array or object is returned, only some elements of
+ which may be private, there also exists the option to remove the private
+ items, while leaving the rest intact.
+ Again, we may either do so silently, or provide notification that items
+ were removed.
+\end_layout
+
+\begin_layout Standard
+Additionally, these possibilities are not mutually exclusive - it would
+ be relatively simple to allow developers to specify the desired behaviour
+ of the wrapper functions as one of the inputs to said functions.
+\end_layout
+
+\begin_layout Standard
+Algorithm 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:A-privacy-safe-version"
+
+\end_inset
+
+ provides a simplistic example of how we might go about wrapping the 
+\family typewriter
+getElementByID
+\family default
+ function.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+function safeGetElementById(id) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  var elem = document.getElementById(id);
+\end_layout
+
+\begin_layout Plain Layout
+
+  var class = elem.className;
+\end_layout
+
+\begin_layout Plain Layout
+
+  if(class.indexOf("private") == -1) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    return elem;
+\end_layout
+
+\begin_layout Plain Layout
+
+  } else {
+\end_layout
+
+\begin_layout Plain Layout
+
+    return null;
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+A privacy-safe version of 
+\family typewriter
+getElementById
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:A-privacy-safe-version"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The result of this is the creation of a set of functions with similar functional
+ity to our set of tainted functions, but providing the guarantee that no
+ private data will be returned by them.
+ This allows developers to utilise said functions without either the developer
+ or the user being concerned about violation of privacy.
+\end_layout
+
+\begin_layout Standard
+It is still necessary to allow use of the tainted functions, as there are
+ legitimate cases where a developer might wish to retrieve private information
+ from the DOM.
+ For example, one might wish to develop an index of private data on the
+ client side, such that it may be quickly searched later.
+ Such an index could be encrypted and stored in the same way as other private
+ data, and updated as needed.
+\end_layout
+
+\begin_layout Subsubsection*
+Dealing With Writes
+\end_layout
+
+\begin_layout Standard
+As mentioned in the section on 
+\begin_inset CommandInset ref
+LatexCommand nameref
+reference "sub:Preventing-Data-Laundering"
+
+\end_inset
+
+, there exists a problem whereby tainted data may be written back to the
+ DOM, and then read back in, in order to remove the tainted designation.
+ This is not as easily dealt with as merely reading private data from the
+ DOM is, as such data will not necessarily be designated as private when
+ it is written.
+\end_layout
+
+\begin_layout Standard
+We therefore create another set of wrapper functions, this time to guard
+ writes to the DOM.
+ Specifically, such functions designate any data written via them as being
+ private.
+ **TODO: Investigate possibility of tainting the DOM node.** This enables
+ our read functions to detect privacy, and act accordingly.
+\end_layout
+
+\begin_layout Standard
+On the data taint detection side, we outright disallow the use of unwrapped
+ write functions on tainted data.
+ The unwrapped functions may still be used on untainted data.
+\end_layout
+
+\begin_layout Standard
+This should not present a problem for developers, as it is always possible
+ to simply keep the tainted data within the JavaScript runtime, instead
+ of using a write-and-read-back pattern, and the private designation - by
+ design - should not have an effect on the way the DOM itself behaves.
+\end_layout
+
+\begin_layout Standard
+**TODO: Specify which functions this affects**
+\end_layout
+
+\begin_layout Chapter
+Acknowledgements
+\end_layout
+
+\begin_layout Standard
+Many thanks to my supervisor, Roger Clarke, for his many helpful points
+ of advice, for sticking with me and this project, and keeping me on track
+ (or at least trying to), despite my not always being the best student.
+\end_layout
+
+\begin_layout Standard
+Also to my partner, Claire, who kept me from going insane while doing this,
+ and who somehow hasn't torn my head off, despite the fact that she's 
+\emph on
+also
+\emph default
+ trying to write a thesis.
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "db"
+options "plain"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

@@ -1,0 +1,563 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language british
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\paragraph_indentation default
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Title
+Background/Literature Review
+\end_layout
+
+\begin_layout Subsection*
+MEGA
+\end_layout
+
+\begin_layout Standard
+Mega.co.nz has created a file storage/sharing service which attempts to ensure
+ privacy by using in-browser end-to-end encryption.
+ It encrypts the files it stores using randomly generated symmetric keys.
+ These keys are in turn encrypted with a symmetric master key, which is
+ itself encrypted using a hash derived from the user's password.
+ This allows the encryption keys to be stored on the company's servers without
+ actually disclosing them.
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-1"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Additionally, each user has account has an RSA key pair associated with
+ it.
+ The private portion is encrypted with the symmetric master key, allowing
+ it to also be stored on the server.
+ The key pair is used to allow users to exchange files, and also for authenticat
+ion.
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-1"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Mega identifies three large-scale security vulnerabilities with respect
+ to their service.
+\end_layout
+
+\begin_layout Itemize
+A man-in-the-middle attack, involving 
+\begin_inset Quotes eld
+\end_inset
+
+issuing a valid duplicate SSL certificate in combination with DNS forging
+ and/or attacks on our BGP routes
+\begin_inset Quotes erd
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-2"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+A third party gaining access to the servers hosting https://mega.co.nz/index.html,
+ and replacing that file with a forged version.
+\end_layout
+
+\begin_layout Itemize
+A third party gaining access to their servers, and creating forged key requests
+ for existing data shares.
+\end_layout
+
+\begin_layout Standard
+They claim that the latter two vulnerabilities are detectable in the client.
+\end_layout
+
+\begin_layout Subsection*
+Existing Criticisms
+\end_layout
+
+\begin_layout Standard
+Matasano Security offers a number of valid (and not so valid) criticisms
+ of JavaScript based cryptography 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-3"
+
+\end_inset
+
+.
+ Their main concern is what they term the 
+\begin_inset Quotes eld
+\end_inset
+
+chicken-egg problem
+\begin_inset Quotes erd
+\end_inset
+
+ of a service delivering crypto code to the browser.
+ They argue that if you cannot trust a network to deliver a password, or
+ do not trust a server to keep a user's secrets, then you cannot trust that
+ same server or network to deliver security code.
+\end_layout
+
+\begin_layout Standard
+I agree that this is the most substantial problem blocking widespread uptake
+ of the idea.
+ However, it may not be insurmountable.
+ The network-delivery problem (as they readily admit) can be solved using
+ TLS/SSL.
+ Trusting the code that is delivered is another matter, and requires finding
+ some way to verify that what is being delivered is both the correct code
+ (i.e.
+ unmodified by some third party), and not itself malicious.
+\end_layout
+
+\begin_layout Standard
+Another substantial criticism they level is the lack of a cryptographically
+ secure RNG in JavaScript.
+ However, I believe this problem has been solved (or at least, is in the
+ process of being solved) by 
+\family typewriter
+window.crypto.getRandomValues
+\family default
+ - a secure RNG, which is a part of the WebCryptoAPI specification currently
+ being developed by the W3C
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-4"
+
+\end_inset
+
+, and which has been implemented in current or upcoming versions of all
+ major browsers 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-5"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+They also claim that the 
+\begin_inset Quotes eld
+\end_inset
+
+view-source transparency is illusory
+\begin_inset Quotes erd
+\end_inset
+
+.
+ That is, that the inherently open-source nature of browser-executed JavaScript
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+All browsers that I am aware of provide a tool to view the source-code.
+\end_layout
+
+\end_inset
+
+ does not actually help, since even a skilled cryptographer would have difficult
+y determining if a given piece of JavaScript code is secure - particularly
+ due to JavaScript's malleable runtime environment.
+ While this is partially correct, it is also disingenuous - the benefit
+ of view-source transparency is that a person can read the code, and 
+\emph on
+know
+\emph default
+ that it is the same code being executed in the browser - something impossible
+ with compiled binaries 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-6"
+
+\end_inset
+
+.
+ The result is that analysis and verification of the code - both by automated
+ tools and by third-parties - is possible, particularly if some of the malleabil
+ity of JavaScript is disallowed (for example, by disallowing the use of
+ the 
+\family typewriter
+eval
+\family default
+ function).
+\end_layout
+
+\begin_layout Subsection*
+MITM Attack
+\end_layout
+
+\begin_layout Standard
+In any service where users may exchange data using the service, there is
+ the potential for a man-in-the-middle attack to be executed by the service
+ (or by some third party who as gained access to their servers)
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-6"
+
+\end_inset
+
+.
+ Because the server must also act as a de facto public key infrastructure
+ - in that it facilitates the exchange of public keys between users - it
+ has the capability to provide a public key for which it controls the private
+ key to the user sending information, and decrypt the information for itself
+ before forwarding it on to the receiving user.
+ 
+\end_layout
+
+\begin_layout Standard
+In order to negate this possibility, it is necessary for there to be some
+ way to verify that a particular public key belongs to the user that the
+ service claims it belongs to.
+\end_layout
+
+\begin_layout Subsection*
+The Assumed Security of SSL
+\end_layout
+
+\begin_layout Standard
+Most discussions of internet- and web-centric security seem to assume that
+ TLS/SSL is as secure as it reasonably can be.
+ However, there is reason to believe that this is not necessarily the case.
+ Recently unsealed court documents show that FBI demanded (via the court)
+ that LavaBit.com hand over its SSL keys 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-8,key-9"
+
+\end_inset
+
+, presumably in an attempt to monitor or pursue Edward Snowden, who was
+ known to have used the service.
+\end_layout
+
+\begin_layout Standard
+Possession of the SSL keys would in principle allow the FBI to intercept
+ any traffic to and from LavaBit.com.
+ It would also permit the undetected impersonation of LavaBit's server,
+ allowing for material not originating from LavaBit.com to be sent to its
+ users.
+\end_layout
+
+\begin_layout Subsection*
+Cost to Business
+\end_layout
+
+\begin_layout Standard
+The revelations about the extent and reach of the U.S.
+ surveillance apparatus is expected to harm the profitability of businesses
+ involved in cloud-computing which host their data within the United States'
+ jurisdiction.
+ A recent report by the Information Technology and Innovation foundation
+ puts the cost (in terms of lost revenue) to the U.S.
+ cloud computing industry at $22 to $35 billion over the three years from
+ August 2013 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-10"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsection*
+Client-Side Security Holes
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Most of this is just personal knowledge.
+ I'll find references for it at some point.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Assuming some way of securely delivering JavaScript code to the browser,
+ we still require some way to check whether the code is doing something
+ we would prefer it not to (for example, sending encryption keys or user
+ data back to the server once it has decrypted).
+\end_layout
+
+\begin_layout Standard
+Suppose we wish to analyse (either automatically or manually) the JavaScript
+ code for a particular webpage, and having done so certify that that particular
+ code is `safe'.
+ To do this in any sane way, we first need to ensure that the code is reasonably
+ static - that is, the code that is analysed is the code that will actually
+ be run on the user's machine.
+ There are a number of barriers that first need to be overcome, before we
+ can do this - most of them to do with how malleable browser-executed JavaScript
+ can be.
+ These are
+\end_layout
+
+\begin_layout Itemize
+The 
+\family typewriter
+eval
+\family default
+ function, which accepts an arbitrary string, and will attempt to evaluate
+ (i.e.
+ execute) it in the JavaScript runtime environment.
+ In other words, it enables arbitrary code execution.
+ Even if the rest of the code is entirely static, if the server or some
+ third party is able to manipulate the string(s) passed to 
+\family typewriter
+eval
+\family default
+, then all other analysis is useless.
+ Thankfully, it is rarely actually necessary to use the 
+\family typewriter
+eval
+\family default
+ function (most of what it's used for can easily be done in some other way),
+ and most coding standards and security policies ban its use.
+ The same may be said for string arguments to 
+\family typewriter
+setTimeout
+\family default
+ and 
+\family typewriter
+setInterval
+\family default
+.
+\end_layout
+
+\begin_layout Itemize
+Inline JavaScript (e.g.
+ 
+\family typewriter
+<script>...</script>
+\family default
+), allowing the embedding of arbitrary JavaScript into the HTML page itself.
+ As this can be added/modified by the server at any time, it negates any
+ other analysis that has been done.
+ However, to the best of my knowledge there is nothing that can be accomplished
+ by inline JavaScript that cannot also be accomplished by an external JavaScript
+ file.
+ The same can be said of DOM events such as 
+\family typewriter
+onclick
+\family default
+, and of links with an 
+\family typewriter
+href
+\family default
+ attribute beginning with 
+\family typewriter
+javascript:
+\family default
+.
+\end_layout
+
+\begin_layout Itemize
+It is possible to dynamically load in scripts by appending a new 
+\family typewriter
+<script>
+\family default
+ tag to the DOM, with the 
+\family typewriter
+src
+\family default
+ attribute pointing to some external URI.
+ Again, there are few circumstances where this is actually necessary.
+ Generally it is merely convenient, and can thus generally be disallowed.
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-1"
+
+\end_inset
+
+https://mega.co.nz/#doc
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-2"
+
+\end_inset
+
+https://mega.co.nz/#help_security
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-3"
+
+\end_inset
+
+
+\begin_inset CommandInset citation
+LatexCommand cite
+key "key-3"
+
+\end_inset
+
+http://www.matasano.com/articles/javascript-cryptography/
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-4"
+
+\end_inset
+
+http://www.w3.org/TR/WebCryptoAPI/
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-5"
+
+\end_inset
+
+https://developer.mozilla.org/en-US/docs/Web/API/window.crypto.getRandomValues
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-6"
+
+\end_inset
+
+http://log.nadim.cc/?p=33
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-1"
+
+\end_inset
+
+http://en.wikipedia.org/wiki/Man-in-the-middle_attack
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-8"
+
+\end_inset
+
+http://www.wired.com/threatlevel/2013/10/lavabit_unsealed/
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-9"
+
+\end_inset
+
+p36, https://s3.amazonaws.com/s3.documentcloud.org/documents/801182/redacted-pleadin
+gs-exhibits-1-23.pdf
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-10"
+
+\end_inset
+
+http://www2.itif.org/2013-cloud-computing-costs.pdf
+\end_layout
+
+\begin_layout Bibliography
+\begin_inset CommandInset bibitem
+LatexCommand bibitem
+key "key-11"
+
+\end_inset
+
+http://en.wikipedia.org/wiki/Content_Security_Policy
+\end_layout
+
+\end_body
+\end_document

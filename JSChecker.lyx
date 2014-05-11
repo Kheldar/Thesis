@@ -1,0 +1,1097 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\usepackage{bussproofs}
+\usepackage{mathtools}
+\end_preamble
+\use_default_options true
+\begin_modules
+theorems-ams
+eqs-within-sections
+figs-within-sections
+\end_modules
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip smallskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset CommandInset include
+LatexCommand include
+filename "lyxproofs.lyx"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Part*
+Threat Model
+\end_layout
+
+\begin_layout Standard
+We assume that an attacker may gain control full control of all software
+ and hardware on the server, with the result that the server may send arbitrary
+ and malicious responses to users based on their requests.
+ An attacker may also gain control over the service itself, either being
+ a part of the entity operating the service, or by legal means - for example,
+ a court order - with the result that security certificates may be compromised,
+ in addition to the server itself.
+\end_layout
+
+\begin_layout Standard
+Additionally, an attacker may gain control of the machines of some other
+ users, though we do not seek to deal with the case where an attacker has
+ gained control of or access to the machine of the user who's data we seek
+ to protect.
+ In that instance, all privacy and security are already out the window;
+ none of the measures outlined here can reasonably help.
+\end_layout
+
+\begin_layout Standard
+We seek to guarantee that even if the server and/or service is completely
+ compromised, the private data of the service's users will not be available
+ to the server, nor to any attacker controlling it.
+ We may only 
+\emph on
+actually
+\emph default
+ guarantee this in the case where the user is willing and able to perform
+ some verification - for example, by installing a plugin to ensure that
+ their private data is not being transmitted to the server.
+ Where this is not the case, we seek to create a digital form of `herd immunity'
+, whereby those users who do perform verification are sufficient to detect
+ generalised server compromise, and bring it to the attention either of
+ those users who do not, or of the appropriate authorities
+\end_layout
+
+\begin_layout Standard
+In essence, we do not trust the server to deliver what the user expects
+ it to deliver.
+ However, it must be noted that this does not come from an inherent distrust
+ of the service, nor those who created it - in fact, it is assumed that
+ the service and its creators intend to create a secure application - it
+ is simply the fact that we cannot outright trust them.
+\end_layout
+
+\begin_layout Part*
+JS Checker & HTML Model
+\end_layout
+
+\begin_layout Subsection*
+Checker
+\end_layout
+
+\begin_layout Standard
+Here we will describe `JS Checker' software, the purpose of which is twofold.
+ For developers, it allows them to ensure that any web-based software they
+ are building respects the privacy of their users, at least from the threats
+ we have outlined here.
+ For web users, it allows them to check whether such websites do indeed
+ respect such privacy.
+ If it finds that privacy may be violated, it may either alert the user,
+ or actively disallow the threat from happening by preventing execution.
+\end_layout
+
+\begin_layout Standard
+The checker software resides on the client, and parses all JavaScript sent
+ from the server prior to its execution.
+ The only restriction on its construction is that it not be accessible to
+ the browser's JavaScript runtime.
+ A browser plugin would be an appropriate model within which to construct
+ one.
+\end_layout
+
+\begin_layout Standard
+The first purpose of the checker is to check a hash of the framework file
+ against a pre-provided hash, to ensure that the file has not been tampered
+ with either on the server or en-route.
+\end_layout
+
+\begin_layout Standard
+The second purpose is to check all other JavaScript sent to the client,
+ and determine whether any of the components of the framework file potentially
+ could be modified by code outside the framework.
+ This is relatively easy to check - we simply have to search for any instances
+ of assignments to identifiers in the framework file.
+ Note that we are not concerned with what such code 
+\emph on
+will
+\emph default
+ do when executed, or whether it 
+\emph on
+will
+\emph default
+ be executed (that way lies madness, and the halting problem).
+ Rather we are concerned with whether code exists which 
+\emph on
+could
+\emph default
+ perform such modifications, if it were run.
+\end_layout
+
+\begin_layout Standard
+The third purpose is to check for use of the unisolated versions of the
+ isolated functions.
+ In the event that any unsafe calls are detected, the question then becomes
+ what to do.
+\end_layout
+
+\begin_layout Subsection*
+Private HTML Snippet
+\end_layout
+
+\begin_layout Standard
+We encode private text-based information on the HTML page like so:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\small},language=HTML"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+<div class="private" key="encrypted-local-key-here">
+\end_layout
+
+\begin_layout Plain Layout
+
+	Encrypted information here.
+\end_layout
+
+\begin_layout Plain Layout
+
+</div>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The 
+\begin_inset Quotes eld
+\end_inset
+
+private
+\begin_inset Quotes erd
+\end_inset
+
+ class is a flag for the cryptography library to indicate both that the
+ tag contains private information, and that it should be decrypted for the
+ user.
+ As per normal HTML rules, the class attribute may contain other values
+ in addition to 
+\begin_inset Quotes eld
+\end_inset
+
+private
+\begin_inset Quotes erd
+\end_inset
+
+, and this will not interfere with the decryption.
+\end_layout
+
+\begin_layout Standard
+The 
+\begin_inset Quotes eld
+\end_inset
+
+key
+\begin_inset Quotes erd
+\end_inset
+
+ attribute is a non-standard HTML attribute, used here to store the encrypted
+ version of the local key corresponding to the private information enclosed
+ by the tag.
+\end_layout
+
+\begin_layout Standard
+Finally, it should be noted that there is no requirement that the tag used
+ be a 
+\begin_inset Quotes eld
+\end_inset
+
+div
+\begin_inset Quotes erd
+\end_inset
+
+ tag - that is simply used here as an example.
+ We do require that there 
+\emph on
+be
+\emph default
+ a tag wrapping the private information, though, and that such a tag be
+ the inner-most tag, relative to the encrypted information.
+\end_layout
+
+\begin_layout Subsubsection*
+Decryption of Private HTML
+\end_layout
+
+\begin_layout Standard
+On page ready, we use JavaScript to scan for any elements with class 
+\begin_inset Quotes eld
+\end_inset
+
+private
+\begin_inset Quotes erd
+\end_inset
+
+.
+ Upon finding such an element, we look for a 
+\begin_inset Quotes eld
+\end_inset
+
+key
+\begin_inset Quotes erd
+\end_inset
+
+ attribute.
+ Upon discovering that, we use the user's master key (assumed already decrypted)
+ to decrypt the local key in the 
+\begin_inset Quotes eld
+\end_inset
+
+key
+\begin_inset Quotes erd
+\end_inset
+
+ element.
+ This decrypted local key is then used to decrypt the private information.
+\end_layout
+
+\begin_layout Subsection*
+Function Isolation
+\end_layout
+
+\begin_layout Standard
+To the best of my knowledge, there are a finite number of built-in JavaScript
+ functions which may access the DOM (specifically those in the DOM API),
+ and there does not exist the capability to create new ones without using
+ the already existing functions.
+\end_layout
+
+\begin_layout Standard
+Because all decrypted information is initially only stored in the DOM (any
+ that may have existed in the JavaScript runtime during decryption is assumed
+ either inaccessible or purged), we may control access to such information
+ by controlling the functions which may read from the DOM, or otherwise
+ interfere with it in ways which would violate the privacy we are trying
+ to establish.
+\end_layout
+
+\begin_layout Standard
+To that end, we isolate functions which have the potential to allow disclosure
+ of decrypted information (as described in browser vulnerabilities section)
+ by wrapping them in custom functions, which check whether they are being
+ used to access the private information.
+\end_layout
+
+\begin_layout Standard
+As an example, we would handle the `getElementByID' function like so:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\small}"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+function safeGetElementById(id) {
+\end_layout
+
+\begin_layout Plain Layout
+
+  var elem = document.getElementById(id);
+\end_layout
+
+\begin_layout Plain Layout
+
+  var class = elem.className;
+\end_layout
+
+\begin_layout Plain Layout
+
+  if(class.indexOf("private") == -1) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    return elem;
+\end_layout
+
+\begin_layout Plain Layout
+
+  } else {
+\end_layout
+
+\begin_layout Plain Layout
+
+    return null;
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+TODO: Need to make above code check subtrees.
+\end_layout
+
+\begin_layout Subsection*
+Framework
+\end_layout
+
+\begin_layout Standard
+All cryptographic code, and all wrapper functions are confined to a single,
+ static JavaScript file.
+ We shall term this file the `framework' file.
+ It is intended that such a file be standardised, so that its integrity
+ may be checked on the client.
+\end_layout
+
+\begin_layout Subsection*
+Handling Unisolated Calls
+\end_layout
+
+\begin_layout Standard
+Calls to the unisolated versions of the isolated functions are not intrinsically
+ a bad thing; there are legitimate uses of such functions which do not violate
+ privacy, and it is preferable that such uses be preserved, in so far as
+ possible.
+\end_layout
+
+\begin_layout Standard
+We must therefore consider a number of options:
+\end_layout
+
+\begin_layout Enumerate
+Disallow their use entirely.
+ This is the safest option, but also the most restrictive.
+\end_layout
+
+\begin_layout Enumerate
+Allow their use, so long as no private information (nor any data derived
+ from that information) is transmitted in any way (for example, via an XHR
+ request).
+ In principle this is just as safe as disallowing their use, but one must
+ be certain that no data is transmitted.
+\end_layout
+
+\begin_layout Enumerate
+Allow their use, so long as any private information (or any data derived
+ from that information) is encrypted prior to being transmitted.
+ This comes with the same proviso as option to, but with the added constraint
+ that we must be sure data is encrypted.
+\end_layout
+
+\begin_layout Subsection*
+Detecting Unisolated Calls
+\end_layout
+
+\begin_layout Standard
+Detecting the existence of unisolated function called is straightforward
+ - we may simply search for them, though we must take care to also check
+ if any aliases are created.
+ This handles option 1 above.
+ Dealing with options 2 and 3 above is more involved.
+\end_layout
+
+\begin_layout Standard
+Suppose 
+\family typewriter
+f
+\family default
+ is an unisolated version of a function, and we detect a function call:
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+var x = f(args);
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We tag the variable 
+\family typewriter
+x
+\family default
+ (the output of 
+\family typewriter
+f
+\family default
+) as unsafe.
+ We then wish to `carry' this unsafe tag through the program's code, such
+ that anything which depends on or derives from 
+\family typewriter
+x
+\family default
+ is also marked as unsafe.
+ Thus if we encountered
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+var y = x;
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+We would mark 
+\family typewriter
+y
+\family default
+ as unsafe.
+ We must derive rules for JavaScript's syntax in order to carry these markings
+ through the program.
+\end_layout
+
+\begin_layout Standard
+Formally, assume we have a list 
+\begin_inset Formula $\mathbf{U}$
+\end_inset
+
+ representing the list of unsafe expressions and identifiers.
+ This list initially contains all the unisolated functions.
+ Further, let 
+\begin_inset Formula $\mathbf{I}$
+\end_inset
+
+ be the set of valid identifiers, and 
+\begin_inset Formula $\mathbf{E}$
+\end_inset
+
+ be the set of valid expressions in JavaScript.
+ All three are assumed to be appropriately constrained to the scope of the
+ block of code currently being examined.
+\end_layout
+
+\begin_layout Subsubsection*
+Expressions
+\end_layout
+
+\begin_layout Standard
+If we encounter an expression 
+\begin_inset Formula $e\in\mathbf{E}$
+\end_inset
+
+ within the code, and if 
+\begin_inset Formula $\exists x.\, x\in\mathbf{U}$
+\end_inset
+
+ and 
+\begin_inset Formula $x\in e$
+\end_inset
+
+ (i.e.
+ x is a part of the expression 
+\begin_inset Formula $e$
+\end_inset
+
+), then 
+\begin_inset Formula $e\in\mathbf{U}$
+\end_inset
+
+ (that is, we add 
+\begin_inset Formula $e$
+\end_inset
+
+ to 
+\begin_inset Formula $\mathbf{U}$
+\end_inset
+
+ if it is not already a member).
+\end_layout
+
+\begin_layout Standard
+TODO: Clarify exactly what `expression' means.
+\end_layout
+
+\begin_layout Subsubsection*
+Assignments
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\forall x\in\mathbf{I},\,\forall e\in\mathbf{E}.$
+\end_inset
+
+ if 
+\begin_inset Formula $e\in\mathbf{U}$
+\end_inset
+
+ and we encounter an expression of the form
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+var x = e;
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+then 
+\begin_inset Formula $x\in\mathbf{U}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection*
+Function calls
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\forall args\subseteq\mathbf{I},\,\forall f\in\mathbf{E}.$
+\end_inset
+
+ if 
+\begin_inset Formula $\exists a.\,\left(a\in args,\, a\in\mathbf{U}\right)$
+\end_inset
+
+ and we encounter an expression of the form
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+f(args);
+\end_layout
+
+\end_inset
+
+ then 
+\begin_inset Formula $f\left(args\right)\in\mathbf{U}$
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Subsubsection*
+Conditionals, Loops, and Function Calls.
+\end_layout
+
+\begin_layout Standard
+(TODO: Make this section stylistically the same as the above.)
+\end_layout
+
+\begin_layout Standard
+Conditionals and loops are trickier again.
+ Say we have a block
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+if(condition) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	statement1a;
+\end_layout
+
+\begin_layout Plain Layout
+
+	statement2a;
+\end_layout
+
+\begin_layout Plain Layout
+
+	   ...
+\end_layout
+
+\begin_layout Plain Layout
+
+	statementNa;
+\end_layout
+
+\begin_layout Plain Layout
+
+} else {
+\end_layout
+
+\begin_layout Plain Layout
+
+	statement1b;
+\end_layout
+
+\begin_layout Plain Layout
+
+	statement2b;
+\end_layout
+
+\begin_layout Plain Layout
+
+	...
+\end_layout
+
+\begin_layout Plain Layout
+
+	statementNb;
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Where 
+\family typewriter
+condition
+\family default
+ is marked as unsafe.
+ Then the results of all statements within the body and the else block of
+ the conditional must be considered to depend on 
+\family typewriter
+condition
+\family default
+, and marked as unsafe.
+ Similarly for while loops:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+while(condition) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	statement1;
+\end_layout
+
+\begin_layout Plain Layout
+
+	statement2;
+\end_layout
+
+\begin_layout Plain Layout
+
+	   ...
+\end_layout
+
+\begin_layout Plain Layout
+
+	statementN;
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+if 
+\family typewriter
+condition
+\family default
+ is marked unsafe, we must consider the results of all statements within
+ the body also unsafe.
+\end_layout
+
+\begin_layout Standard
+For functions, we say the function itself is unsafe if either its return
+ value is unsafe, or it makes a modification to a pass-by-reference parameter,
+ and in doing so makes the parameter unsafe.
+ Alternatively, we could mark the parameter itself as unsafe instead of
+ the entire function.
+\end_layout
+
+\begin_layout Standard
+(TODO: Define how this works for other relevant statements (try, switch,
+ other loops, objects, etc).)
+\end_layout
+
+\begin_layout Standard
+The result of this is that the `unsafe' flag gets propagated throughout
+ the checker's analysis of the code.
+ The next step is to detect whether anything unsafe is being transmitted.
+ 
+\end_layout
+
+\begin_layout Standard
+The typical way in which communications between client and server are performed
+ in JavaScript is an XML HTTP Request (XHR).
+ If an XHR object exists within the code, and it (or any of its sub-elements)
+ has been marked unsafe, then we must consider the code to have the potential
+ to violate the user's privacy (at least under option 2).
+ The same principle can be extended to other methods of external communication
+ within JavaScript.
+\end_layout
+
+\begin_layout Standard
+To handle option 3, we take the above and augment it by allowing encryption
+ functions to accept unsafe inputs, and produce safe (i.e.
+ unmarked) outputs.
+ As an inverse to this, decryption functions must be included in the set
+ of functions marked unsafe (TODO: They probably should be anyway).
+ Thus any user data that is encrypted can safely be sent to the server,
+ even if it derives from private data.
+\end_layout
+
+\begin_layout Part*
+Necessary Limitations
+\end_layout
+
+\begin_layout Standard
+In order to make our model work, it is necessary to place a number of limitation
+s on what may be done within HTML and JavaScript.
+\end_layout
+
+\begin_layout Subsection*
+Loading External Resources
+\end_layout
+
+\begin_layout Standard
+All external resources (images, CSS files, JavaScript files, etc) must be
+ referenced in the initial HTML page sent from the server.
+ This is opposed to the common practice of loading resources after the initial
+ page load by modifying the DOM with JavaScript.
+\end_layout
+
+\begin_layout Standard
+This is due to the fact that loading in resources may initiate communication
+ with the server in a manner which is much more difficult to detect than
+ an AJAX call, thereby allowing the JS runtime to transmit private data
+ to the server.
+\end_layout
+
+\begin_layout Standard
+For example, a JavaScript file might contain the jQuery code in Algorithm
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:jQuery-code-external"
+
+\end_inset
+
+.
+ The code loads in an external CSS file, conditional on some property of
+ the private data.
+ As the file is being loaded from the server, the server would be able to
+ detect and record that the private data had that property.
+ Similar logic may be applied to other types of external resources.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$(document).ready(function() {
+\end_layout
+
+\begin_layout Plain Layout
+
+  // Lifts private data from page
+\end_layout
+
+\begin_layout Plain Layout
+
+  var data = getPrivateData();
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+  if(hasInterestingProperty(data)) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    $('head').append(
+\end_layout
+
+\begin_layout Plain Layout
+
+      "<link type='text/css' rel='stylesheet'
+\end_layout
+
+\begin_layout Plain Layout
+
+      href='innocentCSSFile.css'>");
+\end_layout
+
+\begin_layout Plain Layout
+
+  }
+\end_layout
+
+\begin_layout Plain Layout
+
+});
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+jQuery code to load an external CSS file.
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:jQuery-code-external"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The reason these cases are more difficult to deal with than an Ajax call
+ is that they work by modifying the DOM in ways which are not easily distinguish
+able from ways that we 
+\emph on
+do
+\emph default
+ wish to allow.
+ For instance, it is entirely reasonable that there might be JavaScript
+ code which takes private data from the DOM, performs some processing upon
+ it, and writes something derived from that data back to the DOM.
+\end_layout
+
+\begin_layout Standard
+It is theoretically possible to perform checks on additions and modifications
+ to the DOM.
+ Afterall, there are only a finite number of elements with the capability
+ of loading in an external resource.
+ However, actually catching all the ways that is possible (and being certain
+ they are all caught) is a proverbial rabbit hole, and I've no desire to
+ see how deep it goes.
+\end_layout
+
+\begin_layout Standard
+Resources loaded during the initial page load are safe, since it can be
+ assumed nothing may be done to transmit private data, as none should have
+ been decrypted at that stage.
+\end_layout
+
+\begin_layout Standard
+An unfortunate side-effect of limiting loading of external resources is
+ that it may balloon overall page sizes and load times, if the programmer
+ chooses to preload all potentially used resources.
+ Alternatively, it may reduce functionality if resources are not preloaded.
+\end_layout
+
+\begin_layout Standard
+A possible work-around is to specify on the page itself all resources which
+ 
+\emph on
+may
+\emph default
+ need to be loaded (e.g.
+ by a list of filenames), but which are not loaded in the initial HTML document.
+ As these file-names are present at load-time, it may be assumed that they
+ are not derived from private data.
+ The DOM modifications necessary to load these files could them be wrapped
+ in specific functions known to the JS Checker, allowing it to apply the
+ same logic to these functions as it does to an Ajax call.
+\end_layout
+
+\begin_layout Subsection*
+Eval, et al
+\end_layout
+
+\begin_layout Standard
+Use of JavaScript's 
+\family typewriter
+eval
+\family default
+ function is prohibited under our model, since it will attempt to execute
+ any string passed to it, including strings loaded via Ajax or from the
+ DOM.
+ Such functionality more-or-less eliminates our ability to perform any sort
+ of static analysis on the code.
+ 
+\end_layout
+
+\begin_layout Standard
+For the same reason, calls to 
+\family typewriter
+setTimeout
+\family default
+ and 
+\family typewriter
+setInterval
+\family default
+ with string arguments are also prohibited.
+\end_layout
+
+\begin_layout Subsection*
+Flash, Java, et al
+\end_layout
+
+\begin_layout Standard
+To make this model work, we must ban the use of Flash on any page which
+ contains private information.
+ This is because Flash has access to the JavaScript runtime and - unlike
+ raw JavaScript code - is relatively unmonitorable and uncheckable.
+\end_layout
+
+\begin_layout Standard
+The same is true of Java Applets, as those have the capability of accessing
+ the DOM, thereby exposing any private information which has been written
+ to it.
+\end_layout
+
+\begin_layout Standard
+For the same reason, we must also ban any other method of delivering 
+\begin_inset Quotes eld
+\end_inset
+
+rich content
+\begin_inset Quotes erd
+\end_inset
+
+ which can access either the DOM or the JavaScript runtime in an opaque
+ way.
+ For example, Microsoft's Silverlight is likely to fall into the same category,
+ though I do not have the necessary technical knowledge to properly examine
+ that possibility.
+\end_layout
+
+\end_body
+\end_document

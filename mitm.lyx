@@ -1,0 +1,184 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\begin_preamble
+\usepackage{url}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language english
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command bibtex
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip smallskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Part*
+The Man-in-the-Middle Problem
+\end_layout
+
+\begin_layout Standard
+Our model has a potential problem with a man-in-the-middle attack, if a
+ service should wish to permit users to exchange private information.
+ 
+\end_layout
+
+\begin_layout Standard
+In particular, as it is the service which actively facilitates the exchange
+ of public keys, there is the potential that it will send users key(s) which
+ it controls, as opposed to the correct ones, and there is no straightforward
+ method of detecting or averting this.
+\end_layout
+
+\begin_layout Standard
+To solve this, we require a method by which the client may verify that a
+ public key it receives from another user does in fact belong to that user.
+\end_layout
+
+\begin_layout Standard
+Typical methods of performing a secure key exchange - for example, the Diffie–He
+llman algorithm
+\begin_inset CommandInset citation
+LatexCommand cite
+key "1055638"
+
+\end_inset
+
+ - seem to fail here, as they rely on a direct connection between the two
+ clients.
+\end_layout
+
+\begin_layout Standard
+The usual way around this problem is for clients to verify public keys via
+ some side channel; one not controlled by the service.
+\end_layout
+
+\begin_layout Standard
+However, because of the nature of the service (all users use encryption,
+ and doing so is not optional), we cannot rely on all user's manually self-publi
+shing their keys via this side-channel, the way that a lot of public-key
+ schemes such as PGP tend to do.
+\end_layout
+
+\begin_layout Standard
+There may be a workaround to the issue if we relax the attempt to guarantee
+ that MITM attack has been attempted, and instead try and merely detect
+ such an attack before it has any impact.
+ In particular, as the service is assumed to be generally cooperative in
+ attempting to be secure, it could publish (to a side channel not under
+ its control) its database of user's public keys, and their corresponding
+ unique ID.
+ User's who wish to do so would then be able to verify that their own public
+ key was being accurately reported by this side-channel, and at minimum
+ check that other user's keys provided via the service match the ones stored
+ in the side channel.
+\end_layout
+
+\begin_layout Standard
+This approach is not perfect - in particular, it still provides no guarantees
+ that another user's public key is accurate, and there is also no guarantee
+ that an attacker does not have control of both the service and the side
+ channel.
+ However, a user can can always verify their own public key, and as neither
+ the service nor an attacker can reasonably detect which users are verifying
+ their keys (unless they have control of the user's client machine or the
+ side channel), the likelihood that any man-in-the-middle attack is detected
+ increases with the number of users verifying their keys.
+\end_layout
+
+\begin_layout Standard
+There is also no requirement that there be only one side-channel, or even
+ one type of side-channel.
+ It would be entirely possible to set-up a side channel where users self-report
+ their public keys, and the keys of any other users they have contact with,
+ without any involvement by the service.
+ Another possibility is establishing a web-of-trust (a la OpenPGP
+\begin_inset CommandInset citation
+LatexCommand cite
+key "OpenPGP"
+
+\end_inset
+
+) network, where user's endorse the keys of other user's known to them.
+ The more independent side channels that exist, preferably in multiple internati
+onal jurisdictions, the less likely that any man in the middle attack can
+ occur undetected.
+\end_layout
+
+\begin_layout Standard
+In our case, the important property of any method of validating public keys
+ is that a user is able to detect discrepancies between the service-supplied
+ public key, and the key(s) it is validating against, before any exchange
+ of private information takes place.
+ Such detection firstly allows the user to cease any information exchange,
+ and secondly allows either the service to be alerted (in the instance where
+ their servers have been compromised by a third party), or other users (in
+ the instance where the service itself is the one compromising the keys).
+ In the latter case, it is hoped that the potential for negative publicity
+ (and the ensuing drop in revenue) is sufficient to dissuade the service
+ from willingly attempting to compromise its user's privacy.
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset bibtex
+LatexCommand bibtex
+bibfiles "LitReview/diffieHellman,LitReview/openpgp"
+options "plain"
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document

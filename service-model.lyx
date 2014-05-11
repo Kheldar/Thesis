@@ -1,0 +1,836 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\maintain_unincluded_children false
+\language british
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip smallskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+***TODO: Brief discussion on Homomorphic Encryption***
+\end_layout
+
+\begin_layout Part*
+Secure Service Model
+\end_layout
+
+\begin_layout Section*
+Actors
+\end_layout
+
+\begin_layout Itemize
+The user.
+\end_layout
+
+\begin_layout Itemize
+The user's computer, or similar device (the 
+\begin_inset Quotes eld
+\end_inset
+
+client
+\begin_inset Quotes erd
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Itemize
+Intermediaries (ISPs, and other systems between the client and server).
+\end_layout
+
+\begin_layout Itemize
+The service provider's computer (the 
+\begin_inset Quotes eld
+\end_inset
+
+server
+\begin_inset Quotes erd
+\end_inset
+
+).
+\end_layout
+
+\begin_layout Section*
+Connection
+\end_layout
+
+\begin_layout Itemize
+All communications between the client and server are assumed to take place
+ over a secured connection (e.g.
+ HTTPS).
+\end_layout
+
+\begin_layout Itemize
+Any intermediaries are assumed not to be able to decrypt data sent between
+ the client and server (due to the use of HTTPS).
+ There is the possibility that they will collect meta-data about the transmissio
+n, but attempting to avoid that is outside the scope of this project.
+\end_layout
+
+\begin_layout Section*
+Software/Website Model
+\end_layout
+
+\begin_layout Itemize
+We will model our service as a typical multi-page HTML+JavaScript-based
+ website, accessed via a web-browser.
+\end_layout
+
+\begin_layout Section*
+Encryption Scheme
+\end_layout
+
+\begin_layout Standard
+Our security model uses a moderately complex encryption scheme, visualised
+ in Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Encryption Scheme"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+All encryption described under this scheme is performed on the client (e.g.
+ in a web-browser).
+\end_layout
+
+\begin_layout Standard
+The entities involved in this encryption scheme are:
+\end_layout
+
+\begin_layout Itemize
+The User.
+\end_layout
+
+\begin_layout Itemize
+The User's Password.
+\end_layout
+
+\begin_layout Itemize
+A symmetric Master Key.
+\end_layout
+
+\begin_layout Itemize
+An asymmetric Public/Private key-pair.
+\end_layout
+
+\begin_layout Itemize
+Many symmetric Local Keys.
+\end_layout
+
+\begin_layout Itemize
+Many instances of distinct private data.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename Diagrams/Encrypt.eps
+	lyxscale 50
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Diagram of encryption scheme dependencies.
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Encryption Scheme"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Under our model, the User provides their password to the encryption software
+ (e.g.
+ via a password input in the browser).
+ The password is then hashed, and this resulting hash may then be used to
+ encrypt/decrypt the Master Key.
+\end_layout
+
+\begin_layout Standard
+The Master key is a symmetric key, which is used to encrypt/decrypt the
+ Private key, and all Local Keys.
+ 
+\end_layout
+
+\begin_layout Standard
+The Local Keys are symmetric keys, which correspond one-to-one with an instance
+ of private data, which they may be used to encrypt/decrypt.
+\end_layout
+
+\begin_layout Standard
+The Public/Private key-pair may be used to encrypt/decrypt information that
+ the other key in the pair encrypts/decrypts, as is typical under asymmetric
+ encryption schemes.
+ The Public key is never encrypted, since it is as the name suggests intended
+ to be publicly available.
+\end_layout
+
+\begin_layout Standard
+The Public/Private keys are necessary in order to send private information
+ to other users.
+ The local keys are necessary in order to only send specific data, as opposed
+ to sending more data than is desired.
+\end_layout
+
+\begin_layout Standard
+The Master key could potentially be replaced by the Public/Private pair.
+ However, asymmetric encryption schemes tend to be much slower than symmetric
+ ones, so it is preferable to minimise the use of the asymmetric pair to
+ only when they are actually needed.
+\end_layout
+
+\begin_layout Section*
+Common Elements
+\end_layout
+
+\begin_layout Standard
+All pages and procedures are assumed to have the following steps in common:
+\end_layout
+
+\begin_layout Enumerate
+The client uses a JavaScript-enabled web-browser or similar program to make
+ an HTTP request to the server for the appropriate page.
+\end_layout
+
+\begin_layout Enumerate
+The server responds, sending the corresponding HTML.
+\end_layout
+
+\begin_layout Enumerate
+The client interprets the HTML, and makes additional requests to the server
+ as appropriate for required resources (Images, CSS, JavaScript etc).
+\end_layout
+
+\begin_layout Enumerate
+The server responds by sending the appropriate resources.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Among the JavaScript sent to the client is code for performing the cryptographic
+ operations, described below.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways true
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename Diagrams/common.eps
+	scale 45
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Common Elements
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+User Signup and Key Generation
+\end_layout
+
+\begin_layout Enumerate
+The client requests and receives a sign-up page.
+\end_layout
+
+\begin_layout Enumerate
+On the client, a public-private key-pair is generated (e.g.
+ by use of the RSA algorithm).
+\end_layout
+
+\begin_layout Enumerate
+On the client, a randomly generated symmetric 
+\begin_inset Quotes eld
+\end_inset
+
+master key
+\begin_inset Quotes erd
+\end_inset
+
+ is created.
+\end_layout
+
+\begin_layout Enumerate
+On the client, the private key is encrypted using this master key.
+\end_layout
+
+\begin_layout Enumerate
+On the client, the user fills out a web-form, supplying at minimum a unique
+ identifier (e.g.
+ username, email) and password.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+This may happen concurrent to steps 5-7.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+The master key is encrypted using a hash derived from the password.
+\end_layout
+
+\begin_layout Enumerate
+The public key, the encrypted private key, and the encrypted master key
+ and are all transmitted to the server, along with any other signup information.
+ These are then stored on the server.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+The unencrypted private key, the unencrypted master key, and the password
+ (or any derivation of it) are 
+\emph on
+not
+\emph default
+ transmitted to the server.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways true
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename Diagrams/signup.eps
+	scale 45
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+User Signup and Key Generation
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Authentication and Log-In
+\end_layout
+
+\begin_layout Enumerate
+The client requests and receives a page containing a login form.
+\end_layout
+
+\begin_layout Enumerate
+The user fills out the log-in form with their unique identifier and password.
+\end_layout
+
+\begin_layout Enumerate
+The user submits the form, which causes the client to send the unique identifier
+ to the server.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+But 
+\emph on
+not
+\emph default
+ the password.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+The server responds with the encrypted private key, encrypted master key
+ and public key corresponding to the unique identifier, and a random session
+ token which has been encrypted using the public key of the corresponding
+ unique identifier.
+\end_layout
+
+\begin_layout Enumerate
+The client decrypts the master key using a hash of the supplied password,
+ then decrypts private key using the master key, and finally decrypts the
+ session key using the private key.
+\end_layout
+
+\begin_layout Enumerate
+The decrypted session key is then sent to the server, and the user is considered
+ authenticated if the key matches the original on the server.
+\end_layout
+
+\begin_layout Enumerate
+The session key is then set as a cookie, so that the session may be tracked
+ across pages.
+\end_layout
+
+\begin_layout Enumerate
+The decrypted private key, master key and public key are saved to the JavaScript
+ 
+\family typewriter
+localStorage
+\family default
+ object.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+This is so that they persist across pages, but in a manner not opaquely
+ available to the server (in contrast with cookies).
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways true
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename Diagrams/login.eps
+	scale 45
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Authentication and Log-In
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Storing Private Information
+\end_layout
+
+\begin_layout Enumerate
+The client requests and receives a page which may be used to supply and
+ encrypt private information.
+\end_layout
+
+\begin_layout Enumerate
+The user supplies the private information they wish encrypted and stored
+ to the JavaScript runtime, in some manner applicable to the type on information.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+Different types of information may use different forms of input.
+ The specifics are not relevant, other than that it reaches the JavaScript
+ runtime in a useable fashion.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+On the client, randomly generated symmetric keys (the 
+\begin_inset Quotes eld
+\end_inset
+
+local keys
+\begin_inset Quotes erd
+\end_inset
+
+) are created for each distinct piece of information to be encrypted.
+\end_layout
+
+\begin_layout Enumerate
+The JavaScript runtime encrypts the information using the local keys.
+\end_layout
+
+\begin_layout Enumerate
+The encrypted information is transmitted to the server.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+The unencrypted information is 
+\emph on
+not
+\emph default
+ transmitted to the server.
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+The local key(s) are encrypted with the master key, and transmitted to the
+ server.
+\end_layout
+
+\begin_deeper
+\begin_layout Enumerate
+The unencrypted local keys are 
+\emph on
+not
+\emph default
+ transmitted to the server.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways true
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename Diagrams/saveInfo.eps
+	scale 45
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Storing Private Information
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Retrieving Private Information
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Retrieving-Private-Information"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+The client requests and receives a page which may contain encrypted private
+ information.
+\end_layout
+
+\begin_layout Enumerate
+This may contain encrypted private information, including the encrypted
+ local key(s) corresponding to said information.
+\end_layout
+
+\begin_layout Enumerate
+In place of, or in addition to the encrypted information sent in step 2,
+ the client requests and receives encrypted private information, including
+ the encrypted local key(s) corresponding to said information.
+\end_layout
+
+\begin_layout Enumerate
+The encrypted local keys are decrypted using the master key.
+ The encrypted information is then decrypted using the local keys.
+\end_layout
+
+\begin_layout Enumerate
+The information is made available to the user in whatever format is appropriate
+ to the information.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float figure
+wide false
+sideways true
+status collapsed
+
+\begin_layout Plain Layout
+\noindent
+\align center
+\begin_inset Graphics
+	filename Diagrams/retrieveInfo.eps
+	scale 45
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Retrieving Private Information
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section*
+Making Private Information Available to Other Users
+\end_layout
+
+\begin_layout Enumerate
+The client requests and receives a page which facilitates making private
+ information available to other users.
+\end_layout
+
+\begin_layout Enumerate
+The user indicates the specific information they would like to make available
+ to other users.
+\end_layout
+
+\begin_layout Enumerate
+The user indicates the specific user(s) they would like to make the information
+ available to (using the unique identifier associated with each user).
+\end_layout
+
+\begin_layout Enumerate
+The public key corresponding to each of the specified unique identifiers
+ is requested from, and supplied by the server.
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+There is obvious potential for a man-in-the-middle attack here, which will
+ be addressed later.
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Enumerate
+The local keys corresponding to each of the specified pieces of information
+ are retrieved by the server, and decrypted using the user's master key.
+\end_layout
+
+\begin_layout Enumerate
+The local keys are then re-encrypted using the retrieved public keys.
+\end_layout
+
+\begin_layout Enumerate
+These re-encrypted version are then sent to the server.
+\end_layout
+
+\begin_layout Enumerate
+On the receiving end, the process works as described under the 
+\begin_inset Quotes eld
+\end_inset
+
+
+\begin_inset CommandInset ref
+LatexCommand nameref
+reference "sec:Retrieving-Private-Information"
+
+\end_inset
+
+
+\begin_inset Quotes erd
+\end_inset
+
+ section.
+\end_layout
+
+\begin_layout Standard
+
+\lang english
+\begin_inset Float figure
+wide false
+sideways true
+status collapsed
+
+\begin_layout Plain Layout
+\align center
+
+\lang english
+\begin_inset Graphics
+	filename Diagrams/shareInfo.eps
+	scale 45
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+
+\lang english
+\begin_inset Caption
+
+\begin_layout Plain Layout
+
+\lang english
+Making Private Information Available to Others
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_body
+\end_document
