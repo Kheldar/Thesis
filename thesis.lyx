@@ -778,6 +778,17 @@ to protect data confidentiality in a wide range of web applications against
  The paper covers four main areas: an architecture for protecting users'
  sensitive data, the sharing of sensitive data between users, the verification
  of application code, and computation over encrypted data.
+ In this paper, we shall cover only the first three
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+The fourth requiring substantially more mathematical knowledge than I possess.
+\end_layout
+
+\end_inset
+
+, and reach markedly different conclusions on the third.
 \end_layout
 
 \begin_layout Subsection
@@ -803,7 +814,8 @@ To perform taint checking on a piece of software requires four distinct
 \end_layout
 
 \begin_layout Enumerate
-The software's source-code.
+The software's source-code (or some reasonable other representation we may
+ reason about, such as its byte-code).
 \end_layout
 
 \begin_layout Enumerate
@@ -818,8 +830,8 @@ A taint propagation model for the particular programming language(s) that
 \end_layout
 
 \begin_layout Enumerate
-A set of `taint-sink' functions - functions which we wish to avoid calling
- with tainted values.
+A set of `taint-sink' functions - that is, functions for which we do not
+ wish to have tainted data as input(s).
 \end_layout
 
 \begin_layout Standard
@@ -853,15 +865,117 @@ key "bloomgarden2012dataflow,DataTainting,DataTaintingJS"
 \end_layout
 
 \begin_layout Subsection
-Storing Sensitive Data
-\end_layout
-
-\begin_layout Subsection
-Sharing Sensitive Data
+Cryptography & Storing Sensitive Data
 \end_layout
 
 \begin_layout Standard
-**TODO: Public Key Crypto**
+**TODO: Reference this section**
+\end_layout
+
+\begin_layout Standard
+Cryptography is a well established field of mathematics, dealing chiefly
+ with the transformation of meaningful information into utter gibberish
+ (a.k.a.
+ encryption), while only being able to reverse the process (a.k.a.
+ decryption) if one knows - or can discover - how the original transformation
+ was performed.
+\end_layout
+
+\begin_layout Standard
+Briefly, information may be encrypted using a combination of an appropriate
+ mathematical algorithm **TODO: examples**, and an encryption key - typically
+ a number large enough that an attacker cannot feasibly try all possible
+ numbers.
+ The information (termed cleartext) and key are used as inputs to the algorithm,
+ in order to produce cypertext (the gibberish).
+ 
+\end_layout
+
+\begin_layout Standard
+In order to turn the cyphertext back into cleartext, the cyphertext is used
+ as input into the decryption algorithm corresponding to the encryption
+ algorithm which was used to generate the cleartext, along with a decryption
+ key.
+ The decryption function is typically some form of reversal of the operations
+ performed in the encryption algorithm, while the decryption key may either
+ be the same as the encryption key, or another number which is mathematically
+ related to the encryption key.
+\end_layout
+
+\begin_layout Standard
+In modern use, the encryption and decryption algorithms are typically public
+ knowledge - largely on the basis that by exposing them to many trained
+ mathematicians, any flaws are more likely to be discovered and fixed.
+ The keys on the other hand, should always be kept secret, being made available
+ only to whom the encrypting party wishes to allow access to the encrypted
+ information.
+ It should be noted that since the keys are numbers, anyone may generate
+ their own keys to use with the algorithm, assuming they know how to generate
+ numbers with the specific properties required.
+ The most common desired properties are 
+\end_layout
+
+\begin_layout Enumerate
+That the number is very large - typically 128 bits or more for symmetric
+ keys, and 1024 bits or more for asymmetric keys.
+\end_layout
+
+\begin_layout Enumerate
+That the number is either prime, or has a highly probability of being prime.
+\end_layout
+
+\begin_layout Enumerate
+That the number cannot be easily guessed by a means other than brute-force
+ analysis - this is typically satisfied by choosing a random number.
+\end_layout
+
+\begin_layout Standard
+Encryption is most commonly used to allow the secure transfer of information
+ between two parties, while ensuring that no third party who may have intercepte
+d the information is able to read it.
+ However, it is equally possible to encrypt information, and then safely
+ store it with a potentially untrusted third party for later decryption
+ by the encrypting party.
+ Both of these uses are of interest to us.
+\end_layout
+
+\begin_layout Subsection
+Public Key Cryptography
+\end_layout
+
+\begin_layout Standard
+**TODO: Reference this section**
+\end_layout
+
+\begin_layout Standard
+Public key cryptography, sometimes also known as asymmetric cryptography,
+ is a particular type of cryptography almost exclusively used for sharing
+ information.
+ It functions by generating not one but two cryptographic keys, typically
+ termed a key-pair.
+ When combined with their associated cryptographic algorithm - for example,
+ RSA **TODO: Ref** - these keys have the property that each may be used
+ to decrypt what they other encrypts.
+ However, they may 
+\emph on
+not
+\emph default
+ be used to decrypt what they themselves have encrypted.
+\end_layout
+
+\begin_layout Standard
+The most important result of this (at least for our purposes) is that one
+ can safely distribute or otherwise publish one of these keys (termed the
+ public key), and keep the other key (termed the private key) secret.
+ Other people may then encrypt messages using the public key, and only the
+ holder(s) of the private key may decrypt them.
+ Similarly, any message encrypted using the private key is guaranteed to
+ have come from the holder of the private key - assuming that key is held
+ securely.
+\end_layout
+
+\begin_layout Subsection
+Key Exchange Problem
 \end_layout
 
 \begin_layout Standard
@@ -930,9 +1044,9 @@ key "OpenPGP"
 \end_inset
 
 .
- Under a PKI scheme, a central known entity - generally termed the certificate
- authority (CA) - maintains a binding between public keys and the identifies
- of the user(s) they belong to.
+ Under a PKI scheme, a central entity known to all users - generally termed
+ the certificate authority (CA) - maintains a binding between public keys
+ and the identifies of the user(s) they belong to.
  The public keys of the CA are distributed along with any software that
  uses it, allowing the software to establish a secure connection between
  itself and the CA.
@@ -943,8 +1057,8 @@ key "OpenPGP"
 
 \begin_layout Standard
 The downside of a centralised PKI is that it requires trust of the CA.
- This is not necessarily a bad thing - most secure communications on the
- internet work on this basis - it is still not ideal.
+ While this is not necessarily a bad thing - most secure communications
+ on the internet work on this basis - it is still not ideal.
 \end_layout
 
 \begin_layout Standard
@@ -971,22 +1085,85 @@ key "OpenPGP"
  Under such a scheme, the users themselves issue certificates binding their
  public keys to their identity.
  These certificates are then signed by other users, based on whether or
- not they trust the key to be valid.
- Given sufficient users signing each others' keys, it becomes possible to
- establish the identity and public key of a particular user based on who
- signs their certificate, and who in turn signs 
+ not they trust the certificate to be valid.
+ Given sufficient users signing each others' keys, one user may establish
+ the identity and public key of another user based on who signs their certificat
+e, and who in turn signs 
 \emph on
 those
 \emph default
- users' certificates, and so forth.
+ users' certificates, and so forth down the chain until the first user encounter
+s enough users whom they trust to accurately sign certificates.
 \end_layout
 
 \begin_layout Standard
 Like most decentralised systems, web of trusts do not actually preclude
  working with a central authority, provided most people in the system trust
  that authority.
- The downside to web of trust systems is that they are considerably more
+ The downside to web of trust systems is that they can be considerably more
  difficult to set up and maintain than a centralised one.
+\end_layout
+
+\begin_layout Subsection
+End to End Encryption
+\end_layout
+
+\begin_layout Standard
+**TODO: Ref this section**
+\end_layout
+
+\begin_layout Standard
+End-to-end encryption, sometimes also called client-side encryption, is
+ a technique whereby information is encrypted by one party, communicated
+ to a second party who possesses the capability to decrypt it, and at no
+ point between the initial encryption and the final decryption does any
+ third party - whether they are assisting the communication or intercepting
+ it - possess the capability to read the message.
+ More simply, the message may only be read at either end of the transmission,
+ hence the name.
+\end_layout
+
+\begin_layout Standard
+Several points must be made with regard to end-to-end encryption.
+ Firstly, that the communication between the two parties may be asynchronous;
+ that is, the encrypted information may be held for an arbitrary amount
+ of time by an intermediary third party (which is presumably helping to
+ facilitate the communication) before being finally transmitted to the second
+ party; there is no requirement that the first and second party are ever
+ come into direct contact with one another during the communication.
+\end_layout
+
+\begin_layout Standard
+The second point is that the first and second parties may in fact be the
+ 
+\emph on
+same
+\emph default
+ party.
+ That is, it is entirely reasonable that one might encrypt some information,
+ send it a third party for storage, and later retrieve it for decryption.
+\end_layout
+
+\begin_layout Standard
+End-to-end already encryption enjoys fairly widespread use among security
+ conscious people and organisations.
+ However, one of the overriding themes of most implementations of end-to-end
+ encryption is that the software facilitating it is already deployed to
+ both the sending and receiving parties prior to any encrypted communication
+ taking place, and that these deployments are wholly controlled by the two
+ parties.
+ There are very good reasons for using such a model - pre-deployment and
+ total control enormously simplify a lot of security concerns surrounding
+ end-to-end encryption.
+\end_layout
+
+\begin_layout Subsection
+In-Browser Encryption
+\end_layout
+
+\begin_layout Standard
+Of particular interest is the idea of performing encryption with a web-browser,
+ or other similar software such as an HTML-enabled email client.
 \end_layout
 
 \begin_layout Section
@@ -1397,8 +1574,84 @@ name "chap:Service-Model"
 ***TODO: Brief discussion on Homomorphic Encryption***
 \end_layout
 
-\begin_layout Section*
+\begin_layout Standard
+In this chapter, we present a generalised model of how one could set up
+ a web service intending to provide protection of sensitive information
+ to its users.
+ We will particularly focus on the case where the client-side portion of
+ the service consists of a web page (or pages), including JavaScript code
+ and any resources required by the page (images, stylesheets, etc), as this
+ is by a large margin the most prevalent current method for delivering web
+ services.
+ However, the model (with a few provisos) could potentially be extended
+ to other similar delivery methods, such as 
+\begin_inset Quotes eld
+\end_inset
+
+apps
+\begin_inset Quotes erd
+\end_inset
+
+ on mobile phones and tablets.
+\end_layout
+
+\begin_layout Standard
+**TODO: Those provisos, somewhere**
+\end_layout
+
+\begin_layout Standard
+The model is intended to be verifiable by the client; that is to say that
+ it is intended for it to be possible for the client to check that
+\end_layout
+
+\begin_layout Itemize
+The client-side portion of the service is not disclosing any potentially
+ sensitive information to any third party (including itself).
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+The corollary of this is that all information disclosed to the service or
+ to third parties is either not sensitive, or is encrypted.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+The client-side portion of the service has not been tampered with by a third
+ party; that is to say, what is sent to the client is what the service intended
+ to sent to the client, and what the client expected to be sent.
+\end_layout
+
+\begin_layout Itemize
+All sensitive information which one user decides to make available to another
+ user, via the service, is made available only to that user, and not to
+ another user, to the server, or to a third party.
+ **TODO: Make sure I've done this**.
+\end_layout
+
+\begin_layout Itemize
+The client-side portion of the service does not contain code with the potential
+ to subvert the measures in place keeping sensitive information private.
+\end_layout
+
+\begin_layout Standard
+The actual process of how we can handle the verification can be performed
+ in handled in Chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Plugin-Model"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
 Actors
+\end_layout
+
+\begin_layout Standard
+There are three active participating entities in our model.
 \end_layout
 
 \begin_layout Itemize
@@ -1406,34 +1659,14 @@ The user.
 \end_layout
 
 \begin_layout Itemize
-The user's computer, or similar device (the 
-\begin_inset Quotes eld
-\end_inset
-
-client
-\begin_inset Quotes erd
-\end_inset
-
-).
+The client.
 \end_layout
 
 \begin_layout Itemize
-Intermediaries (ISPs, and other systems between the client and server).
+The service.
 \end_layout
 
-\begin_layout Itemize
-The service provider's computer (the 
-\begin_inset Quotes eld
-\end_inset
-
-server
-\begin_inset Quotes erd
-\end_inset
-
-).
-\end_layout
-
-\begin_layout Section*
+\begin_layout Section
 Connection
 \end_layout
 
@@ -1450,7 +1683,7 @@ Any intermediaries are assumed not to be able to decrypt data sent between
 n, but attempting to avoid that is outside the scope of this project.
 \end_layout
 
-\begin_layout Section*
+\begin_layout Section
 Software/Website Model
 \end_layout
 
@@ -1459,7 +1692,7 @@ We will model our service as a typical multi-page HTML+JavaScript-based
  website, accessed via a web-browser.
 \end_layout
 
-\begin_layout Section*
+\begin_layout Section
 Encryption Scheme
 \end_layout
 
@@ -1592,7 +1825,7 @@ The Master key could potentially be replaced by the Public/Private pair.
  only when they are actually needed.
 \end_layout
 
-\begin_layout Section*
+\begin_layout Section
 Common Elements
 \end_layout
 
@@ -2064,7 +2297,7 @@ There is obvious potential for a man-in-the-middle attack here, which will
 
 \end_inset
 
-
+ **TODO: Address footnote later**.
 \end_layout
 
 \begin_layout Enumerate
@@ -2145,6 +2378,13 @@ Making Private Information Available to Others
 
 \lang english
 Plugin Model
+\begin_inset CommandInset label
+LatexCommand label
+name "chap:Plugin-Model"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Section*
