@@ -1,0 +1,510 @@
+#LyX 2.0 created this file. For more info see http://www.lyx.org/
+\lyxformat 413
+\begin_document
+\begin_header
+\textclass beamer
+\begin_preamble
+\usetheme{PaloAlto}
+\end_preamble
+\use_default_options true
+\maintain_unincluded_children false
+\language british
+\language_package default
+\inputencoding auto
+\fontencoding global
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\use_non_tex_fonts false
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\default_output_format default
+\output_sync 0
+\bibtex_command default
+\index_command default
+\paperfontsize default
+\spacing single
+\use_hyperref false
+\papersize default
+\use_geometry true
+\use_amsmath 1
+\use_esint 1
+\use_mhchem 1
+\use_mathdots 1
+\cite_engine basic
+\use_bibtopic false
+\use_indices false
+\paperorientation portrait
+\suppress_date false
+\use_refstyle 1
+\index Index
+\shortcut idx
+\color #008000
+\end_index
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation skip
+\defskip smallskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\html_math_output 0
+\html_css_as_file 0
+\html_be_strict false
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+title[Online Privacy]{Online Privacy in the Snowden Era}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+author[Josh Godsiff]{Joshua Korner-Godsiff - u4685222
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\backslash
+
+\backslash
+ Supervisor: Roger Clarke}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subtitle
+Browser-Based End-to-End Encryption Delivered by a Service Operator
+\end_layout
+
+\begin_layout Institute
+Australian National University
+\end_layout
+
+\begin_layout Date
+19th May 2014
+\end_layout
+
+\begin_layout Section
+Overview
+\end_layout
+
+\begin_layout Subsection
+The Problem
+\end_layout
+
+\begin_layout BeginFrame
+The Problem
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+The NSA is spying on everything everyone does online.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+The Problem
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+So are the intelligence agencies of:
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+UK, Canada, NZ, Australia, Austria, India, Netherlands, Russia, China, Iran,
+ Syria, Israel
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+And probably many more.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+The Problem
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+Seeing more serious and sophisticated security breaches (
+\begin_inset Quotes eld
+\end_inset
+
+hacks
+\begin_inset Quotes erd
+\end_inset
+
+) of large organisations.
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+Things like Heartbleed don't help.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+The Problem
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+Some organisations are just giving their users' data away.
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+(For money).
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+The Problem
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+How is the average, everyday user supposed to protect their privacy and
+ security?
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+How is the average company supposed to protect itself and its users?
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout Subsection
+The Solution?
+\end_layout
+
+\begin_layout BeginFrame
+The Solution?
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename Diagrams/encryptAllTheThings.jpg
+	scale 40
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout BeginFrame
+The Solution?
+\end_layout
+
+\begin_layout Itemize
+\noindent
+Nice idea, but average user does not know
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+\noindent
+What encryption is.
+\end_layout
+
+\begin_layout Itemize
+\noindent
+How to set it up.
+\end_layout
+
+\begin_layout Itemize
+\noindent
+How to use it.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+PGP invented in 1991.
+ Virtually unknown outside tech circles.
+\end_layout
+
+\begin_layout Itemize
+HTTPS, on the other hand...
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+The Solution?
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+Need a way to provide encryption 
+\series bold
+WITHOUT
+\series default
+ impacting the user experience.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout Section
+Problem Definition
+\end_layout
+
+\begin_layout Subsection
+Goal
+\end_layout
+
+\begin_layout BeginFrame
+Goal
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+Only the user, and any other users they give permission to, has access to
+ that user's sensitive data.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout Subsection
+Threat Model
+\end_layout
+
+\begin_layout BeginFrame
+Threat Model
+\end_layout
+
+\begin_layout Standard
+Large-scale breaches of privacy result from compromise of a server/service/servi
+ce-operator, not user machines.
+\end_layout
+
+\begin_layout Standard
+Want to protect against 
+\series bold
+ANY
+\series default
+ compromise on the server end, regardless of how or why that compromise
+ occurs.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Threat Model
+\end_layout
+
+\begin_layout Standard
+Sensitive data must be safe even if the service operator itself is actively
+ working against its users.
+\end_layout
+
+\begin_layout Standard
+By extension:
+\end_layout
+
+\begin_layout Itemize
+Includes the possibility that the server/service is under the control of
+ hackers, intelligence agencies, or any other adversary.
+\end_layout
+
+\begin_layout Itemize
+Any threats between the service and client (i.e.
+ threats to communication).
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Threat Model
+\end_layout
+
+\begin_layout Standard
+Not appearing in this threat model:
+\end_layout
+
+\begin_layout Itemize
+Client-side threats
+\end_layout
+
+\begin_layout Itemize
+Other users
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout Subsection
+Usability
+\end_layout
+
+\begin_layout BeginFrame
+Usability Requirements
+\end_layout
+
+\begin_layout Standard
+Solution must avoid altering user experience, or erecting barriers to uptake.
+\end_layout
+
+\begin_layout Itemize
+No user-initiated downloads.
+\end_layout
+
+\begin_layout Itemize
+No installation.
+\end_layout
+
+\begin_layout Itemize
+No configuration.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula $\Longrightarrow$
+\end_inset
+
+ Must be as mass-deployable as the service itself.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Usability Requirements
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+Your grandma has to be able to use this.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout Section
+Solution Overview
+\end_layout
+
+\begin_layout BeginFrame
+Solution Overview
+\end_layout
+
+\begin_layout Itemize
+Encrypt all sensitive data on client.
+\end_layout
+
+\begin_layout Itemize
+Use public/private key-pair to send data to other users.
+\end_layout
+
+\begin_layout Itemize
+Use password to encrypt all encryption keys.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Solution Overview
+\end_layout
+
+\begin_layout Itemize
+Store encrypted information and encrypted keys with the service.
+\end_layout
+
+\begin_layout Itemize
+
+\series bold
+DO NOT
+\series default
+ store unencrypted information, or unencrypted keys, or password with the
+ service.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Solution Overview
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+Have service deliver encryption capabilities to the browser, via JavaScript.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\end_body
+\end_document
