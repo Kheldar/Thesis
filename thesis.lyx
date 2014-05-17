@@ -732,7 +732,7 @@ Insofar as possible, the user should not be
 required
 \emph default
  to be aware that anything is being done to protect their data; particularly
- they should not be required to be aware, nor participate in any of the
+ they should not be required to be aware of, nor participate in any of the
  technicalities of protecting their data, beyond what is normal for a web
  service (for example, using a password).
 \end_layout
@@ -1864,7 +1864,7 @@ All sensitive information which one user decides to make available to another
 
 \begin_layout Itemize
 The client-side portion of the service does not contain code with the potential
- to subvert the measures in place keeping sensitive information private.
+ to subvert the measures any privacy preserving measures.
 \end_layout
 
 \begin_layout Standard
