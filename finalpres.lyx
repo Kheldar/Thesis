@@ -5,6 +5,13 @@
 \textclass beamer
 \begin_preamble
 \usetheme{PaloAlto}
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \tableofcontents[currentsection]
+  \end{frame}
+}
 \end_preamble
 \use_default_options true
 \maintain_unincluded_children false
@@ -71,7 +78,7 @@ status open
 
 
 \backslash
-title[Online Privacy]{Online Privacy in the Snowden Era}
+title[Online Privacy]{Usable Online Privacy}
 \end_layout
 
 \begin_layout Plain Layout
@@ -107,8 +114,25 @@ Australian National University
 19th May 2014
 \end_layout
 
+\begin_layout BeginFrame
+Table of Contents
+\end_layout
+
+\begin_layout Standard
+\begin_inset CommandInset toc
+LatexCommand tableofcontents
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
 \begin_layout Section
-Overview
+Introduction
 \end_layout
 
 \begin_layout Subsection
@@ -317,7 +341,7 @@ Goal
 \begin_layout Standard
 \noindent
 \align center
-Only the user, and any other users they give permission to, has access to
+Only the user, and any other users they give permission to, get access to
  that user's sensitive data.
 \end_layout
 
@@ -356,7 +380,7 @@ Threat Model
 \end_layout
 
 \begin_layout Standard
-Sensitive data must be safe even if the service operator itself is actively
+Sensitive data must be safe, even if the service operator itself is actively
  working against its users.
 \end_layout
 
@@ -499,7 +523,387 @@ Solution Overview
 \begin_layout Standard
 \noindent
 \align center
-Have service deliver encryption capabilities to the browser, via JavaScript.
+Have service deliver encryption capabilities to the browser, using JavaScript.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout Subsection
+Problems to be Solved
+\end_layout
+
+\begin_layout BeginFrame
+Problems To Be Solved
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+Encryption via service-delivered JavaScript means service can modify encryption
+ code, at any time, without notice.
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+Some third party adversary could also change it.
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+Prefer this did not happen, or that we could detect it.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Problems To Be Solved
+\end_layout
+
+\begin_layout Standard
+\noindent
+Need a way to check:
+\end_layout
+
+\begin_layout Enumerate
+Code the client receives is what the service intended to send.
+\end_layout
+
+\begin_layout Enumerate
+Cryptographic & privacy preserving functions are what user expects to receive.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Need to standardise!
+\end_layout
+
+\end_deeper
+\begin_layout Enumerate
+The rest of the code isn't violating the user's privacy, nor subverting
+ security measures.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Problems To Be Solved
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+Can't rely on service to provide method to check.
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+Can't rely on all users installing something to check.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Problems To Be Solved
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+
+\series bold
+CAN
+\series default
+ (statistically speaking) rely on 
+\emph on
+some
+\emph default
+ users installing something to check.
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+Those users can tell others.
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+Knowing is half the battle, as not using the service unless/until the problem
+ is fixed will keep data safe.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Problems To Be Solved
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+How do we actually perform these checks?
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Problems To Be Solved
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+How can users exchange data securely, if the service is facilitating the
+ exchange?
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout Section
+Interesting Bits
+\end_layout
+
+\begin_layout BeginFrame
+Encryption Scheme
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename Diagrams/Encrypt.eps
+	display false
+	width 100col%
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Checks
+\end_layout
+
+\begin_layout Standard
+Use browser plug-in.
+\end_layout
+
+\begin_layout Itemize
+Can hook into web-pages, JavaScript files, DOM.
+\end_layout
+
+\begin_layout Itemize
+Can hook into JavaScript runtime, if need-be.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Check 1
+\end_layout
+
+\begin_layout FrameSubtitle
+\noindent
+\begin_inset Quotes eld
+\end_inset
+
+Code the client receives is what the service intended to send
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+Use HTTPS.
+ 
+\end_layout
+
+\begin_layout Itemize
+Have the service sign anything it sends with private key.
+\end_layout
+
+\begin_layout Itemize
+Store public key in certificate.
+\end_layout
+
+\begin_layout Itemize
+Protects against everything except HTTPS compromise.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Other two checks negate that danger.
+\end_layout
+
+\end_deeper
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Check 2
+\end_layout
+
+\begin_layout FrameSubtitle
+\noindent
+\begin_inset Quotes eld
+\end_inset
+
+Cryptographic & privacy preserving functions are what user expects to receive
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Itemize
+Roll all these functions into a single JS file.
+ Hash it.
+\end_layout
+
+\begin_layout Itemize
+Store this hash in the plugin itself.
+ 
+\end_layout
+
+\begin_layout Itemize
+Check for it on page load.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Check 3
+\end_layout
+
+\begin_layout FrameSubtitle
+\noindent
+\begin_inset Quotes eld
+\end_inset
+
+The rest of the code isn't violating the user's privacy, nor subverting
+ security measures
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The hard one! Many different aspects to this.
+\end_layout
+
+\begin_layout Standard
+Use plugin to parse all JS present at page load.
+\end_layout
+
+\begin_layout Standard
+And then...
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Check 3
+\end_layout
+
+\begin_layout FrameSubtitle
+\noindent
+\begin_inset Quotes eld
+\end_inset
+
+The rest of the code isn't violating the user's privacy, nor subverting
+ security measures
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Check for
+\end_layout
+
+\begin_layout Itemize
+eval, setTimeout, setInterval
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Allow arbitrary code execution.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Loading of 
+\emph on
+any
+\emph default
+ novel external resources (images, CSS, JS files, PDFs).
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Can be used to convey information to the server.
+\end_layout
+
+\begin_layout Itemize
+All resources need to be loaded at page load.
+\end_layout
+
+\end_deeper
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Check 3
+\end_layout
+
+\begin_layout FrameSubtitle
+\noindent
+\begin_inset Quotes eld
+\end_inset
+
+The rest of the code isn't violating the user's privacy, nor subverting
+ security measures
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Perform Taint Analysis on the JS code
 \end_layout
 
 \begin_layout EndFrame
