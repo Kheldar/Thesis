@@ -8,6 +8,7 @@
 \usepackage[palatino]{anuthesis}
 \usepackage{graphicx}
 \usepackage{makeidx}
+\usepackage{xcolor}
 \end_preamble
 \use_default_options true
 \maintain_unincluded_children false
@@ -57,6 +58,7 @@
 \papercolumns 1
 \papersides 1
 \paperpagestyle default
+\listings_params "basicstyle={\ttfamily},comment={[l]{//}},commentstyle={\color{purple}\ttfamily},identifierstyle={\color{black}},keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},keywordstyle={\color{blue}\bfseries},morecomment={[s]{/*}{*/}},ndkeywords={class, export, boolean, throw, implements, import, this},ndkeywordstyle={\color{darkgray}\bfseries},sensitive=false,stringstyle={\color{red}\ttfamily},xleftmargin=1cm"
 \tracking_changes false
 \output_changes false
 \html_math_output 0
@@ -460,10 +462,25 @@ cannot
 \emph default
 , as a result of supplying it to the service, fall into the hands of any
  party to whom the user has not granted access.
- This goal should be achievable without the user's active participation
- in achieving it.
+\end_layout
+
+\begin_layout Standard
+This goal should be achievable without the user's active participation in
+ achieving it.
  That is to say, all users receive protection, whether or not they seek
  it.
+ The reasoning behind this particular constraint is the observation that
+ while there exist a great many services and technologies which allow users
+ to protect their privacy and data, almost all them require active participation
+ on the part of the user to do so - for example by downloading, installing,
+ and/or configuring some specific piece of software, which can present a
+ significant barrier to uptake.
+ This is in contrast to the vast majority of highly successful websites,
+ such as Facebook, Google, YouTube, Amazon, eBay, Wikipedia, Twitter, and
+ indeed most other popular sites **TODO: Ref http://www.alexa.com/topsites/global*
+*, where the most significant barrier to uptake is the sign-up form.
+ If online privacy is to become at all ubiquitous, it cannot be difficult
+ to acquire and use.
 \end_layout
 
 \begin_layout Standard
@@ -474,13 +491,12 @@ Furthermore, we seek to allow users to verify that they are receiving such
  will do perform the verification.
  In essence, we seek to create a digital version of the concept of herd
  immunity, whereby those users who verify their own protection by extension
- provide some measure of protection to those who are only who do not, under
- the assumption that the service or any third party would be unable to tell
- the two apart.
+ provide some measure of protection to those who do not, under the assumption
+ that the service or any third party would be unable to tell the two apart.
 \end_layout
 
 \begin_layout Standard
-**TODO: Rationale, re: usability**
+**TODO: Consider moving the rationale to another section**
 \end_layout
 
 \begin_layout Standard
@@ -710,6 +726,17 @@ An exception is made in the case of service critical data.
  form of their choice of whether or not to utilise the service.
 \end_layout
 
+\begin_layout Standard
+Insofar as possible, the user should not be 
+\emph on
+required
+\emph default
+ to be aware that anything is being done to protect their data; particularly
+ they should not be required to be aware, nor participate in any of the
+ technicalities of protecting their data, beyond what is normal for a web
+ service (for example, using a password).
+\end_layout
+
 \begin_layout Chapter
 Literature Review
 \begin_inset CommandInset label
@@ -728,7 +755,7 @@ Previous/other work in the area
 \begin_layout Standard
 While there has certainly been work related to many of the individual aspects
  presented in this paper, with one exception there appears to be a dearth
- of literature on the topic as a whole.
+ of academic literature on the topic as a whole.
 \end_layout
 
 \begin_layout Standard
@@ -1560,6 +1587,212 @@ src
 \end_layout
 
 \begin_layout Chapter
+Solution Overview
+\end_layout
+
+\begin_layout Standard
+**TODO: Some/all of this may get moved to other sections.
+ I just needed somewhere to write this so I could put the broad picture
+ down in words.**
+\end_layout
+
+\begin_layout Standard
+Here we present an overview of the model solution to the problem of how
+ can web services preserve the privacy of their users.
+ It is intended to inform the discussion in chapters **TODO: Cross-reference**.
+\end_layout
+
+\begin_layout Standard
+Our base assumption is that an individual or organisation wishes to create
+ a web service which - insofar as possible - preserves the privacy of its
+ users, and moreover offers some guarantees both to the service creator,
+ and to the users of the service, that their privacy is preserved.
+\end_layout
+
+\begin_layout Standard
+If the service creator does not wish to preserve their user's privacy, then
+ there is no point in their utilising the solution presented in this paper.
+ A third possibility exists, whereby the service creator wishes to 
+\emph on
+appear
+\emph default
+ as though they are preserving privacy in an attempt to dupe their users
+ into a false sense of security.
+ I would note that this could barely produce a worse privacy outcome than
+ the one which already exists for web-service users at the moment; nevertheless
+ our solution treats this case as a security breach, and deals with it appropria
+tely.
+ **TODO: Make sure I have.**
+\end_layout
+
+\begin_layout Standard
+Chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Service-Model"
+
+\end_inset
+
+ provides a model of how one might set up a service which accomplishes this
+ goal.
+ Under the correct operation of this model all sensitive user data is encrypted
+ on the client before it is sent to the service (if it is sent at all).
+ The decryption mechanisms are never conveyed in any usable form to the
+ service, resulting perhaps the most important property of our model - that
+ the service cannot read the sensitive data, and therefore neither can anyone
+ else on the service side of the equation, nor anyone in between.
+\end_layout
+
+\begin_layout Standard
+Executed correctly, this property results in peace of mind for both the
+ users and the service provider.
+ From the user's perspective, they are assured that the service provider
+ cannot disclose their sensitive information to any third party, willingly
+ or otherwise.
+ From the service provider's perspective, they are assured that even if
+ they are compelled to turn over user data, or suffer a security breach
+ in which their data stores are compromised, such data is all but meaningless
+ in the form that they posses.
+\end_layout
+
+\begin_layout Standard
+However, additional measures are required if the service is to retain broad
+ usability comparable to most popular web services, while still offering
+ these guarantees.
+ Most services which currently offer these sorts of features require the
+ user to explicitly download, install and/or configure certain software
+ in order facilitate the security mechanisms.
+ That is an outcome we would expressly like to avoid, as many users are
+ either not willing or not able to take those additional steps to protect
+ their privacy.
+\end_layout
+
+\begin_layout Standard
+If we are to avoid forcing users to install separate software in order to
+ protect their privacy, then we must find another way to deliver these protectio
+ns.
+ Considering we are discussing web services, the most obvious delivery mechanism
+ is via the web browser, which in principle already possesses all the capabiliti
+es we need - that is, an user-friendly method of content delivery and a
+ programming language (i.e.
+ JavaScript) which is powerful enough to implement encryption in.
+ However, this raises its own problems.
+\end_layout
+
+\begin_layout Standard
+Firstly, and most importantly, web-pages and all of their associated content
+ are supplied directly from the service (or wherever else they deem to load
+ them from) when the user request them, and (caching aside) this content
+ does not tend to persist between requests.
+ This means that the service is supplying to the user the cryptographic
+ code (in the form of JavaScript) that is intended to protect the user's
+ privacy, and that they may modify this code at any time, without explicitly
+ notifying the user.
+ Obviously this is a serious security problem, given that a compromised
+ service is the primary threat we wish to defend against.
+\end_layout
+
+\begin_layout Standard
+The issue is not insurmountable, however.
+ In order to operate under such a model while still guaranteeing the privacy
+ of users, we need to verify three things:
+\end_layout
+
+\begin_layout Itemize
+That the code the client receives is the code that service intended to send;
+ that is, it has not been tampered with by some unauthorised third party.
+\end_layout
+
+\begin_layout Itemize
+The portion of the code that the user receives which implements the cryptographi
+c and privacy preserving functions is the what the user expects to receive.
+ That is, the service provider has not modified the fundamentals of the
+ code which protects the user's privacy.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+It is assumed that there is some reasonably standardised implementation
+ of the cryptographic and privacy preserving functions, which can be checked
+ against.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+The parts of the code which implement the actual web service - as distinct
+ from the code which implements they cryptography and other privacy preserving
+ functions - do not violate the user's privacy, nor do they do anything
+ which could subvert the measures put in place by the cryptographic and
+ privacy preserving functions.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+It is assumed that the code which implements the cryptography and other
+ privacy preserving functions does not have the capability to violate the
+ user's privacy.
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+It is important to note that all of the above are 
+\emph on
+checks
+\emph default
+.
+ If any of them fails, then is is possible that the user's privacy is being
+ violated.
+ However, it is possible for all of them to succeed without actually checking
+ them
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+This will become important in a moment.
+\end_layout
+
+\end_inset
+
+, thus still in practice ensuring privacy.
+\end_layout
+
+\begin_layout Standard
+The service cannot be relied upon to supply a way to check these things,
+ for the same reasons we cannot completely rely on it to supply code which
+ preserves the user's privacy.
+ Because we wish to maintain the service's usability, we also cannot rely
+ on all users installing something which performs the checks.
+\end_layout
+
+\begin_layout Standard
+However, what can (statistically speaking) be relied upon is that 
+\emph on
+some
+\emph default
+ users will install software if it guarantees their privacy.
+ If we assume that the service cannot distinguish users who have installed
+ such software from those who have not, then the service provider (or anyone
+ else) would be unable to change their code in a way which violates privacy
+ en mass, without someone noticing and making that information public.
+ In the case of trying to protect privacy against server/service compromise,
+ knowing is (in my opinion at least) half the battle.
+ That is doubly true as ceasing to use the service unless/until the issue
+ is fixed is an entirely valid way for a user to protect their privacy and
+ data.
+\end_layout
+
+\begin_layout Standard
+Chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Plugin-Model"
+
+\end_inset
+
+ will describe software capable of performing the necessary checks.
+\end_layout
+
+\begin_layout Chapter
 Service Model
 \begin_inset CommandInset label
 LatexCommand label
@@ -1576,8 +1809,8 @@ name "chap:Service-Model"
 
 \begin_layout Standard
 In this chapter, we present a generalised model of how one could set up
- a web service intending to provide protection of sensitive information
- to its users.
+ a web service with the intent to protect the sensitive information of the
+ service's users.
  We will particularly focus on the case where the client-side portion of
  the service consists of a web page (or pages), including JavaScript code
  and any resources required by the page (images, stylesheets, etc), as this
@@ -1592,7 +1825,7 @@ apps
 \begin_inset Quotes erd
 \end_inset
 
- on mobile phones and tablets.
+ on mobile phones and tablets, and possibly further afield.
 \end_layout
 
 \begin_layout Standard
@@ -1624,8 +1857,8 @@ The client-side portion of the service has not been tampered with by a third
 
 \begin_layout Itemize
 All sensitive information which one user decides to make available to another
- user, via the service, is made available only to that user, and not to
- another user, to the server, or to a third party.
+ user via the service is made available only to that user, and not to another
+ user, to the server, or to a third party.
  **TODO: Make sure I've done this**.
 \end_layout
 
@@ -1635,8 +1868,8 @@ The client-side portion of the service does not contain code with the potential
 \end_layout
 
 \begin_layout Standard
-The actual process of how we can handle the verification can be performed
- in handled in Chapter 
+The actual process of how we can handle the verification is detailed in
+ Chapter 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "chap:Plugin-Model"
@@ -1644,6 +1877,15 @@ reference "chap:Plugin-Model"
 \end_inset
 
 .
+\end_layout
+
+\begin_layout Section
+Software/Website Model
+\end_layout
+
+\begin_layout Standard
+We will model our service as a typical multi-page HTML+JavaScript-based
+ website, accessed via a web-browser.
 \end_layout
 
 \begin_layout Section
@@ -1666,6 +1908,26 @@ The client.
 The service.
 \end_layout
 
+\begin_layout Standard
+We consider the intermediaries between the client and the service (i.e.
+ ISPs and internet traffic carriers) to be passive entities, merely responsible
+ for passing data from one to the other.
+ As both the connection and any sensitive data travelling on it is encrypted,
+ there is very little they could actively do anyway.
+\end_layout
+
+\begin_layout Standard
+Similarly the server - and any supporting software running on it, such as
+ web servers and database servers - are assumed to perform their intended
+ functions correctly when interacting with the client and the service.
+\end_layout
+
+\begin_layout Standard
+Potential adversaries of, and deviations from the model are handled in the
+ security section **TODO: Security section**, as opposed to in the model
+ itself.
+\end_layout
+
 \begin_layout Section
 Connection
 \end_layout
@@ -1678,18 +1940,9 @@ All communications between the client and server are assumed to take place
 
 \begin_layout Itemize
 Any intermediaries are assumed not to be able to decrypt data sent between
- the client and server (due to the use of HTTPS).
+ the client and server due to the use of HTTPS.
  There is the possibility that they will collect meta-data about the transmissio
 n, but attempting to avoid that is outside the scope of this project.
-\end_layout
-
-\begin_layout Section
-Software/Website Model
-\end_layout
-
-\begin_layout Itemize
-We will model our service as a typical multi-page HTML+JavaScript-based
- website, accessed via a web-browser.
 \end_layout
 
 \begin_layout Section
@@ -1718,27 +1971,27 @@ The entities involved in this encryption scheme are:
 \end_layout
 
 \begin_layout Itemize
-The User.
+The user.
 \end_layout
 
 \begin_layout Itemize
-The User's Password.
+The user's password.
 \end_layout
 
 \begin_layout Itemize
-A symmetric Master Key.
+A symmetric master key.
 \end_layout
 
 \begin_layout Itemize
-An asymmetric Public/Private key-pair.
+An asymmetric public/private key-pair.
 \end_layout
 
 \begin_layout Itemize
-Many symmetric Local Keys.
+Many symmetric local keys.
 \end_layout
 
 \begin_layout Itemize
-Many instances of distinct private data.
+Many instances of distinct sensitive data.
 \end_layout
 
 \begin_layout Standard
@@ -1785,44 +2038,50 @@ name "fig:Encryption Scheme"
 \end_layout
 
 \begin_layout Standard
-Under our model, the User provides their password to the encryption software
+Under this model, the user provides their password to the encryption software
  (e.g.
  via a password input in the browser).
  The password is then hashed, and this resulting hash may then be used to
- encrypt/decrypt the Master Key.
+ encrypt/decrypt the master key.
 \end_layout
 
 \begin_layout Standard
-The Master key is a symmetric key, which is used to encrypt/decrypt the
- Private key, and all Local Keys.
+The master key is a symmetric key, which is used to encrypt/decrypt the
+ private key, and all local keys.
  
 \end_layout
 
 \begin_layout Standard
-The Local Keys are symmetric keys, which correspond one-to-one with an instance
- of private data, which they may be used to encrypt/decrypt.
+The local keys are symmetric keys, which correspond one-to-one with an instance
+ of sensitive data, which they may be used to encrypt/decrypt.
 \end_layout
 
 \begin_layout Standard
-The Public/Private key-pair may be used to encrypt/decrypt information that
- the other key in the pair encrypts/decrypts, as is typical under asymmetric
+The public/private key-pair may be used to encrypt/decrypt information that
+ the other key in the pair decrypts/encrypts, as is typical under asymmetric
  encryption schemes.
- The Public key is never encrypted, since it is as the name suggests intended
- to be publicly available.
+ The public key is never encrypted, since it is intended to be publicly
+ available.
 \end_layout
 
 \begin_layout Standard
-The Public/Private keys are necessary in order to send private information
+The public/private keys are necessary in order to send private information
  to other users.
- The local keys are necessary in order to only send specific data, as opposed
- to sending more data than is desired.
+ The local keys are necessary in order to only make available specific data.
+ If all sensitive information was encrypted using only one key, it is conceivabl
+e that another user could decrypt all of that data, rather that just the
+ instance that was intended to be made available.
 \end_layout
 
 \begin_layout Standard
-The Master key could potentially be replaced by the Public/Private pair.
+The master key could potentially be replaced by the public/private pair.
  However, asymmetric encryption schemes tend to be much slower than symmetric
  ones, so it is preferable to minimise the use of the asymmetric pair to
  only when they are actually needed.
+\end_layout
+
+\begin_layout Standard
+**TODO: Ref MEGA, as this is basically their system**.
 \end_layout
 
 \begin_layout Section
@@ -1844,7 +2103,7 @@ The server responds, sending the corresponding HTML.
 
 \begin_layout Enumerate
 The client interprets the HTML, and makes additional requests to the server
- as appropriate for required resources (Images, CSS, JavaScript etc).
+ as appropriate for required resources (images, CSS, JavaScript etc).
 \end_layout
 
 \begin_layout Enumerate
@@ -1893,7 +2152,7 @@ Common Elements
 
 \end_layout
 
-\begin_layout Section*
+\begin_layout Section
 User Signup and Key Generation
 \end_layout
 
@@ -1990,7 +2249,7 @@ User Signup and Key Generation
 
 \end_layout
 
-\begin_layout Section*
+\begin_layout Section
 Authentication and Log-In
 \end_layout
 
@@ -2091,7 +2350,7 @@ Authentication and Log-In
 
 \end_layout
 
-\begin_layout Section*
+\begin_layout Section
 Storing Private Information
 \end_layout
 
@@ -2193,7 +2452,7 @@ Storing Private Information
 
 \end_layout
 
-\begin_layout Section*
+\begin_layout Section
 Retrieving Private Information
 \begin_inset CommandInset label
 LatexCommand label
@@ -2265,7 +2524,7 @@ Retrieving Private Information
 
 \end_layout
 
-\begin_layout Section*
+\begin_layout Section
 Making Private Information Available to Other Users
 \end_layout
 
@@ -2375,9 +2634,381 @@ Making Private Information Available to Others
 \end_layout
 
 \begin_layout Chapter
+Implementation Overview
+\end_layout
 
-\lang english
+\begin_layout Standard
+**TODO: This may be moved elsewhere.**
+\end_layout
+
+\begin_layout Standard
+**TODO: More of this**
+\end_layout
+
+\begin_layout Standard
+In this chapter, we will describe the necessary portions of an implementation
+ of this model.
+ For sections involving JavaScript, jQuery's **TODO: Ref** notation will
+ be used for conciseness.
+ This is not strictly necessary for implementation.
+\end_layout
+
+\begin_layout Section
+Cryptography
+\end_layout
+
+\begin_layout Standard
+We require an appropriate implementation of both a symmetric key algorithm
+ (e.g.
+ AES) and an asymmetric key algorithm (e.g.
+ RSA) **TODO: Ref** in JavaScript.
+ These implementations must provide encryption, decryption, and key generation
+ functions for both algorithms.
+\end_layout
+
+\begin_layout Standard
+The psuedo-random number generator is assumed to be supplied by the browser,
+ in the form of the 
+\family typewriter
+window.crypto.getRandomValues
+\family default
+ function 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "MozGetRandomValues"
+
+\end_inset
+
+, or failing that any other appropriate cryptographically secure random
+ number generator.
+\end_layout
+
+\begin_layout Section
+Sensitive Information Encoding
+\end_layout
+
+\begin_layout Standard
+We require that all sensitive information included as a part of the initial
+ HTML page be encoded like so:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "language=HTML,tabsize=4"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+<div class="sensitive" key="encrypted-local-key-here">
+\end_layout
+
+\begin_layout Plain Layout
+
+	Encrypted information here.
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+</div>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The “sensitive” class is a flag for the cryptography library to indicate
+ both that the tag contains sensitive information, and that it should be
+ decrypted for the user.
+ As per normal HTML rules, the class attribute may contain other values
+ in addition to “sensitive”, and this will not interfere with the decryption.
+\end_layout
+
+\begin_layout Standard
+The 
+\emph on
+key
+\emph default
+ attribute is a non-standard HTML attribute, used here to store the encrypted
+ version of the local key corresponding to the private information enclosed
+ by the tag.
+\end_layout
+
+\begin_layout Standard
+Finally, it should be noted that there is no requirement that the tag used
+ be a 
+\family typewriter
+div
+\family default
+ tag - that is simply used here as an example.
+ We do require that there be a tag wrapping the sensitive information though,
+ and that such a tag be the inner-most tag, relative to the encrypted informatio
+n.
+\end_layout
+
+\begin_layout Section
+Decryption
+\end_layout
+
+\begin_layout Standard
+There are two primary methods by which sensitive data may be decrypted,
+ beyond the assumed basic cryptographic 
+\family typewriter
+decrypt
+\family default
+ functions.
+\end_layout
+
+\begin_layout Standard
+The first method applies if an encrypted form of the data is present in
+ the HTML page at load time, as described above.
+ In that instance, we use the following function: **TODO: Test this.**
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+//On document ready
+\end_layout
+
+\begin_layout Plain Layout
+
+$(document).ready(function() {
+\end_layout
+
+\begin_layout Plain Layout
+
+	//For-each tag marked "sensitive".
+\end_layout
+
+\begin_layout Plain Layout
+
+	$(".sensitive").each(function() {
+\end_layout
+
+\begin_layout Plain Layout
+
+		//Grab the cyphertext
+\end_layout
+
+\begin_layout Plain Layout
+
+		var cypherText = $(this).html();
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+		//Grab the key
+\end_layout
+
+\begin_layout Plain Layout
+
+		var localKey = $(this).attr("key");
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\end_layout
+
+\begin_layout Plain Layout
+
+		//Decrypt the local key
+\end_layout
+
+\begin_layout Plain Layout
+
+		//(masterKey is assumed to be in scope/retrievable)
+\end_layout
+
+\begin_layout Plain Layout
+
+		localKey = decrypt(localKey, masterKey);
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+		//Decrypt to cleartext
+\end_layout
+
+\begin_layout Plain Layout
+
+		var clearText = decrypt(html, key);
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\end_layout
+
+\begin_layout Plain Layout
+
+		//Replace cyphertext with cleartext
+\end_layout
+
+\begin_layout Plain Layout
+
+		$(this).html(clearText);
+\end_layout
+
+\begin_layout Plain Layout
+
+	}
+\end_layout
+
+\begin_layout Plain Layout
+
+});
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The second method applies if an encrypted form of the data is loaded in
+ after the initial page load (e.g.
+ via an AJAX call), and needs to be added to the DOM.
+ In that instance, we use the following function: **TODO: Test this.**
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+//DOMReference contains a reference to an
+\end_layout
+
+\begin_layout Plain Layout
+
+//existing DOM node.
+\end_layout
+
+\begin_layout Plain Layout
+
+function (cyphertext, key, DOMReference) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	//Decrypt the local key
+\end_layout
+
+\begin_layout Plain Layout
+
+	//(masterKey is assumed to be in scope/retrievable)
+\end_layout
+
+\begin_layout Plain Layout
+
+	localKey = decrypt(localKey, masterKey);
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	//Decrypt to clearText
+\end_layout
+
+\begin_layout Plain Layout
+
+	var clearText = decrypt(html, localKey);
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	//Ensure that the wrapping DOM node
+\end_layout
+
+\begin_layout Plain Layout
+
+	//is marked as sensitive.
+\end_layout
+
+\begin_layout Plain Layout
+
+	DOMReference.addClass("sensitive");
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+	//Ensure the wrapping DOM node
+\end_layout
+
+\begin_layout Plain Layout
+
+	//has the key attached.
+\end_layout
+
+\begin_layout Plain Layout
+
+	DOMReference.attr("key", localKey);
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\end_layout
+
+\begin_layout Plain Layout
+
+	//Replace DOMReference's inner HTML
+\end_layout
+
+\begin_layout Plain Layout
+
+	//with the cleartext.
+\end_layout
+
+\begin_layout Plain Layout
+
+	DOMReference.html(clearText);
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Chapter
 Plugin Model
+\lang english
+
 \begin_inset CommandInset label
 LatexCommand label
 name "chap:Plugin-Model"
@@ -2385,6 +3016,14 @@ name "chap:Plugin-Model"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+**TODO: Syntax highlighting on all JS keywords.**
+\end_layout
+
+\begin_layout Standard
+Here we will describe a browser plugin **TODO: This**.
 \end_layout
 
 \begin_layout Section*
