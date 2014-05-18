@@ -5,11 +5,14 @@
 \textclass beamer
 \begin_preamble
 \usetheme{PaloAlto}
+\usepackage{multicol}
 \AtBeginSection[]
 {
   \begin{frame}
     \frametitle{Table of Contents}
+    \begin{multicols}{2}
     \tableofcontents[currentsection]
+    \end{multicols}
   \end{frame}
 }
 \end_preamble
@@ -114,20 +117,47 @@ Australian National University
 19th May 2014
 \end_layout
 
-\begin_layout BeginFrame
-Table of Contents
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{frame}{Table Of Contents}
 \end_layout
 
-\begin_layout Standard
-\begin_inset CommandInset toc
-LatexCommand tableofcontents
+\begin_layout Plain Layout
+
+
+\backslash
+begin{multicols}{2}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+tableofcontents{}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{multicols}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{frame}
+\end_layout
 
 \end_inset
 
-
-\end_layout
-
-\begin_layout EndFrame
 
 \end_layout
 
@@ -235,8 +265,7 @@ The Problem
 \begin_layout Standard
 \noindent
 \align center
-How is the average, everyday user supposed to protect their privacy and
- security?
+How is the average, everyday user supposed to protect their privacy?
 \end_layout
 
 \begin_layout Standard
@@ -296,6 +325,10 @@ How to use it.
 
 \end_deeper
 \begin_layout Itemize
+Doesn't care.
+\end_layout
+
+\begin_layout Itemize
 PGP invented in 1991.
  Virtually unknown outside tech circles.
 \end_layout
@@ -336,6 +369,12 @@ Goal
 
 \begin_layout BeginFrame
 Goal
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+Protect all users, not just those who seek protection.
 \end_layout
 
 \begin_layout Standard
@@ -681,6 +720,10 @@ How can users exchange data securely, if the service is facilitating the
 Interesting Bits
 \end_layout
 
+\begin_layout Subsection
+Encryption Scheme
+\end_layout
+
 \begin_layout BeginFrame
 Encryption Scheme
 \end_layout
@@ -702,6 +745,123 @@ Encryption Scheme
 
 \end_layout
 
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{frame}[fragile]
+\backslash
+frametitle{Storing Sensitive Information}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For sensitive information present on the page at load time:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "basicstyle={\footnotesize},language=HTML,tabsize=4"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+<div class="sensitive" key="encrypted-local-key-here">
+\end_layout
+
+\begin_layout Plain Layout
+
+    Encrypted information here.
+ 
+\end_layout
+
+\begin_layout Plain Layout
+
+</div>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Decrypt on page load.
+\end_layout
+
+\begin_layout Standard
+
+\series bold
+DON'T
+\series default
+ decrypt anything not marked as 
+\begin_inset Quotes eld
+\end_inset
+
+sensitive
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Doesn't have to be a div.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{frame}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout BeginFrame
+Storing Sensitive Information
+\end_layout
+
+\begin_layout Standard
+For information loaded in after page load, have to ensure 
+\end_layout
+
+\begin_layout Itemize
+It is tagged as sensitive.
+\end_layout
+
+\begin_layout Itemize
+Has encrypted key attached
+\end_layout
+
+\begin_layout Standard
+when it is added to DOM.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout Subsection
+Checks
+\end_layout
+
 \begin_layout BeginFrame
 Checks
 \end_layout
@@ -716,6 +876,11 @@ Can hook into web-pages, JavaScript files, DOM.
 
 \begin_layout Itemize
 Can hook into JavaScript runtime, if need-be.
+\end_layout
+
+\begin_layout Itemize
+Alerts users if privacy may be violated.
+ Stops page running until user chooses what to do.
 \end_layout
 
 \begin_layout EndFrame
@@ -752,7 +917,7 @@ Store public key in certificate.
 \end_layout
 
 \begin_layout Itemize
-Protects against everything except HTTPS compromise.
+Protects against everything except purposeful compromise by the service.
 \end_layout
 
 \begin_deeper
@@ -859,7 +1024,21 @@ eval, setTimeout, setInterval
 
 \begin_deeper
 \begin_layout Itemize
-Allow arbitrary code execution.
+Allows arbitrary code execution.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Inline JavaScript
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Unpredictable.
+\end_layout
+
+\begin_layout Itemize
+Don't need it.
 \end_layout
 
 \end_deeper
@@ -881,6 +1060,10 @@ All resources need to be loaded at page load.
 \end_layout
 
 \end_deeper
+\begin_layout Itemize
+Messing with the crypto-code.
+\end_layout
+
 \begin_layout EndFrame
 
 \end_layout
@@ -903,7 +1086,1245 @@ The rest of the code isn't violating the user's privacy, nor subverting
 \end_layout
 
 \begin_layout Standard
-Perform Taint Analysis on the JS code
+\noindent
+\align center
+Perform Taint Analysis on the JavaScript code to detect potential privacy
+ violations.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout Subsection
+Taint Analysis
+\end_layout
+
+\begin_layout BeginFrame
+Just what the heck is Taint Analysis?
+\end_layout
+
+\begin_layout Standard
+Taint analysis is a analysis technique.
+ 
+\end_layout
+
+\begin_layout Itemize
+Comes in Static and Dynamic flavours.
+\end_layout
+
+\begin_layout Standard
+Usually used to detect if unsanitised input is ending up somewhere dangerous.
+ For example:
+\end_layout
+
+\begin_layout Itemize
+User input being fed directly to SQL queries.
+\end_layout
+
+\begin_layout Itemize
+User input being fed directly to exec command.
+\end_layout
+
+\begin_layout Standard
+We're going to use it to see if sensitive data is being sent anywhere (e.g
+ via Ajax call).
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Just what the heck is Taint Analysis?
+\end_layout
+
+\begin_layout Standard
+To perform taint analysis, you need:
+\end_layout
+
+\begin_layout Itemize
+Software source-code.
+ (Byte-code may suffice).
+\end_layout
+
+\begin_layout Itemize
+Set of tainted data sources.
+ (E.g.
+ User input).
+\end_layout
+
+\begin_layout Itemize
+Set of `taint-sink' functions.
+ (Where you don't want tainted data to go).
+\end_layout
+
+\begin_layout Itemize
+Taint propagation model for the programming language(s) the software is
+ written in.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Taint Analysis for JS
+\end_layout
+
+\begin_layout Itemize
+Source-Code ✔
+\end_layout
+
+\begin_layout Itemize
+Tainted data-sources
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Any function in the DOM API that could pull decrypted data from the DOM.
+\end_layout
+
+\begin_layout Itemize
+Decryption functions.
+\end_layout
+
+\begin_layout Itemize
+Key retrieval functions.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Taint-sink functions
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+XML HTTP Requests (a.k.a.
+ Ajax calls).
+\end_layout
+
+\begin_layout Itemize
+Anything else that can be used to communicate.
+\end_layout
+
+\end_deeper
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{frame}[fragile]
+\backslash
+frametitle{Taint Propagation Model}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+framesubtitle{Expressions 
+\backslash
+& Function Calls}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Won't go into complete detail.
+ (Long).
+\end_layout
+
+\begin_layout Standard
+Expressions:
+\end_layout
+
+\begin_layout Itemize
+If any sub-expression is tainted, whole expression is tainted.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+42 * foo + bar;
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+Function Calls:
+\end_layout
+
+\begin_layout Itemize
+Any arg tainted, whole call tainted.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+func(arg1, arg2, ...);
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{frame}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{frame}[fragile]
+\backslash
+frametitle{Taint Propagation Model}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+framesubtitle{Assignments}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Expression tainted 
+\begin_inset Formula $\implies$
+\end_inset
+
+ identifier tainted
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+identifier = expression;
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Can remove taint by assigning untainted expression.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Propagates up objects/arrays, so:
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+foo[i] = x;
+\end_layout
+
+\begin_layout Plain Layout
+
+foo.bar = x;
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{frame}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{frame}[fragile]
+\backslash
+frametitle{Taint Propagation Model}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+framesubtitle{References 
+\backslash
+& Tainted Scopes}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+References
+\end_layout
+
+\begin_layout Itemize
+Need to track.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+var a = {foo: "Hello"}
+\end_layout
+
+\begin_layout Plain Layout
+
+var b = a;
+\end_layout
+
+\begin_layout Plain Layout
+
+b.foo = taintedEntity;
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+Tainted Scopes:
+\end_layout
+
+\begin_layout Itemize
+If a block level construct (if, for, while, switch, etc) depends on tainted
+ entity, whole scope is tainted.
+\end_layout
+
+\begin_layout Itemize
+Taint persists after block.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{frame}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{frame}[fragile]
+\backslash
+frametitle{Taint Propagation Model}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+framesubtitle{If Statements}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+if (conditionalExpression) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    statementA;
+\end_layout
+
+\begin_layout Plain Layout
+
+    ...
+\end_layout
+
+\begin_layout Plain Layout
+
+} else {
+\end_layout
+
+\begin_layout Plain Layout
+
+    statementB;
+\end_layout
+
+\begin_layout Plain Layout
+
+    ...
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+If 
+\family typewriter
+conditionalExpression
+\family default
+ tainted, both branches tainted.
+\end_layout
+
+\begin_layout Itemize
+If not tainted, analyse branches independently.
+\end_layout
+
+\begin_layout Itemize
+Principles apply to other conditionals (e.g.
+ Switch).
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{frame}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{frame}[fragile]
+\backslash
+frametitle{Taint Propagation Model}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+framesubtitle{While Statements}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+while (condition) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    statements;
+\end_layout
+
+\begin_layout Plain Layout
+
+    ...
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+If 
+\family typewriter
+condition
+\family default
+ is tainted, all statements in loop body are tainted.
+\end_layout
+
+\begin_layout Itemize
+Principle applies to all other loop statements.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{frame}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{frame}[fragile]
+\backslash
+frametitle{Taint Propagation Model}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+framesubtitle{Loop Statements in General}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Need to run taint analysis over loop repeatedly.
+\end_layout
+
+\begin_layout Itemize
+Stop once taint status has stabilised.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+var foo = untainted-entity;
+\end_layout
+
+\begin_layout Plain Layout
+
+var bar = untainted-entity;
+\end_layout
+
+\begin_layout Plain Layout
+
+while(untainted-condition) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    var baz = bar;
+\end_layout
+
+\begin_layout Plain Layout
+
+    bar = foo;
+\end_layout
+
+\begin_layout Plain Layout
+
+    foo = tainted-entity;
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Don't allow untainting in loop body.
+ (Infinite loops).
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{frame}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{frame}[fragile]
+\backslash
+frametitle{Taint Propagation Model}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+framesubtitle{With Statements}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Disallow use of 
+\family typewriter
+with
+\family default
+ statements under our model.
+\end_layout
+
+\begin_layout Itemize
+Too difficult to reason about.
+\end_layout
+
+\begin_deeper
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+var obj1 = {b: "Hello"};
+\end_layout
+
+\begin_layout Plain Layout
+
+var obj2 = {foo: "World"};
+\end_layout
+
+\begin_layout Plain Layout
+
+(function (a, b) {
+\end_layout
+
+\begin_layout Plain Layout
+
+    with (a) {
+\end_layout
+
+\begin_layout Plain Layout
+
+        b = "Goodbye";
+\end_layout
+
+\begin_layout Plain Layout
+
+    }
+\end_layout
+
+\begin_layout Plain Layout
+
+})(obj1,obj2);
+\end_layout
+
+\begin_layout Plain Layout
+
+alert(obj1.b); //alerts "Goodbye"
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_deeper
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{frame}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{frame}[fragile]
+\backslash
+frametitle{Taint Propagation Model}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+framesubtitle{Functions}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Functions are complicated.
+ Have to deal with:
+\end_layout
+
+\begin_layout Itemize
+Reference parameters (i.e.
+ pointers) being tainted.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Hard, because JS is untyped.
+\end_layout
+
+\begin_layout Itemize
+Use object/array notation (a[b] and a.b) to detect.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Parameters tainting each other.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Assume each parameter is tainted (one at a time)
+\end_layout
+
+\begin_layout Itemize
+See what else becomes tainted.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Out-of-scope variables.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Treat them as an implicit parameter.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Return value tainted 
+\begin_inset Formula $\implies$
+\end_inset
+
+ function itself tainted.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{frame}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{frame}[fragile]
+\backslash
+frametitle{Taint Propagation Model}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+framesubtitle{Functions}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+Functions get even more complicated.
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+Because functions are also objects.
+ And objects are functions.
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+\begin_inset Graphics
+	filename Diagrams/javaScript.jpg
+	scale 30
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{frame}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{frame}[fragile]
+\backslash
+frametitle{Taint Propagation Model}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+framesubtitle{Objects}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+If one member of an object is tainted, the whole thing is tainted.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Becomes way too complicated otherwise.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+In other respects, treat like functions.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{frame}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+begin{frame}[fragile]
+\backslash
+frametitle{Taint Propagation Model}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+framesubtitle{Try-Catch 
+\backslash
+& Exceptions}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Itemize
+Try-Catch-Finally blocks, and Exceptions, are not covered under model.
+\end_layout
+
+\begin_layout Itemize
+Probably could be, but 'catch-all' nature of 
+\family typewriter
+catch
+\family default
+ block makes this complex.
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+end{frame}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
+Making The Model Usable
+\end_layout
+
+\begin_layout BeginFrame
+Making it Usable
+\end_layout
+
+\begin_layout Standard
+The above is too restrictive, by itself.
+\end_layout
+
+\begin_layout Itemize
+Wrap tainted functions to check if reading sensitive data.
+\end_layout
+
+\begin_layout Itemize
+Don't return sensitive data from these functions.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Behave normally for regular data.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Unwrapped functions still available.
+ (Legitimate uses).
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Data Laundering
+\end_layout
+
+\begin_layout Standard
+Tainted values could be written to DOM, and read back as untainted values.
+\end_layout
+
+\begin_layout Itemize
+Wrap DOM-write functions to add 
+\begin_inset Quotes eld
+\end_inset
+
+sensitive
+\begin_inset Quotes erd
+\end_inset
+
+ flags, which can be detected by wrapped DOM-read functions.
+\end_layout
+
+\begin_layout Itemize
+Alert user if tainted value is written via unwrapped function.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Exchanging Sensitive Information
+\end_layout
+
+\begin_layout Standard
+To send something to another user:
+\end_layout
+
+\begin_layout Itemize
+Use public key crypto.
+\end_layout
+
+\begin_layout Itemize
+Need a third-party CA (at least in the plugin), to protect against Man-in-the-Mi
+ddle attacks from the service.
+\end_layout
+
+\begin_layout Itemize
+Could also use web of trust.
+\end_layout
+
+\begin_layout Standard
+No solution is perfect.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout Section
+Impact
+\end_layout
+
+\begin_layout BeginFrame
+Impact & Future Work
+\end_layout
+
+\begin_layout Itemize
+Targeted Advertising doesn't really work.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Same for most business models depending on sensitive user data.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Sets intelligence agencies back to specific, targeted surveillance.
+\end_layout
+
+\begin_layout Itemize
+No more massive data-theft hacks.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout BeginFrame
+Future Work
+\end_layout
+
+\begin_layout Itemize
+Taint-Analysis produces a lot of false positives.
+\end_layout
+
+\begin_deeper
+\begin_layout Itemize
+Could be much narrower.
+\end_layout
+
+\begin_layout Itemize
+Dynamic tainting worth a look.
+\end_layout
+
+\end_deeper
+\begin_layout Itemize
+Needs to be gone over with a fine-tooth-comb.
+\end_layout
+
+\begin_layout EndFrame
+
+\end_layout
+
+\begin_layout Section
+Conclusion
+\end_layout
+
+\begin_layout BeginFrame
+Conclusion
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+That was a gross over-simplification of my thesis.
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+Any questions?
 \end_layout
 
 \begin_layout EndFrame
