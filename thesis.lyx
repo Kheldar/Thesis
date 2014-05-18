@@ -2920,7 +2920,7 @@ function (cyphertext, key, DOMReference) {
 
 \begin_layout Plain Layout
 
-	localKey = decrypt(localKey, masterKey);
+	localKey = decrypt(key, masterKey);
 \end_layout
 
 \begin_layout Plain Layout
@@ -2972,7 +2972,7 @@ function (cyphertext, key, DOMReference) {
 
 \begin_layout Plain Layout
 
-	DOMReference.attr("key", localKey);
+	DOMReference.attr("key", key);
 \end_layout
 
 \begin_layout Plain Layout
@@ -3200,7 +3200,7 @@ call
 \emph default
  is considered tainted - although the function 
 \emph on
-itself
+identifier
 \emph default
  is not marked at tainted as a result of this.
 \end_layout
@@ -3486,6 +3486,7 @@ If ..
 
 \begin_layout Standard
 \begin_inset listings
+lstparams "tabsize=4"
 inline false
 status open
 
@@ -5952,7 +5953,7 @@ reference "sec:Initially-Tainted-Functions"
 
  section as tainted, without offering some form of workaround, it would
  be virtually impossible to write any meaningfully useful application in
- JavaScript that was did not (under that model) violate a user's privacy.
+ JavaScript that did not (under that model) violate a user's privacy.
  We therefore need to offer some way that developers may use as many of
  those functions as possible, but in a way that we can be sure does not
  violate privacy.
@@ -6050,7 +6051,7 @@ function safeGetElementById(id) {
 
 \begin_layout Plain Layout
 
-  if(class.indexOf("private") == -1) {
+  if(class.indexOf("sensitive") == -1) {
 \end_layout
 
 \begin_layout Plain Layout
