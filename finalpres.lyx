@@ -1633,7 +1633,7 @@ status open
 
 \begin_layout Plain Layout
 
-while (condition) {
+while (invariant) {
 \end_layout
 
 \begin_layout Plain Layout
@@ -1659,7 +1659,7 @@ while (condition) {
 \begin_layout Itemize
 If 
 \family typewriter
-condition
+invariant
 \family default
  is tainted, all statements in loop body are tainted.
 \end_layout
@@ -2256,7 +2256,7 @@ Impact
 \end_layout
 
 \begin_layout BeginFrame
-Impact & Future Work
+Impact
 \end_layout
 
 \begin_layout Itemize
@@ -2275,6 +2275,10 @@ Sets intelligence agencies back to specific, targeted surveillance.
 
 \begin_layout Itemize
 No more massive data-theft hacks.
+\end_layout
+
+\begin_layout Itemize
+Some computational heavy-lifting now on client (indexing, search, etc).
 \end_layout
 
 \begin_layout EndFrame
@@ -2301,6 +2305,14 @@ Dynamic tainting worth a look.
 \end_deeper
 \begin_layout Itemize
 Needs to be gone over with a fine-tooth-comb.
+\end_layout
+
+\begin_layout Itemize
+Password Recovery
+\end_layout
+
+\begin_layout Itemize
+Password still most vulnerable point.
 \end_layout
 
 \begin_layout EndFrame
