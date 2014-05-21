@@ -69,11 +69,19 @@
 \begin_body
 
 \begin_layout Title
-Title Goes Here
+Usable Online Privacy:
+\begin_inset Newline newline
+\end_inset
+
+Browser-Based End-to-End Encryption Delivered by a Service Provider
 \end_layout
 
 \begin_layout Author
 Joshua Korner-Godsiff - u4685222
+\begin_inset Newline newline
+\end_inset
+
+Supervised by Roger Clarke
 \end_layout
 
 \begin_layout Standard
@@ -123,12 +131,25 @@ In the course of using a web-based service, users will often disclose an
 \begin_layout Standard
 Concern over these potential intrusions has been greatly heightened within
  the previous several years.
- The leaks from Edward Snowden **TODO: Reference** have revealed that the
- United States' National Security Agency (NSA), and Britain's Government
- Communications Headquarters (GCHQ) have been engaging in almost carte blanche
- surveillance of internet activity.
+ The leaks from Edward Snowden 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "PRISM"
+
+\end_inset
+
+ have revealed that the United States' National Security Agency (NSA), and
+ Britain's Government Communications Headquarters (GCHQ) have been engaging
+ in almost carte blanche surveillance of internet activity.
  They reportedly have access to data related to users of Facebook, Google,
- Microsoft, Apples, Yahoo, and a number of other companies.
+ Microsoft, Apples, Yahoo, and a number of other companies 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "PRISM"
+
+\end_inset
+
+.
  While most such companies have stated that they only turn over data in
  response to a legally binding order or subpoena, it has been alleged that
  the access by intelligence agencies to their data is far more streamlined
@@ -162,10 +183,49 @@ key "LavaBitCourtDocs,WiredLavaBitCryptoKeys"
 
  to a government, an action which undermines one of the cornerstones upon
  which internet security is based.
+ Not only does the possessing of such encryption keys provide access to
+ user data, but it also enables a third party to impersonate the service,
+ effectively tricking users into believing they are using the real thing,
+ when in fact they are using a decoy designed for surveillance.
 \end_layout
 
 \begin_layout Standard
-**TODO: Credit Card details stolen from Target**
+Threats to privacy and security from criminal elements also cannot be taken
+ lightly.
+ In 2013, a hack of the United States branch of the Target corporation resulted
+ in around forty million credit-card records, and seventy million records
+ of addresses, telephone numbers and other instances of personal information
+ ending up in the hands of hackers.
+ Moreover, this happened in the face of a security system which allegedly
+ detected the security breach as it was in progress, but failed to take
+ any action to prevent it 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Target"
+
+\end_inset
+
+.
+ In 2011, hackers breached Sony's PlayStation Network, making off with around
+ seventy million customer data records, including names addresses, dates
+ of birth, hashed and salted, passwords, and security questions 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "PSN"
+
+\end_inset
+
+, forcing the network offline for twenty-four days.
+ These hacks are alleged to have cost their respective companies millions
+ of dollars, and enabled waves of identity and credit-card fraud, and other
+ crimes, and they are far from the only examples of such crimes.
+\end_layout
+
+\begin_layout Standard
+In the face of such threats to both privacy and security, the questions
+ must be asked: What can the average user do to protect themselves against
+ such threats? And what can the average company do to protect both themselves
+ and their users?
 \end_layout
 
 \begin_layout Standard
@@ -188,21 +248,35 @@ That is, do not store passwords, encryption keys, or plain-text data on
  had compromised the server would lack access to the necessary decryption
  keys.
  Such a model has already been adopted (at least in some form) by a number
- of web-based services.
- Examples include Mega.co.nz 
+ of web-based services; examples include Mega.co.nz 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "Mega"
 
 \end_inset
 
-, ***TODO: other examples***
+, CryptoCat 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Crypocat"
+
+\end_inset
+
+ and ProtonMail 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ProtonMail"
+
+\end_inset
+
+, all of which offer variants on the ideas that will be presented in this
+ paper.
 \end_layout
 
 \begin_layout Standard
 It must be noted that while such an idea has the potential to neatly deal
- with all three primary threats to privacy (hackers, advertisers, and intelligen
-ce agencies), it is only the last of those which necessitates it.
+ with all three primary threats to privacy (hackers, advertisers, and government
+ agencies), it is only the last of those which necessitates it.
  Server-side encryption, combined with proper security procedures, is generally
  sufficient to mitigate a technical threat from hackers - at least to the
  point where the difficulties of client-side encryption are not worth the
@@ -234,20 +308,25 @@ able
 scope
 \emph default
  of what they're doing with it.
+ 
+\end_layout
+
+\begin_layout Plain Layout
+It must also be noted that we are not exclusively dealing with western democrati
+c governments, who at worst tend to lock people up.
+ In less democratic parts of the world, governments having mass-surveillance
+ capabilities tends to get people killed.
 \end_layout
 
 \end_inset
 
 , forcing them to act in ways they otherwise would not, including circumventing
  their own security measures.
-\end_layout
-
-\begin_layout Standard
-The government
+ The government 
 \begin_inset Formula $\leftrightarrow$
 \end_inset
 
-corporation power dynamic is not even the only one to have these concerns
+ corporation power dynamic is not even the only one to have these concerns
  - merely the most obvious one.
  In certain parts of the world, such as Russia, South-East Asia, and Central/Lat
 in America, it is quite conceivable that organised crime syndicates could
@@ -256,16 +335,70 @@ in America, it is quite conceivable that organised crime syndicates could
 \end_layout
 
 \begin_layout Standard
-In this paper, a model sufficient to protect user data against arbitrary
- server compromises will be presented.
+In this paper, we will present the fundamentals of a model for performing
+ client-side encryption of user-data for web services.
  The naive version of such a model suffers from a number of serious security
- concerns which (if unsolved) undermine its core purpose.
- Potential solutions to the most egregious and foreseeable of these problems
- will therefore also be presented.
+ and usability concerns which (if unsolved) undermine its core purpose;
+ we shall therefore address as many of these concerns as possible, and make
+ note of the ones which we cannot.
+ 
 \end_layout
 
 \begin_layout Standard
-**TODO: The rest of this**
+The first concern is that - at least in the case of an HTML+JavaScript based
+ web-service - a compromised service could provide malicious code to the
+ client, enabling it to retrieve sensitive data and/or decryption keys,
+ completely undermining the client-side security mechanisms.
+ Solving this in the case of web-applications is particularly difficult
+ due to the highly dynamic nature of web-pages and JavaScript.
+\end_layout
+
+\begin_layout Standard
+Secondly, it is unreasonable to expect that all users of a service would
+ be willing, able, know that solutions exist, and care enough to install
+ software which ensures protection of their privacy.
+ Indeed, possibly the most problematic aspect of many existing privacy-oriented
+ pieces of software (a prime example being PGP 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "OpenPGPAlliance"
+
+\end_inset
+
+) is that they set an unfortunately high bar in terms of the required skills
+ and knowledge in order to use them effectively, while simultaneously doing
+ little to promote their use to the general public.
+ Any solution which aims to to provide protection against mass surveillance
+ and mass data-theft must provide its protection to as many users as possible,
+ and thus must necessarily minimise the barriers to uptake and use.
+\end_layout
+
+\begin_layout Standard
+Thirdly, many modern web-applications provide the ability for users to share
+ data with one another.
+ If such data is encrypted, then the encryption keys must be distributed
+ to all relevant users in order allow for sharing.
+ If the key exchange and distribution is handled by the server, then a compromis
+ed server could either decrypt the files en-route (in the case of symmetric
+ encryption) or substitute keys belonging to users with ones they control
+ (in the case of asymmetric encryption), and neither of these cases would
+ be easily detectable by the end-users.
+\end_layout
+
+\begin_layout Standard
+Fourthly, users must be able to have some certainty that their privacy,
+ and the security of their data is being preserved, beyond even the assurances
+ provided to them by the providers of the services they use, or the governments
+ of the appropriate jurisdictions.
+\end_layout
+
+\begin_layout Standard
+This paper shall address all of these problems in detail.
+ Additionally, we shall make careful note (though not attempt to solve)
+ a number of other problems that arise, including the issues of password
+ recovery, shifting application logic and processing to the client, and
+ the impact that client-side encryption has on certain popular business
+ models.
 \end_layout
 
 \begin_layout Section
@@ -273,14 +406,33 @@ Thesis Structure
 \end_layout
 
 \begin_layout Standard
-In Chapter 
+Chapter 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "chap:Problem-Definition"
 
 \end_inset
 
-, we will 
+ will define the terms used throughout this paper, the threat model we seek
+ to protect against, as well as the goals and requirements of any solution.
+\end_layout
+
+\begin_layout Standard
+Chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Literature-Review"
+
+\end_inset
+
+ will provide a broad look at the relevant literature and techniques applicable
+ to the the problem, as well an examination of how this problem is being
+ addressed within the web-services industry, as there seems to be more happening
+ on that front than in academia.
+\end_layout
+
+\begin_layout Standard
+**TODO: Rest of this**
 \end_layout
 
 \begin_layout Chapter
@@ -299,7 +451,16 @@ Definition of Terms
 \end_layout
 
 \begin_layout Standard
+We shall firstly define, in as unambiguous a manner as possible, the specific
+ meaning of the terms used throughout this document:
+\end_layout
+
+\begin_layout Standard
 **TODO: Work out if I actually want to limit this to the WWW.**
+\end_layout
+
+\begin_layout Standard
+**TODO: Change some of these to what Roger suggested?**
 \end_layout
 
 \begin_layout Labeling
@@ -455,8 +616,8 @@ Goal
 \end_layout
 
 \begin_layout Standard
-Our overarching goal is to define a model under which the sensitive data
- that a user supplies to a web-service 
+The overarching goal of this paper is to define a model under which the
+ sensitive data that a user supplies to a web-service 
 \emph on
 cannot
 \emph default
@@ -465,10 +626,10 @@ cannot
 \end_layout
 
 \begin_layout Standard
-This goal should be achievable without the user's active participation in
- achieving it.
- That is to say, all users receive protection, whether or not they seek
- it.
+It is preferable that this goal be achievable without the user's active
+ participation in achieving it.
+ That is to say, the aim is that all users receive protection, regardless
+ of whether or not they seek it.
  The reasoning behind this particular constraint is the observation that
  while there exist a great many services and technologies which allow users
  to protect their privacy and data, almost all them require active participation
@@ -477,10 +638,16 @@ This goal should be achievable without the user's active participation in
  significant barrier to uptake.
  This is in contrast to the vast majority of highly successful websites,
  such as Facebook, Google, YouTube, Amazon, eBay, Wikipedia, Twitter, and
- indeed most other popular sites **TODO: Ref http://www.alexa.com/topsites/global*
-*, where the most significant barrier to uptake is the sign-up form.
- If online privacy is to become at all ubiquitous, it cannot be difficult
- to acquire and use.
+ indeed most other popular sites 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "AlexaTop500"
+
+\end_inset
+
+, where the most significant barrier to uptake is the sign-up form.
+ If online privacy is to become at all ubiquitous, it is imperative that
+ it is not difficult to acquire and use.
 \end_layout
 
 \begin_layout Standard
@@ -488,7 +655,7 @@ Furthermore, we seek to allow users to verify that they are receiving such
  protections.
  In the case of those users who do not wish to verify it, or who lack the
  technical competency to verify it, we rely on the existence of other users
- will do perform the verification.
+ who do perform the verification.
  In essence, we seek to create a digital version of the concept of herd
  immunity, whereby those users who verify their own protection by extension
  provide some measure of protection to those who do not, under the assumption
@@ -500,7 +667,7 @@ Furthermore, we seek to allow users to verify that they are receiving such
 \end_layout
 
 \begin_layout Standard
-**TODO: Look into whether navigator.plugins breaks this assumption.**
+**TODO: Note in Plugin section issues with navigator.plugins**
 \end_layout
 
 \begin_layout Section
@@ -517,7 +684,8 @@ name "sec:Threat-Model"
 \begin_layout Standard
 Here we will define the specific range of threats that we seek to protect
  against.
- Many of these threats are interrelated in some way.
+ Many of these threats are interrelated in some way, and therefore the threats
+ cannot be considered in isolation to one another.
 \end_layout
 
 \begin_layout Subsection
@@ -532,15 +700,27 @@ It is assumed to be possible for a third party to either convince or compel
 \begin_layout Standard
 Additionally, it is assumed to be possible for a third party to convince
  or compel the service provider to alter the operation of the service, in
- any way, resulting in a the web service being compromised.
- This includes, but is not limited to, the disclosure of the service-provider's
+ any way, resulting in the web service being compromised.
+ This includes, but is not limited to the disclosure of the service-provider's
  own encryption keys and security certificates, if any, to the third party.
 \end_layout
 
 \begin_layout Standard
 The consequence of these assumptions is that any sensitive data that the
  service provider possesses cannot be assumed to be secure, even if the
- service provider has encrypted it.
+ service provider has encrypted it with their own keys.
+\end_layout
+
+\begin_layout Standard
+We do not generally assume that the service provider 
+\emph on
+itself
+\emph default
+ is acting against the privacy interests of its users - on the basis that
+ any service provider which sets out to protect its users privacy is unlikely
+ to back-flip on that decision.
+ However, it is still a possibility, and presents identical threats to the
+ above.
 \end_layout
 
 \begin_layout Subsection
@@ -584,15 +764,16 @@ Client Compromise
 \end_layout
 
 \begin_layout Standard
-It is assumed that the user's own machine is 
+For the purposes of our threat model, it is assumed that the user's own
+ machine is 
 \emph on
 not
 \emph default
  compromised by a third party.
- Protecting against that possibility is beyond the scope of what I am trying
- to accomplish here; moreover, in the event that the user's machine is compromis
-ed, any attempt to protect sensitive data created on that machine is essentially
- moot, anyway.
+ Protecting against that possibility is beyond the scope of what this paper
+ is trying to accomplish; moreover, in the event that the user's machine
+ is compromised, any attempt to protect sensitive data created on that machine
+ is essentially moot, anyway.
 \end_layout
 
 \begin_layout Standard
@@ -616,7 +797,7 @@ Transmission Layer Compromise
 \end_layout
 
 \begin_layout Standard
-It is assumed that transmissions between the client and server may be both
+It is assumed that communications between the client and server may be both
  intercepted and modified by a third party, including in the case where
  the connection is encrypted (e.g.
  by TLS/SSL).
@@ -664,29 +845,17 @@ It must be noted that it is not assumed that the service provider sets out
 \end_layout
 
 \begin_layout Standard
-**TODO: Rewrite the below, and put it somewhere appropriate.**
+While we seek to provide users with the ability to verify that their privacy
+ and data are being protected, such a guarantee can only be provided to
+ those users willing and able to verify it.
+ Those users who are not willing or able will have to suffice with the assurance
+s of the service, and the fact that those users who do perform such verification
+ have not detected any violations.
 \end_layout
 
 \begin_layout Standard
-We seek to guarantee that even if the server and/or service is completely
- compromised, the private data of the service's users will not be available
- to the server, nor to any attacker controlling it.
- We may only actually guarantee this in the case where the user is willing
- and able to perform some verification - for example, by installing a plugin
- to ensure that their private data is not being transmitted to the server.
- Where this is not the case, we seek to create a digital form of `herd immunity'
-, whereby those users who do perform verification are sufficient to detect
- generalised server compromise, and bring it to the attention either of
- those users who do not, or of the appropriate authorities
-\end_layout
-
-\begin_layout Standard
-In essence, we do not trust the server to deliver what the user expects
- it to deliver.
- However, it must be noted that this does not come from an inherent distrust
- of the service, nor those who created it - in fact, it is assumed that
- the service and its creators intend to create a secure application - it
- is simply the fact that we cannot outright trust them.
+In essence, we do not trust in the security of any unencrypted data which
+ leaves the client.
 \end_layout
 
 \begin_layout Section
@@ -825,7 +994,14 @@ Data Tainting
 \begin_layout Standard
 Data tainting - sometimes also called taint checking - is a well established
  method of analysing a program to determine which aspects of it are influenced
- by user input, or other external data sources **TODO: Ref**.
+ by user input, or other external data sources 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "sabelfeld2003InformationFlowSecurity"
+
+\end_inset
+
+.
  Traditionally, it is used as a means to detect vulnerabilities in the program;
  for example, it can be used to determine if user input (or some derivative
  thereof) is being fed directly to a SQL database, or as a command to an
@@ -841,8 +1017,8 @@ To perform taint checking on a piece of software requires four distinct
 \end_layout
 
 \begin_layout Enumerate
-The software's source-code (or some reasonable other representation we may
- reason about, such as its byte-code).
+The software's source-code (or some other representation we may reason about,
+ such as its byte-code).
 \end_layout
 
 \begin_layout Enumerate
@@ -852,8 +1028,8 @@ A set of initially tainted data sources - traditionally, this is anything
 
 \begin_layout Enumerate
 A taint propagation model for the particular programming language(s) that
- the software is written in, which is used to determine which sets of data
- throughout the program are (or may be) tainted.
+ the software is written in, which is used to determine data paths through
+ the program are (or at least may be) tainted.
 \end_layout
 
 \begin_layout Enumerate
@@ -868,8 +1044,14 @@ Data tainting in JavaScript (which we are specifically interested in) has
  the concept, albeit for quite specific security purposes.
  This support was extended to some versions of Internet Explorer and Opera,
  but the overall feature was deprecated in JavaScript 1.2, and is no longer
- officially supported in any major browser **TODO: Ref W3Schools taintEnabled()*
-*.
+ officially supported in any major browser 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "W3SchoolsTaintEnabled"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -877,18 +1059,18 @@ There are plenty of more modern attempts at implementing some form of taint
  analysis for JavaScript 
 \begin_inset CommandInset citation
 LatexCommand cite
-key "bloomgarden2012dataflow,DataTainting,DataTaintingJS"
+key "DataTainting,DataTaintingJS,Bloomgarden2012dataflow"
 
 \end_inset
 
 .
- All of the ones I encountered while researching this used a dynamic analysis
- approach - that is, they analysed the application as it was running, and
- only analysed those data paths that were actually executed.
+ All of the ones encountered while researching this paper used a dynamic
+ analysis approach - that is, they analysed the application as it was running,
+ and only analysed those data paths which were actually executed.
  This is in contrast to the concept of static analysis, which analyses a
  program's source code before it is run, and examines all control flow paths.
- The former is more precise, while the latter is more thorough, and easier
- to implement.
+ The former is more precise, and carries more computational overhead, while
+ the latter is more thorough, and easier to implement.
 \end_layout
 
 \begin_layout Subsection
@@ -901,27 +1083,45 @@ Cryptography & Storing Sensitive Data
 
 \begin_layout Standard
 Cryptography is a well established field of mathematics, dealing chiefly
- with the transformation of meaningful information into utter gibberish
- (a.k.a.
- encryption), while only being able to reverse the process (a.k.a.
- decryption) if one knows - or can discover - how the original transformation
- was performed.
+ with methods of securing information, such that only those who are authorised
+ to do so may discover the contents of said information.
 \end_layout
 
 \begin_layout Standard
 Briefly, information may be encrypted using a combination of an appropriate
- mathematical algorithm **TODO: examples**, and an encryption key - typically
- a number large enough that an attacker cannot feasibly try all possible
- numbers.
+ mathematical algorithm (e.g.
+ AES 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "AES"
+
+\end_inset
+
+, Blowfish 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Blowfish"
+
+\end_inset
+
+, and RSA
+\begin_inset CommandInset citation
+LatexCommand cite
+key "RSA"
+
+\end_inset
+
+), and an encryption key - typically a number large enough that an attacker
+ cannot feasibly try all possible numbers.
  The information (termed cleartext) and key are used as inputs to the algorithm,
- in order to produce cypertext (the gibberish).
+ in order to produce cyphertext (that is, unreadable gibberish).
  
 \end_layout
 
 \begin_layout Standard
 In order to turn the cyphertext back into cleartext, the cyphertext is used
  as input into the decryption algorithm corresponding to the encryption
- algorithm which was used to generate the cleartext, along with a decryption
+ algorithm which was used to generate the cyphertext, along with a decryption
  key.
  The decryption function is typically some form of reversal of the operations
  performed in the encryption algorithm, while the decryption key may either
@@ -971,18 +1171,27 @@ Public Key Cryptography
 \end_layout
 
 \begin_layout Standard
-**TODO: Reference this section**
-\end_layout
+Public key cryptography 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "HandbookAppliedCrypto,DiffieHellman"
 
-\begin_layout Standard
-Public key cryptography, sometimes also known as asymmetric cryptography,
- is a particular type of cryptography almost exclusively used for sharing
- information.
+\end_inset
+
+, sometimes also known as asymmetric cryptography, is a particular type
+ of cryptography almost exclusively used for sharing information.
  It functions by generating not one but two cryptographic keys, typically
  termed a key-pair.
  When combined with their associated cryptographic algorithm - for example,
- RSA **TODO: Ref** - these keys have the property that each may be used
- to decrypt what they other encrypts.
+ RSA 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "RSA"
+
+\end_inset
+
+ - these keys have the property that each may be used to decrypt what they
+ other encrypts.
  However, they may 
 \emph on
 not
@@ -1020,8 +1229,8 @@ Facebook and email being examples
 .
  If we wish to hide such data from all the intermediaries between the users
  - including the server - then it becomes necessary to encrypt the data.
- The question then becomes: how do we distribute those keys to the user(s)
- at the other end?
+ The question then becomes: how do we distribute the decryption keys to
+ the user(s) at the other end?
 \end_layout
 
 \begin_layout Standard
@@ -1033,7 +1242,7 @@ key exchange problem
 \begin_inset Quotes erd
 \end_inset
 
- is a well trodden field of cryptography and security.
+ is a well trodden area of cryptography and security.
  The Diffie-Hellman key-exchange algorithm 
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -1073,17 +1282,17 @@ key "OpenPGP"
 .
  Under a PKI scheme, a central entity known to all users - generally termed
  the certificate authority (CA) - maintains a binding between public keys
- and the identifies of the user(s) they belong to.
+ and the identifies of the user(s) to which they belong.
  The public keys of the CA are distributed along with any software that
  uses it, allowing the software to establish a secure connection between
  itself and the CA.
  This in turn allows such software to both look up the public key belonging
  to a particular identity, and to verify that a particular public key does
- in fact belong to a particular user.
+ in fact belong to a particular identity.
 \end_layout
 
 \begin_layout Standard
-The downside of a centralised PKI is that it requires trust of the CA.
+The downside of a centralised PKI is that it requires trust in the CA.
  While this is not necessarily a bad thing - most secure communications
  on the internet work on this basis - it is still not ideal.
 \end_layout
@@ -1140,6 +1349,10 @@ End to End Encryption
 \end_layout
 
 \begin_layout Standard
+**TODO: Make this have a point**
+\end_layout
+
+\begin_layout Standard
 End-to-end encryption, sometimes also called client-side encryption, is
  a technique whereby information is encrypted by one party, communicated
  to a second party who possesses the capability to decrypt it, and at no
@@ -1191,6 +1404,7 @@ In-Browser Encryption
 \begin_layout Standard
 Of particular interest is the idea of performing encryption with a web-browser,
  or other similar software such as an HTML-enabled email client.
+ **TODO: This section**
 \end_layout
 
 \begin_layout Section
@@ -1293,7 +1507,7 @@ They claim that the latter two vulnerabilities are detectable in the client.
 \end_layout
 
 \begin_layout Subsection*
-Existing Criticisms
+Criticisms of JavaScript-based Encryption
 \end_layout
 
 \begin_layout Standard
@@ -1321,8 +1535,8 @@ chicken-egg problem
 \end_layout
 
 \begin_layout Standard
-I agree that this is the most substantial problem blocking widespread uptake
- of the idea.
+This is indeed one of the most substantial problems blocking widespread
+ uptake of the idea.
  However, it may not be insurmountable.
  The network-delivery problem (as they readily admit) can be solved using
  TLS/SSL.
@@ -1341,7 +1555,7 @@ Another substantial criticism they level is the lack of a cryptographically
 window.crypto.getRandomValues
 \family default
  - a secure RNG, which is a part of the WebCryptoAPI specification currently
- being developed by the W3C
+ being developed by the W3C 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "W3CWebCryptoAPI"
@@ -1387,8 +1601,8 @@ y determining if a given piece of JavaScript code is secure - particularly
 \emph on
 know
 \emph default
- that it is the same code being executed in the browser - something impossible
- with compiled binaries 
+ that it is the same code being executed in the browser - something which
+ is very difficult to impossible with compiled binaries 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "ThoughtsOnJSCrypto"
@@ -1411,9 +1625,9 @@ Man In The Middle Attack
 \end_layout
 
 \begin_layout Standard
-In any service where users may exchange data using the service, there is
- the potential for a man-in-the-middle attack to be executed by the service
- (or by some third party who as gained access to their servers)
+In any situation where users may exchange data using a service, there is
+ the potential for a man-in-the-middle attack to be executed by that service
+ (or by some third party who as gained access to their servers) 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "ThoughtsOnJSCrypto"
@@ -1421,7 +1635,7 @@ key "ThoughtsOnJSCrypto"
 \end_inset
 
 .
- Because the server must also act as a de facto public key infrastructure
+ Because the server is likely to act as a de facto public key infrastructure
  - in that it facilitates the exchange of public keys between users - it
  has the capability to provide a public key for which it controls the private
  key to the user sending information, and decrypt the information for itself
@@ -1433,6 +1647,9 @@ key "ThoughtsOnJSCrypto"
 In order to negate this possibility, it is necessary for there to be some
  way to verify that a particular public key belongs to the user that the
  service claims it belongs to.
+ The most common methods of doing this are to either pre-distribute the
+ keys to end users, or to use a third party to facilitate key exchange,
+ or to verify acquired keys.
 \end_layout
 
 \begin_layout Subsection*
@@ -1485,12 +1702,40 @@ key "PRISMCostToIndustry"
 .
 \end_layout
 
+\begin_layout Standard
+Security breaches have a similarly chilling effect on business revenue and
+ the broader economy.
+ The PlayStation Network hack 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "PSN"
+
+\end_inset
+
+ alone is said to have cost Sony $170 million USD 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "PSNHackCost"
+
+\end_inset
+
+, while identity theft in general is said to cost the US economy over $56
+ billion USD per year (as of 2012) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "IDTheftCost"
+
+\end_inset
+
+.
+\end_layout
+
 \begin_layout Subsection*
 Client-Side Security Holes
 \end_layout
 
 \begin_layout Standard
-**TODO: Find References**
+**TODO: Move this to Plugin Model chapter**
 \end_layout
 
 \begin_layout Standard
@@ -1598,7 +1843,7 @@ Solution Overview
 
 \begin_layout Standard
 Here we present an overview of the model solution to the problem of how
- can web services preserve the privacy of their users.
+ web services can preserve the privacy of their users.
  It is intended to inform the discussion in chapters **TODO: Cross-reference**.
 \end_layout
 
@@ -1606,7 +1851,7 @@ Here we present an overview of the model solution to the problem of how
 Our base assumption is that an individual or organisation wishes to create
  a web service which - insofar as possible - preserves the privacy of its
  users, and moreover offers some guarantees both to the service creator,
- and to the users of the service, that their privacy is preserved.
+ and to the users of the service, that this privacy is preserved.
 \end_layout
 
 \begin_layout Standard
@@ -1673,8 +1918,8 @@ If we are to avoid forcing users to install separate software in order to
 ns.
  Considering we are discussing web services, the most obvious delivery mechanism
  is via the web browser, which in principle already possesses all the capabiliti
-es we need - that is, an user-friendly method of content delivery and a
- programming language (i.e.
+es we need - that is, a user-friendly method of content delivery and a programmi
+ng language (i.e.
  JavaScript) which is powerful enough to implement encryption in.
  However, this raises its own problems.
 \end_layout
@@ -1682,7 +1927,7 @@ es we need - that is, an user-friendly method of content delivery and a
 \begin_layout Standard
 Firstly, and most importantly, web-pages and all of their associated content
  are supplied directly from the service (or wherever else they deem to load
- them from) when the user request them, and (caching aside) this content
+ them from) when the user requests them, and (caching aside) this content
  does not tend to persist between requests.
  This means that the service is supplying to the user the cryptographic
  code (in the form of JavaScript) that is intended to protect the user's
@@ -1719,8 +1964,8 @@ It is assumed that there is some reasonably standardised implementation
 
 \end_deeper
 \begin_layout Itemize
-The parts of the code which implement the actual web service - as distinct
- from the code which implements they cryptography and other privacy preserving
+The portions of the code which implement the actual web service - as distinct
+ from the code which implements the cryptography and other privacy preserving
  functions - do not violate the user's privacy, nor do they do anything
  which could subvert the measures put in place by the cryptographic and
  privacy preserving functions.
@@ -1729,8 +1974,8 @@ The parts of the code which implement the actual web service - as distinct
 \begin_deeper
 \begin_layout Itemize
 It is assumed that the code which implements the cryptography and other
- privacy preserving functions does not have the capability to violate the
- user's privacy.
+ privacy preserving functions does not in itself have the capability to
+ violate the user's privacy.
 \end_layout
 
 \end_deeper
@@ -1771,13 +2016,24 @@ some
 \emph default
  users will install software if it guarantees their privacy.
  If we assume that the service cannot distinguish users who have installed
- such software from those who have not, then the service provider (or anyone
- else) would be unable to change their code in a way which violates privacy
- en mass, without someone noticing and making that information public.
+ such software from those who have not
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Without some form of intervention this assumption is not actually true,
+ but we will deal with that problem later.
+\end_layout
+
+\end_inset
+
+, then the service provider (or anyone else) would be unable to change their
+ code in a way which violates privacy en mass, without someone noticing
+ and making that information public.
  In the case of trying to protect privacy against server/service compromise,
- knowing is (in my opinion at least) half the battle.
- That is doubly true as ceasing to use the service unless/until the issue
- is fixed is an entirely valid way for a user to protect their privacy and
+ knowing that the violation exists is extremely useful, since if the data
+ is encrypted then ceasing to use the service unless/until the issue is
+ fixed is an entirely valid way for a user to protect their privacy and
  data.
 \end_layout
 
@@ -1826,6 +2082,22 @@ apps
 \end_inset
 
  on mobile phones and tablets, and possibly further afield.
+ Some of the model has been adapted from work done in industry - particularly
+ that of Mega 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "MegaDoc"
+
+\end_inset
+
+ and CryptoCat 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Crypocat"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -1839,7 +2111,8 @@ The model is intended to be verifiable by the client; that is to say that
 
 \begin_layout Itemize
 The client-side portion of the service is not disclosing any potentially
- sensitive information to any third party (including itself).
+ sensitive information to any third party (including the server-side portion
+ of the service).
 \end_layout
 
 \begin_deeper
@@ -1877,6 +2150,12 @@ reference "chap:Plugin-Model"
 \end_inset
 
 .
+\end_layout
+
+\begin_layout Standard
+Potential adversaries of, and deviations from the model are handled in the
+ security section **TODO: Security section**, as opposed to in the model
+ itself.
 \end_layout
 
 \begin_layout Section
@@ -1922,12 +2201,6 @@ Similarly the server - and any supporting software running on it, such as
  functions correctly when interacting with the client and the service.
 \end_layout
 
-\begin_layout Standard
-Potential adversaries of, and deviations from the model are handled in the
- security section **TODO: Security section**, as opposed to in the model
- itself.
-\end_layout
-
 \begin_layout Section
 Connection
 \end_layout
@@ -1942,7 +2215,8 @@ All communications between the client and server are assumed to take place
 Any intermediaries are assumed not to be able to decrypt data sent between
  the client and server due to the use of HTTPS.
  There is the possibility that they will collect meta-data about the transmissio
-n, but attempting to avoid that is outside the scope of this project.
+n, but attempting to avoid that is a) likely impossible, and b) outside
+ the scope of this project.
 \end_layout
 
 \begin_layout Section
@@ -2054,6 +2328,8 @@ The master key is a symmetric key, which is used to encrypt/decrypt the
 \begin_layout Standard
 The local keys are symmetric keys, which correspond one-to-one with an instance
  of sensitive data, which they may be used to encrypt/decrypt.
+ An instance of sensitive data may be any logically distinct piece of informatio
+n, such as the body of an email, a PDF document, or a blog post.
 \end_layout
 
 \begin_layout Standard
@@ -2065,7 +2341,7 @@ The public/private key-pair may be used to encrypt/decrypt information that
 \end_layout
 
 \begin_layout Standard
-The public/private keys are necessary in order to send private information
+The public/private keys are necessary in order to send sensitive information
  to other users.
  The local keys are necessary in order to only make available specific data.
  If all sensitive information was encrypted using only one key, it is conceivabl
@@ -2075,13 +2351,9 @@ e that another user could decrypt all of that data, rather that just the
 
 \begin_layout Standard
 The master key could potentially be replaced by the public/private pair.
- However, asymmetric encryption schemes tend to be much slower than symmetric
- ones, so it is preferable to minimise the use of the asymmetric pair to
- only when they are actually needed.
-\end_layout
-
-\begin_layout Standard
-**TODO: Ref MEGA, as this is basically their system**.
+ However, asymmetric encryption schemes tend to be computationally much
+ slower than symmetric ones, so it is preferable to minimise the use of
+ the asymmetric pair to only when they are actually needed.
 \end_layout
 
 \begin_layout Section
@@ -2118,6 +2390,17 @@ Among the JavaScript sent to the client is code for performing the cryptographic
 
 \end_deeper
 \begin_layout Standard
+Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Common-Elements"
+
+\end_inset
+
+ provides a visual representation of these steps..
+\end_layout
+
+\begin_layout Standard
 \begin_inset Float figure
 wide false
 sideways true
@@ -2140,6 +2423,13 @@ status collapsed
 
 \begin_layout Plain Layout
 Common Elements
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Common-Elements"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -2156,13 +2446,33 @@ Common Elements
 User Signup and Key Generation
 \end_layout
 
+\begin_layout Standard
+The following describes the essential steps under the model for performing
+ user signup and encryption key generation .
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:User-Signup-and-KeyGen"
+
+\end_inset
+
+ provides a visual representation of this process.
+\end_layout
+
 \begin_layout Enumerate
 The client requests and receives a sign-up page.
 \end_layout
 
 \begin_layout Enumerate
 On the client, a public-private key-pair is generated (e.g.
- by use of the RSA algorithm).
+ by use of the RSA algorithm 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "RSA"
+
+\end_inset
+
+).
 \end_layout
 
 \begin_layout Enumerate
@@ -2237,6 +2547,13 @@ status collapsed
 
 \begin_layout Plain Layout
 User Signup and Key Generation
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:User-Signup-and-KeyGen"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -2251,6 +2568,19 @@ User Signup and Key Generation
 
 \begin_layout Section
 Authentication and Log-In
+\end_layout
+
+\begin_layout Standard
+The following describes the essential steps under the model for authenticating
+ the identity of a user, and allowing them to log in to the service.
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Authentication-and-Log-In"
+
+\end_inset
+
+ provides a visual representation of this process.
 \end_layout
 
 \begin_layout Enumerate
@@ -2338,6 +2668,13 @@ status collapsed
 
 \begin_layout Plain Layout
 Authentication and Log-In
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Authentication-and-Log-In"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -2351,16 +2688,30 @@ Authentication and Log-In
 \end_layout
 
 \begin_layout Section
-Storing Private Information
+Storing Sensitive Information
+\end_layout
+
+\begin_layout Standard
+The following describes the essential steps under the model for enabling
+ a user to store sensitive information in an encrypted form with the service,
+ while ensuring that such information is not readable by the service.
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Storing-Private-Information"
+
+\end_inset
+
+ provides a visual representation of this process.
 \end_layout
 
 \begin_layout Enumerate
 The client requests and receives a page which may be used to supply and
- encrypt private information.
+ encrypt sensitive information.
 \end_layout
 
 \begin_layout Enumerate
-The user supplies the private information they wish encrypted and stored
+The user supplies the sensitive information they wish encrypted and stored
  to the JavaScript runtime, in some manner applicable to the type on information.
 \end_layout
 
@@ -2368,7 +2719,7 @@ The user supplies the private information they wish encrypted and stored
 \begin_layout Enumerate
 Different types of information may use different forms of input.
  The specifics are not relevant, other than that it reaches the JavaScript
- runtime in a useable fashion.
+ runtime in a usable fashion.
 \end_layout
 
 \end_deeper
@@ -2439,7 +2790,14 @@ status collapsed
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Storing Private Information
+Storing sensitive Information
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Storing-Private-Information"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -2453,7 +2811,7 @@ Storing Private Information
 \end_layout
 
 \begin_layout Section
-Retrieving Private Information
+Retrieving Sensitive Information
 \begin_inset CommandInset label
 LatexCommand label
 name "sec:Retrieving-Private-Information"
@@ -2463,19 +2821,34 @@ name "sec:Retrieving-Private-Information"
 
 \end_layout
 
+\begin_layout Standard
+The following describes the essential steps under the model for enabling
+ a user to retrieve sensitive information that was previously encrypted
+ and stored with the service, either by that user, or by another user that
+ has made the information available to the first user.
+ Figure 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "fig:Retrieving-sensitive-Information"
+
+\end_inset
+
+ provides a visual representation of this process.
+\end_layout
+
 \begin_layout Enumerate
-The client requests and receives a page which may contain encrypted private
+The client requests and receives a page which may contain encrypted sensitive
  information.
 \end_layout
 
 \begin_layout Enumerate
-This may contain encrypted private information, including the encrypted
+This may contain encrypted sensitive information, including the encrypted
  local key(s) corresponding to said information.
 \end_layout
 
 \begin_layout Enumerate
 In place of, or in addition to the encrypted information sent in step 2,
- the client requests and receives encrypted private information, including
+ the client requests and receives encrypted sensitive information, including
  the encrypted local key(s) corresponding to said information.
 \end_layout
 
@@ -2511,7 +2884,14 @@ status collapsed
 \begin_inset Caption
 
 \begin_layout Plain Layout
-Retrieving Private Information
+Retrieving sensitive Information
+\begin_inset CommandInset label
+LatexCommand label
+name "fig:Retrieving-sensitive-Information"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -2525,11 +2905,16 @@ Retrieving Private Information
 \end_layout
 
 \begin_layout Section
-Making Private Information Available to Other Users
+Making Sensitive Information Available to Other Users
+\end_layout
+
+\begin_layout Standard
+The following describes the essential steps under the model for enabling
+ one user to share sensitive information with one or more other users.
 \end_layout
 
 \begin_layout Enumerate
-The client requests and receives a page which facilitates making private
+The client requests and receives a page which facilitates making sensitive
  information available to other users.
 \end_layout
 
@@ -2597,7 +2982,7 @@ reference "sec:Retrieving-Private-Information"
 \begin_inset Float figure
 wide false
 sideways true
-status collapsed
+status open
 
 \begin_layout Plain Layout
 \align center
@@ -2618,9 +3003,7 @@ status collapsed
 \begin_inset Caption
 
 \begin_layout Plain Layout
-
-\lang english
-Making Private Information Available to Others
+Making sensitive Information Available to Others
 \end_layout
 
 \end_inset
@@ -2733,7 +3116,7 @@ The
 key
 \emph default
  attribute is a non-standard HTML attribute, used here to store the encrypted
- version of the local key corresponding to the private information enclosed
+ version of the local key corresponding to the sensitive information enclosed
  by the tag.
 \end_layout
 
@@ -3038,17 +3421,17 @@ key "DataTainting"
 
 \end_inset
 
- in order to detect cases where private data may be accessed from within
+ in order to detect cases where sensitive data may be accessed from within
  JavaScript.
  Briefly, data tainting is a concept whereby we mark a particular set of
  initial functions and operations as being tainted, and then any operations
  which depend on something tainted also become tainted.
  In our particular case, we may mark functions which have the potential
- to retrieve private information as being tainted.
- This information can then be used to detect whether private information
+ to retrieve sensitive information as being tainted.
+ This information can then be used to detect whether sensitive information
  is being used inappropriately; for example, we could check if the arguments
- to an AJAX call are tainted, indicating that private data could be transmitted
- to a server.
+ to an AJAX call are tainted, indicating that sensitive data could be transmitte
+d to a server.
 \end_layout
 
 \begin_layout Standard
@@ -4546,7 +4929,7 @@ Initially Tainted Functions
 The ***nth*** thing we require for this approach is to define a set of initial
  tainted functions.
  Broadly, this is defined as any function with the capability to retrieve
- private information from the DOM.
+ sensitive information from the DOM.
  To the extent that I have been able to research, the only functions with
  this capability reside within the DOM API, although there are a 
 \emph on
@@ -4687,7 +5070,7 @@ Returns the
 \family typewriter
 <body>
 \family default
- node, which may contain private information.
+ node, which may contain sensitive information.
 \end_layout
 
 \end_inset
@@ -4720,7 +5103,7 @@ Returns the
 \family typewriter
 <html>
 \family default
- node, which may contain private information.
+ node, which may contain sensitive information.
 \end_layout
 
 \end_inset
@@ -5044,7 +5427,7 @@ isEqualNode
 
 \begin_layout Plain Layout
 Tests if two nodes are equal.
- Could be used to compare a node against one containing private data.
+ Could be used to compare a node against one containing sensitive data.
 \end_layout
 
 \end_inset
@@ -5131,7 +5514,7 @@ nodeValue
 \begin_inset Text
 
 \begin_layout Plain Layout
-Returns the value of an element, which may include private text.
+Returns the value of an element, which may include sensitive text.
 \end_layout
 
 \end_inset
@@ -5962,11 +6345,11 @@ reference "sec:Initially-Tainted-Functions"
 \begin_layout Standard
 The approach I would put forward is to wrap each of the tainted functions
  in function which - when run - checks to see if the attempted operation
- is actually trying to retrieve private data.
- In the case where private data would not be retrieved, the function would
+ is actually trying to retrieve sensitive data.
+ In the case where sensitive data would not be retrieved, the function would
  behave in the same was as its unchecked function.
  In the case where it would be retrieved, the wrapper function would be
- required to not return the private data.
+ required to not return the sensitive data.
  However, there are a number of different ways we could handle the specific
  behaviour of such functions:
 \end_layout
@@ -5996,7 +6379,7 @@ The second approach is to fail with feedback - i.e.
 
 \begin_layout Standard
 In the case where an array or object is returned, only some elements of
- which may be private, there also exists the option to remove the private
+ which may be sensitive, there also exists the option to remove the sensitive
  items, while leaving the rest intact.
  Again, we may either do so silently, or provide notification that items
  were removed.
@@ -6113,18 +6496,18 @@ name "alg:A-privacy-safe-version"
 \begin_layout Standard
 The result of this is the creation of a set of functions with similar functional
 ity to our set of tainted functions, but providing the guarantee that no
- private data will be returned by them.
+ sensitive data will be returned by them.
  This allows developers to utilise said functions without either the developer
  or the user being concerned about violation of privacy.
 \end_layout
 
 \begin_layout Standard
 It is still necessary to allow use of the tainted functions, as there are
- legitimate cases where a developer might wish to retrieve private information
+ legitimate cases where a developer might wish to retrieve sensitive information
  from the DOM.
- For example, one might wish to develop an index of private data on the
+ For example, one might wish to develop an index of sensitive data on the
  client side, such that it may be quickly searched later.
- Such an index could be encrypted and stored in the same way as other private
+ Such an index could be encrypted and stored in the same way as other sensitive
  data, and updated as needed.
 \end_layout
 
@@ -6142,16 +6525,16 @@ reference "sub:Preventing-Data-Laundering"
 
 , there exists a problem whereby tainted data may be written back to the
  DOM, and then read back in, in order to remove the tainted designation.
- This is not as easily dealt with as merely reading private data from the
- DOM is, as such data will not necessarily be designated as private when
- it is written.
+ This is not as easily dealt with as merely reading sensitive data from
+ the DOM is, as such data will not necessarily be designated as sensitive
+ when it is written.
 \end_layout
 
 \begin_layout Standard
 We therefore create another set of wrapper functions, this time to guard
  writes to the DOM.
  Specifically, such functions designate any data written via them as being
- private.
+ sensitive.
  **TODO: Investigate possibility of tainting the DOM node.** This enables
  our read functions to detect privacy, and act accordingly.
 \end_layout
@@ -6165,8 +6548,8 @@ On the data taint detection side, we outright disallow the use of unwrapped
 \begin_layout Standard
 This should not present a problem for developers, as it is always possible
  to simply keep the tainted data within the JavaScript runtime, instead
- of using a write-and-read-back pattern, and the private designation - by
- design - should not have an effect on the way the DOM itself behaves.
+ of using a write-and-read-back pattern, and the sensitive designation -
+ by design - should not have an effect on the way the DOM itself behaves.
 \end_layout
 
 \begin_layout Standard
@@ -6195,6 +6578,7 @@ also
 \begin_layout Standard
 \begin_inset CommandInset bibtex
 LatexCommand bibtex
+btprint "btPrintAll"
 bibfiles "db"
 options "plain"
 
