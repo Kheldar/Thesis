@@ -738,6 +738,8 @@ itself
  to back-flip on that decision.
  However, it is still a possibility, and presents identical threats to the
  above.
+ Because it presents identical threats to the above, it is also solved by
+ any solution to the above.
 \end_layout
 
 \begin_layout Subsection
@@ -894,7 +896,7 @@ reference "sec:Threat-Model"
  to read the data.
  Given this, we require a model under which neither the web-service software,
  nor the server upon which it operates, nor the service provider have the
- capability to read a user's sensitive data.
+ capability to gain access to the content of a user's sensitive data.
 \end_layout
 
 \begin_layout Standard
@@ -1228,6 +1230,63 @@ The most important result of this (at least for our purposes) is that one
 \end_layout
 
 \begin_layout Subsection
+End to End Encryption
+\end_layout
+
+\begin_layout Standard
+**TODO: Ref this section**
+\end_layout
+
+\begin_layout Standard
+**TODO: Make this have a point**
+\end_layout
+
+\begin_layout Standard
+End-to-end encryption, sometimes also called client-side encryption, is
+ a technique whereby information is encrypted by one party, communicated
+ to a second party who possesses the capability to decrypt it, and at no
+ point between the initial encryption and the final decryption does any
+ third party - whether they are assisting the communication or intercepting
+ it - possess the capability to read the message.
+ More simply, the message may only be read at either end of the transmission,
+ hence the name.
+\end_layout
+
+\begin_layout Standard
+Several points must be made with regard to end-to-end encryption.
+ Firstly, that the communication between the two parties may be asynchronous;
+ that is, the encrypted information may be held for an arbitrary amount
+ of time by an intermediary third party (which is presumably helping to
+ facilitate the communication) before being finally transmitted to the second
+ party; there is no requirement that the first and second party are ever
+ come into direct contact with one another during the communication.
+\end_layout
+
+\begin_layout Standard
+The second point is that the first and second parties may in fact be the
+ 
+\emph on
+same
+\emph default
+ party.
+ That is, it is entirely reasonable that one might encrypt some information,
+ send it a third party for storage, and later retrieve it for decryption.
+\end_layout
+
+\begin_layout Standard
+End-to-end already encryption enjoys fairly widespread use among security
+ conscious people and organisations.
+ However, one of the overriding themes of most implementations of end-to-end
+ encryption is that the software facilitating it is already deployed to
+ both the sending and receiving parties prior to any encrypted communication
+ taking place, and that these deployments are wholly controlled by the two
+ parties.
+ There are very good reasons for using such a model - pre-deployment and
+ total control enormously simplify a lot of security concerns surrounding
+ end-to-end encryption.
+\end_layout
+
+\begin_layout Subsection
 Key Exchange Problem
 \end_layout
 
@@ -1272,7 +1331,8 @@ key "DiffieHellman"
 \end_layout
 
 \begin_layout Itemize
-It fails to provide a method for one user to establish the identity of another.
+It fails to provide a method for one user to authenticate the identity of
+ another.
 \end_layout
 
 \begin_layout Itemize
@@ -1358,64 +1418,7 @@ Like most decentralised systems, web of trusts do not actually preclude
 \end_layout
 
 \begin_layout Subsection
-End to End Encryption
-\end_layout
-
-\begin_layout Standard
-**TODO: Ref this section**
-\end_layout
-
-\begin_layout Standard
-**TODO: Make this have a point**
-\end_layout
-
-\begin_layout Standard
-End-to-end encryption, sometimes also called client-side encryption, is
- a technique whereby information is encrypted by one party, communicated
- to a second party who possesses the capability to decrypt it, and at no
- point between the initial encryption and the final decryption does any
- third party - whether they are assisting the communication or intercepting
- it - possess the capability to read the message.
- More simply, the message may only be read at either end of the transmission,
- hence the name.
-\end_layout
-
-\begin_layout Standard
-Several points must be made with regard to end-to-end encryption.
- Firstly, that the communication between the two parties may be asynchronous;
- that is, the encrypted information may be held for an arbitrary amount
- of time by an intermediary third party (which is presumably helping to
- facilitate the communication) before being finally transmitted to the second
- party; there is no requirement that the first and second party are ever
- come into direct contact with one another during the communication.
-\end_layout
-
-\begin_layout Standard
-The second point is that the first and second parties may in fact be the
- 
-\emph on
-same
-\emph default
- party.
- That is, it is entirely reasonable that one might encrypt some information,
- send it a third party for storage, and later retrieve it for decryption.
-\end_layout
-
-\begin_layout Standard
-End-to-end already encryption enjoys fairly widespread use among security
- conscious people and organisations.
- However, one of the overriding themes of most implementations of end-to-end
- encryption is that the software facilitating it is already deployed to
- both the sending and receiving parties prior to any encrypted communication
- taking place, and that these deployments are wholly controlled by the two
- parties.
- There are very good reasons for using such a model - pre-deployment and
- total control enormously simplify a lot of security concerns surrounding
- end-to-end encryption.
-\end_layout
-
-\begin_layout Subsection
-In-Browser Encryption
+In-Browser Cryptography
 \end_layout
 
 \begin_layout Standard
@@ -1423,17 +1426,100 @@ In-Browser Encryption
 \end_layout
 
 \begin_layout Standard
-Of particular interest is the idea of performing encryption with a web-browser,
- or other similar software such as an HTML-enabled email client.
- Historically this has been quite problematic, because JavaScript has until
- quite recently lacked a cryptographically secure random number generator,
- meaning that developers either had to use JavaScript's 
+Of particular interest is the idea of supplying encryption and decryption
+ functionality within a web-browser, or other similar software such as an
+ HTML-enabled email client.
+ There are many ways in which this could be (and to some degree already
+ has been) accomplished.
+\end_layout
+
+\begin_layout Standard
+Firstly, there is the idea of supplying cryptographic functionality via
+ a specialist library of piece of software, through which all communications
+ are piped.
+ From a purely technical perspective, this is the preferred option.
+ Its chief benefit is that the software is installed on the client, and
+ cannot in any way be meddled with by a third party, except by compromising
+ the client itself.
+ Additionally, such an approach has full access to the underlying operating
+ system, and thus easy access to things such as high-quality sources of
+ high entropy, and security supportive hardware.
+ This is the approach that SSL has taken, and it has achieved great success
+ in doing so - though a large part of that success is due to the fact that
+ it is comes packaged with most web-browsers.
+ In order to have similar success, any such approach would likely 
+\emph on
+also
+\emph default
+ have to be packaged with the browser, as otherwise it is unlikely to receive
+ widespread uptake, and therefore would not be particularly useful to a
+ service seeking to utilise it.
+\end_layout
+
+\begin_layout Standard
+**TODO: Work out whether I want to distinguish crypto that is intrinsic
+ to the software from the above**.
+\end_layout
+
+\begin_layout Standard
+A second approach is the notion of a browser plugin.
+ This also has the benefit of being installed on the client, but with that
+ drawback that plugins tend to be heavily sandboxed by the browser, thus
+ keeping them away from the underlying operating system.
+ It suffers from the same problem as specialist software, in that it needs
+ broad uptake to be particularly useful, and it is less likely to achieve
+ that if the user must specifically install it.
+\end_layout
+
+\begin_layout Standard
+A third approach is the idea of an on-demand download.
+ Under this approach, code to perform cryptographic operations is loaded
+ onto the client from an external source whenever there is a potential need
+ for it.
+ This has the potential to very neatly sidestep the issues of uptake and
+ usability.
+ However, it suffers from the very serious security issue of having cryptographi
+c code originate from an external source.
+ Additionally, in the specific case of web-browsers, the only way to deliver
+ such code would be via JavaScript, which presents its own litany of security
+ issues.
+\end_layout
+
+\begin_layout Standard
+The personal opinion of this author is that - for all the potential security
+ issues - the third option is actually the most promising.
+ The other two have been tried - to varying degrees of success - but the
+ only solutions to achieve widespread use are the ones which come with the
+ software that uses it, and do not require active user involvement to function.
+ The third option at least potentially has both of those properties, if
+ the security issues can be solved.
+ In any case, given a choice between trying to solve the security issues
+ with cryptographic code from an external source in JavaScript, and trying
+ to convince the general public to use encryption - and educating them sufficien
+tly such that they can actually use it - the former is quite probably easier.
+\end_layout
+
+\begin_layout Subsection
+Cryptography in JavaScript
+\end_layout
+
+\begin_layout Standard
+**TODO: Ref**
+\end_layout
+
+\begin_layout Standard
+Historically, encryption in JavaScript (the de facto scripting language
+ of web-browsers and related software) has been quite problematic, because
+ JavaScript has until quite recently lacked a cryptographically secure random
+ number generator, meaning that developers either had to use JavaScript's
+ 
 \family typewriter
 Math.random()
 \family default
-, which is not cryptographically secure; or to use Java applets, or a plugin,
+, which is not cryptographically secure; or use Java applets, or a plugin,
  or to generate the number elsewhere (e.g.
- on the server) and send it to the client, all of which have their own problems.
+ on the server) and send it to the client, all of which have their own associate
+d problems.
 \end_layout
 
 \begin_layout Standard
@@ -1443,7 +1529,7 @@ window.crypto.getRandomValues()
 \family default
  function, which in principle provides cryptographically secure random number
  generation.
- It is 
+ It is still 
 \begin_inset Quotes eld
 \end_inset
 
@@ -1451,14 +1537,14 @@ in principle
 \begin_inset Quotes erd
 \end_inset
 
- because of two provisos: firstly, the technology (and the associated W3C
+ because of two issues: firstly, the technology (and the associated W3C
  specification) is still in development.
  At time of writing the function is supported by all major desktop browsers
  (Chrome, Firefox, IE, Opera, and Safari) and 
 \emph on
 some
 \emph default
- mobile browsers (Chrome, Firefox) 
+ mobile browsers (Chrome, and Firefox) 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "MozGetRandomValues"
@@ -1469,8 +1555,8 @@ key "MozGetRandomValues"
 \end_layout
 
 \begin_layout Standard
-The second proviso is the technology relies on the browser to provide good
- sources of entropy, and these sources are 
+The second issue is that the technology relies on the browser to provide
+ good sources of entropy, and these sources are 
 \emph on
 not
 \emph default
@@ -1508,8 +1594,50 @@ should
 \emph default
  provide cryptographically random values, there's no real guarantee that
  they are doing so.
- However, it is still the best option available to JavaScript, and notably
+ However, it is still the best option available in JavaScript, and notably
  better than Math.random().
+\end_layout
+
+\begin_layout Subsection
+AJAX
+\end_layout
+
+\begin_layout Standard
+AJAX - short for 
+\series bold
+A
+\series default
+syncronous 
+\series bold
+J
+\series default
+avascript 
+\series bold
+A
+\series default
+nd 
+\series bold
+X
+\series default
+ML, and sometimes also called XHR, short for 
+\series bold
+X
+\series default
+ML 
+\series bold
+H
+\series default
+TTP 
+\series bold
+R
+\series default
+equest - is a well-established technique for performing communications between
+ a JavaScript runtime and a server capable of responding to HTTP requests.
+ It is one of the few ways in which a JavaScript runtime running in a browser
+ can communicate with the outside world.
+ It forms the basis of many modern web applications, due to its ability
+ to exchange data with a server after page load.
+ **TODO: Ref https://developer.mozilla.org/en/docs/AJAX**
 \end_layout
 
 \begin_layout Section
@@ -1529,10 +1657,6 @@ not
  Edward Snowden leaks **TODO: Reference**.
  Because of this, it seems prudent to touch on the major points of interest
  that exist on the industrial side, and from less traditional sources.
-\end_layout
-
-\begin_layout Standard
-**TODO: Everything below here needs to be restructured/rewritten.**
 \end_layout
 
 \begin_layout Subsection*
@@ -1587,14 +1711,14 @@ issuing a valid duplicate SSL certificate in combination with DNS forging
 \begin_inset Quotes erd
 \end_inset
 
-
+ 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "MegaSecurityAndPrivacy"
 
 \end_inset
 
-
+.
 \end_layout
 
 \begin_layout Itemize
@@ -1609,6 +1733,14 @@ A third party gaining access to their servers, and creating forged key requests
 
 \begin_layout Standard
 They claim that the latter two vulnerabilities are detectable in the client.
+\end_layout
+
+\begin_layout Subsection*
+CryptoCat
+\end_layout
+
+\begin_layout Standard
+**TODO: This**.
 \end_layout
 
 \begin_layout Subsection*
@@ -1749,14 +1881,18 @@ In order to negate this possibility, it is necessary for there to be some
 \end_layout
 
 \begin_layout Subsection*
-The Assumed Security of SSL
+LavaBit, and the Assumed Security of TLS/SSL
 \end_layout
 
 \begin_layout Standard
-Most discussions of internet- and web-centric security seem to assume that
- TLS/SSL is as secure as it reasonably can be.
+**TODO: Brief description of LavaBit**
+\end_layout
+
+\begin_layout Standard
+Most discussions of internet- and web-centric security assume that TLS/SSL
+ is as secure as it reasonably can be.
  However, there is reason to believe that this is not necessarily the case.
- Recently unsealed court documents show that FBI demanded (via the court)
+ Recently unsealed court documents show that the FBI demanded (via a court)
  that LavaBit.com hand over its SSL keys 
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -1774,6 +1910,10 @@ Possession of the SSL keys would in principle allow the FBI to intercept
  It would also permit the undetected impersonation of LavaBit's server,
  allowing for material not originating from LavaBit.com to be sent to its
  users.
+\end_layout
+
+\begin_layout Standard
+**TODO: Brief bit on HeartBleed**
 \end_layout
 
 \begin_layout Subsection*
@@ -1831,7 +1971,7 @@ Client-Side Security Holes
 \end_layout
 
 \begin_layout Standard
-**TODO: Move this to Plugin Model chapter**
+**TODO: Move all of this to the Plugin Model chapter**
 \end_layout
 
 \begin_layout Standard
