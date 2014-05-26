@@ -9,6 +9,7 @@
 \usepackage{graphicx}
 \usepackage{makeidx}
 \usepackage{xcolor}
+\usepackage{epigraph}
 \end_preamble
 \use_default_options true
 \maintain_unincluded_children false
@@ -109,6 +110,10 @@ Introduction
 \end_layout
 
 \begin_layout Standard
+**TODO: Introduce Service-Provider as threat**
+\end_layout
+
+\begin_layout Standard
 In the course of using a web-based service, users will often disclose an
  enormous amount of personal and private information to that service, without
  necessarily realising where that information may ultimately end up, or
@@ -126,6 +131,17 @@ In the course of using a web-based service, users will often disclose an
  to protecting the privacy of its users, and takes all reasonable security
  precautions, it logically cannot guarantee its users privacy so long as
  it itself has the ability to access the data.
+ In the case of services which are 
+\emph on
+not
+\emph default
+ committed to protecting their users, there are even further threats: an
+ unscrupulous service provider can hold data to ransom or commit extortion,
+ and on the more benign side one could quite deftly manipulate a user's
+ behaviour.
+ Google is quietly becoming remarkably good at the latter - an Android phone
+ can now tell you which roads to drive down, where to eat, and what stocks
+ to watch, among many other things.
 \end_layout
 
 \begin_layout Standard
@@ -142,7 +158,7 @@ key "PRISM"
  Britain's Government Communications Headquarters (GCHQ) have been engaging
  in almost carte blanche surveillance of internet activity.
  They reportedly have access to data related to users of Facebook, Google,
- Microsoft, Apples, Yahoo, and a number of other companies 
+ Microsoft, Apple, Yahoo, and a number of other companies 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "PRISM"
@@ -168,8 +184,8 @@ Five Eyes
 \end_inset
 
  alliance, but also including that of Austria, India, Netherlands, Russia,
- China, Iran, and Syria - are all either known or alleged to be participating
- in this activity to varying degrees.
+ China, Iran, Syria, and Israel - are all either known or alleged to be
+ participating in this activity to varying degrees.
 \end_layout
 
 \begin_layout Standard
@@ -274,9 +290,9 @@ key "ProtonMail"
 \end_layout
 
 \begin_layout Standard
-It must be noted that while such an idea has the potential to neatly deal
- with all three primary threats to privacy (hackers, advertisers, and government
- agencies), it is only the last of those which necessitates it.
+The idea has the potential to neatly deal with all three primary sources
+ of threat to privacy (hackers, advertisers, and government agencies), and
+ for the last of those it is all but necessary.
  Server-side encryption, combined with proper security procedures, is generally
  sufficient to mitigate a technical threat from hackers - at least to the
  point where the difficulties of client-side encryption are not worth the
@@ -399,6 +415,7 @@ This paper shall address all of these problems in detail.
  recovery, shifting application logic and processing to the client, and
  the impact that client-side encryption has on certain popular business
  models.
+ **TODO: Make sure I've done this last bit**
 \end_layout
 
 \begin_layout Section
@@ -634,8 +651,8 @@ It is preferable that this goal be achievable without the user's active
  while there exist a great many services and technologies which allow users
  to protect their privacy and data, almost all them require active participation
  on the part of the user to do so - for example by downloading, installing,
- and/or configuring some specific piece of software, which can present a
- significant barrier to uptake.
+ and/or configuring some specific piece of software - which can present
+ a significant barrier to uptake.
  This is in contrast to the vast majority of highly successful websites,
  such as Facebook, Google, YouTube, Amazon, eBay, Wikipedia, Twitter, and
  indeed most other popular sites 
@@ -1402,9 +1419,97 @@ In-Browser Encryption
 \end_layout
 
 \begin_layout Standard
+**TODO: Ref**
+\end_layout
+
+\begin_layout Standard
 Of particular interest is the idea of performing encryption with a web-browser,
  or other similar software such as an HTML-enabled email client.
- **TODO: This section**
+ Historically this has been quite problematic, because JavaScript has until
+ quite recently lacked a cryptographically secure random number generator,
+ meaning that developers either had to use JavaScript's 
+\family typewriter
+Math.random()
+\family default
+, which is not cryptographically secure; or to use Java applets, or a plugin,
+ or to generate the number elsewhere (e.g.
+ on the server) and send it to the client, all of which have their own problems.
+\end_layout
+
+\begin_layout Standard
+JavaScript now possesses the 
+\family typewriter
+window.crypto.getRandomValues()
+\family default
+ function, which in principle provides cryptographically secure random number
+ generation.
+ It is 
+\begin_inset Quotes eld
+\end_inset
+
+in principle
+\begin_inset Quotes erd
+\end_inset
+
+ because of two provisos: firstly, the technology (and the associated W3C
+ specification) is still in development.
+ At time of writing the function is supported by all major desktop browsers
+ (Chrome, Firefox, IE, Opera, and Safari) and 
+\emph on
+some
+\emph default
+ mobile browsers (Chrome, Firefox) 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "MozGetRandomValues"
+
+\end_inset
+
+, and it is anticipated that support will continue to spread.
+\end_layout
+
+\begin_layout Standard
+The second proviso is the technology relies on the browser to provide good
+ sources of entropy, and these sources are 
+\emph on
+not
+\emph default
+ defined in the specification.
+ Specifically: **TODO: Ref https://dvcs.w3.org/hg/webcrypto-api/raw-file/tip/spec/
+Overview.html**
+\end_layout
+
+\begin_layout Quotation
+
+\shape slanted
+\begin_inset Quotes eld
+\end_inset
+
+Implementations should generate cryptographically random values using well-estab
+lished cryptographic pseudo-random number generators seeded with high-quality
+ entropy, such as from an operating-system entropy source (e.g., "/dev/urandom").
+ This specification provides no lower-bound on the information theoretic
+ entropy present in cryptographically random values, but implementations
+ should make a best effort to provide as much entropy as practicable.
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\end_layout
+
+\begin_layout Quotation
+- W3C Cryptography API Specification
+\end_layout
+
+\begin_layout Standard
+The result is that while browsers 
+\emph on
+should
+\emph default
+ provide cryptographically random values, there's no real guarantee that
+ they are doing so.
+ However, it is still the best option available to JavaScript, and notably
+ better than Math.random().
 \end_layout
 
 \begin_layout Section
@@ -1554,16 +1659,7 @@ Another substantial criticism they level is the lack of a cryptographically
 \family typewriter
 window.crypto.getRandomValues
 \family default
- - a secure RNG, which is a part of the WebCryptoAPI specification currently
- being developed by the W3C 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "W3CWebCryptoAPI"
-
-\end_inset
-
-, and which has been implemented in current or upcoming versions of all
- major browsers 
+() 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "MozGetRandomValues"
@@ -2982,7 +3078,7 @@ reference "sec:Retrieving-Private-Information"
 \begin_inset Float figure
 wide false
 sideways true
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \align center
@@ -3409,7 +3505,7 @@ name "chap:Plugin-Model"
 Here we will describe a browser plugin **TODO: This**.
 \end_layout
 
-\begin_layout Section*
+\begin_layout Section
 Static Data Tainting in JavaScript
 \end_layout
 
@@ -3450,13 +3546,8 @@ dynamic
  is actually executed, whereas static analysis examines all possible execution
  paths.
  Which of those is preferable is a matter of point of view - the dynamic
- approach is technically more precise, in that it only detects that which
- is 
-\emph on
-actually
-\emph default
- tainted; however, the static approach allows the program to examine the
- 
+ approach is more precise, in that it gives less false positives; however,
+ the static approach allows the program to examine the 
 \emph on
 intent
 \emph default
@@ -3466,12 +3557,94 @@ intent
 \end_layout
 
 \begin_layout Standard
-In order to perform static taint analysis, the first thing we require is
- some reasonably formal description of data taint, and it's propagation
- in JavaScript.
+In order to perform static taint analysis, we need four things:
 \end_layout
 
-\begin_layout Subsection*
+\begin_layout Enumerate
+The software's source-code.
+\end_layout
+
+\begin_layout Enumerate
+A set of initially tainted functions.
+\end_layout
+
+\begin_layout Enumerate
+A set of taint-sink functions.
+\end_layout
+
+\begin_layout Enumerate
+A definition of taint propagation in JavaScript.
+\end_layout
+
+\begin_layout Standard
+We have the first (in-browser JavaScript is inherently open-source).
+ The third is relatively easy to define: Ajax calls, and anything else which
+ could be used to communicate information to the server.
+ The fourth point will be defined in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Taint-Propagation-Model"
+
+\end_inset
+
+, while the second will be defined in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Initially-Tainted-Functions"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+**TODO: Reread the below in context.
+ Possibly move it to the end of prop.
+ model.**
+\end_layout
+
+\begin_layout Standard
+An important point to note is that our propagation model attempts to minimise
+ or eliminate false-negatives, which is to say that everything which 
+\emph on
+could
+\emph default
+ possibly depend on tainted data is marked as such.
+ This unfortunately results in an abundance of false-positives.
+ This is much less of a problem than in it generally is in taint analysis
+ models, specifically because most such models attempt to protect the 
+\emph on
+program
+\emph default
+ from the 
+\emph on
+user
+\emph default
+, while we are attempting to protect the 
+\emph on
+user
+\emph default
+ from the 
+\emph on
+program
+\emph default
+.
+ This places a great deal more flexibility in the hands of the developer
+ to program around the constraints of the propagation model.
+\end_layout
+
+\begin_layout Section
+Taint Propagation Model
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Taint-Propagation-Model"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
 Tainted Entities
 \end_layout
 
@@ -3481,11 +3654,25 @@ A
 tainted entity
 \emph default
  shall be defined as any JavaScript data construct (that is: variables,
- functions, objects, and arrays, and anything else which may be represented
+ functions, objects, arrays, and anything else which may be represented
  by an identifier) which has been marked as tainted.
 \end_layout
 
-\begin_layout Subsection*
+\begin_layout Standard
+The set of tainted entities is tracked by the taint propagation model.
+ All initially tainted functions (defined in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Initially-Tainted-Functions"
+
+\end_inset
+
+) are marked as tainted, and considered tainted entities.
+ Other entities are marked as being tainted or not tainted as the program
+ is analysed using the propagation model.
+\end_layout
+
+\begin_layout Subsection
 Expressions
 \end_layout
 
@@ -3574,10 +3761,18 @@ func(arg1, arg2, ...);
 \end_layout
 
 \begin_layout Standard
-where `arg1, arg2, ...' represents some a finite number of arguments to the
- function call.
+where `
+\family typewriter
+arg1, arg2, ...
+\family default
+' represents some a finite number of arguments to the function call, and
+ 
+\family typewriter
+func
+\family default
+ represents the function name.
  Each argument may be an expression in its own right.
- If any of the arguments is tainted, then the whole function 
+ If any of the arguments are tainted, then the whole function 
 \emph on
 call
 \emph default
@@ -3586,9 +3781,65 @@ call
 identifier
 \emph default
  is not marked at tainted as a result of this.
+ The other arguments 
+\emph on
+may
+\emph default
+ become tainted (see Subsection 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Functions"
+
+\end_inset
+
+).
+ For example
 \end_layout
 
-\begin_layout Subsection*
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+func(taintedArg, untaintedArg);
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+if 
+\family typewriter
+taintedArg
+\family default
+ was tainted, but 
+\family typewriter
+func
+\family default
+, and 
+\family typewriter
+untaintedArg
+\family default
+ were not, then the call as a whole would be tainted, but 
+\family typewriter
+func
+\family default
+ would not become tainted, and 
+\family typewriter
+untaintedArg
+\family default
+ 
+\emph on
+may
+\emph default
+ become tainted, depending on the function.
+\end_layout
+
+\begin_layout Subsection
 Assignments
 \end_layout
 
@@ -3716,10 +3967,17 @@ bar
 If an identifier is currently marked as tainted, but is assigned an untainted
  expression, then the tainted marking will be removed from that identifier
  from that point forward in the program (unless it is within a tainted scope,
- see below), until it is assigned another tainted value.
+ see 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Tainted-Scopes"
+
+\end_inset
+
+), until it is assigned another tainted value.
 \end_layout
 
-\begin_layout Subsection*
+\begin_layout Subsection
 References
 \end_layout
 
@@ -3763,8 +4021,15 @@ a
  must be tainted if b is (and vice-versa).
 \end_layout
 
-\begin_layout Subsection*
+\begin_layout Subsection
 Tainted Scopes
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Tainted-Scopes"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -3853,7 +4118,7 @@ reference "sub:With-Statements"
 ).
 \end_layout
 
-\begin_layout Subsection*
+\begin_layout Subsection
 If ..
  Else Statements
 \end_layout
@@ -4078,7 +4343,7 @@ foo
  will be marked as tainted, as it was tainted in at least one branch.
 \end_layout
 
-\begin_layout Subsection*
+\begin_layout Subsection
 Switch Statements
 \end_layout
 
@@ -4138,7 +4403,27 @@ switch
  statement.
 \end_layout
 
-\begin_layout Subsection*
+\begin_layout Standard
+If 
+\family typewriter
+expression
+\family default
+ is not tainted, then each 
+\family typewriter
+case: ...
+ break;
+\family default
+ pair is treated in the same was as an individual branch of an 
+\family typewriter
+if ..
+ else
+\family default
+ statement.
+ In the event of fall-through cases, the top-most case in the fall-through
+ chain takes precedence in determining taint status.
+\end_layout
+
+\begin_layout Subsection
 Loop Statements
 \end_layout
 
@@ -4170,7 +4455,7 @@ do ..
  
 \end_layout
 
-\begin_layout Subsection*
+\begin_layout Subsubsection*
 While Loops
 \end_layout
 
@@ -4194,7 +4479,7 @@ status open
 
 \begin_layout Plain Layout
 
-while (condition) {
+while (invariant) {
 \end_layout
 
 \begin_layout Plain Layout
@@ -4233,7 +4518,7 @@ do {
 
 \begin_layout Plain Layout
 
-} while (condition);
+} while (invariant);
 \end_layout
 
 \end_inset
@@ -4244,7 +4529,7 @@ do {
 \begin_layout Standard
 In both cases, if 
 \family typewriter
-condition
+invariant
 \family default
  is tainted, then we generate a tainted scope across the body of the loop.
 \end_layout
@@ -4263,7 +4548,7 @@ not
  This is due to the possibility that there exists an entity which is not
  tainted prior to the loop being analysed, but which becomes tainted during
  the loop analysis.
- Such an entity could conceivably taint entities syntactically above it
+ Such an entity could conceivably taint entities syntactically before it
  during subsequent passes of the loop.
  For example:
 \end_layout
@@ -4285,7 +4570,7 @@ var bar = untainted-entity;
 
 \begin_layout Plain Layout
 
-while(untainted-condition) {
+while(untainted-invariant) {
 \end_layout
 
 \begin_layout Plain Layout
@@ -4348,12 +4633,77 @@ baz
 \end_layout
 
 \begin_layout Standard
-Me must therefore repeatedly analyse the loop until we reach a point whereby
- the taint status of all entities within both the body and the loop invariant(s)
- do not change between analysis iterations.
+Me must therefore repeatedly analyse the loop until we reach a point where
+ the taint status of all entities within both the body of the loop and the
+ loop invariant(s) do not change between analysis iterations (i.e.
+ we reach the fixpoint).
 \end_layout
 
-\begin_layout Subsection*
+\begin_layout Standard
+Because of this, we also need to disallow 
+\emph on
+un
+\emph default
+tainting of identifiers within loops.
+ If this is not done, it is trivial to set up an infinite loop in the analysis.
+ For example, the below is impossible to analyse without knowing how many
+ iterations the loop will go for, as the taint status of 
+\family typewriter
+foo
+\family default
+ and 
+\family typewriter
+bar
+\family default
+ swaps with every iteration.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+var foo = tainted-entity;
+\end_layout
+
+\begin_layout Plain Layout
+
+var bar = untainted-entity;
+\end_layout
+
+\begin_layout Plain Layout
+
+while(untainted-invariant) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	var tmp = foo;
+\end_layout
+
+\begin_layout Plain Layout
+
+	foo = bar;
+\end_layout
+
+\begin_layout Plain Layout
+
+	bar = foo;
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsubsection*
 For Loops
 \end_layout
 
@@ -4494,17 +4844,237 @@ object
  Should check.***
 \end_layout
 
-\begin_layout Subsection*
-Try ..
- Catch ..
- Finally Statements
+\begin_layout Subsubsection*
+Break & Continue Statements
 \end_layout
 
 \begin_layout Standard
-**TODO: This is a bit complicated due to exceptions**
+
+\family typewriter
+Break
+\family default
+ and 
+\family typewriter
+Continue
+\family default
+ statements within loop bodies are ignored, for the purposes of taint analysis.
+ 
+\family typewriter
+Break
+\family default
+ and 
+\family typewriter
+Continue
+\family default
+ statements with an attached label (which functions similarly to a 
+\family typewriter
+Goto
+\family default
+ statement in other languages) are not allowed under the model, as they
+ make control flow analysis much too difficult.
 \end_layout
 
-\begin_layout Subsection*
+\begin_layout Subsection
+Try ..
+ Catch ..
+ Finally Statements & Exceptions
+\end_layout
+
+\begin_layout Standard
+
+\family typewriter
+Try ..
+ Catch ..
+ Finally
+\family default
+ statements are disallowed under our model.
+ This is due to the considerable complexity in analysing them.
+ Specifically, 
+\end_layout
+
+\begin_layout Itemize
+Exceptions may be tainted.
+\end_layout
+
+\begin_layout Itemize
+A 
+\family typewriter
+Try
+\family default
+ block may contain an arbitrary number of sources of exceptions.
+\end_layout
+
+\begin_layout Itemize
+Functions which throw exceptions may throw different ones based on different
+ conditions, and not all of these are necessarily tainted.
+\end_layout
+
+\begin_layout Itemize
+A 
+\family typewriter
+Catch
+\family default
+ block has no syntactical way of distinguishing the types of exceptions
+ it is receiving
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+There does exist a so-called conditional catch block, but it is a non-standard
+ feature, and not on a standards track.
+ **TODO: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Stateme
+nts/try...catch**
+\end_layout
+
+\end_inset
+
+.
+ This is to say that all possible exceptions from a given 
+\family typewriter
+Try
+\family default
+ block are caught in one 
+\family typewriter
+Catch
+\family default
+ block.
+\end_layout
+
+\begin_layout Itemize
+Even if the 
+\family typewriter
+Catch
+\family default
+ block could distinguish the type of an exception, there could be multiple
+ sources of that type of exception.
+\end_layout
+
+\begin_layout Itemize
+Data flow through the blocks cannot be determined statically, since exceptions
+ mean control flow can jump out of the 
+\family typewriter
+Try
+\family default
+ block mid-flow, and there are potentially multiple points at which this
+ can happen.
+\end_layout
+
+\begin_layout Standard
+This is not to say that it is impossible to analyse 
+\family typewriter
+Try ..
+ Catch ..
+ Finally
+\family default
+ statements - there probably does exist some reasonable propagation model
+ for them which doesn't allow for false-negatives; I merely have not found
+ one.
+ There is of course the trivial one where we just assume everything in the
+ statement is tainted, but that is hardly useful or satisfying.
+\end_layout
+
+\begin_layout Standard
+The closest I have come to a propagation model for these statements is:
+\end_layout
+
+\begin_layout Itemize
+Assume all code in the 
+\family typewriter
+Try
+\family default
+ block executes.
+\end_layout
+
+\begin_layout Itemize
+If there are 
+\emph on
+any
+\emph default
+ sources of exceptions in the 
+\family typewriter
+Try
+\family default
+ block, assume the 
+\family typewriter
+Catch
+\family default
+ block executes.
+\end_layout
+
+\begin_layout Itemize
+If there are any sources of 
+\emph on
+tainted
+\emph default
+ exceptions in the 
+\family typewriter
+Try
+\family default
+ block, treat the 
+\family typewriter
+Catch
+\family default
+ block as a tainted scope.
+\end_layout
+
+\begin_layout Itemize
+Assume all code in the 
+\family typewriter
+Finally
+\family default
+ block (if such a block exists) executes, after the other two blocks.
+\end_layout
+
+\begin_layout Standard
+However, because of the complexities of the 
+\family typewriter
+Try ..
+ Catch ..
+ Finally
+\family default
+ statements, I have been unable to properly check if this model is sufficient.
+\end_layout
+
+\begin_layout Standard
+Exceptions, by contrast, are relatively simple - they can be handled as
+ another type of 
+\family typewriter
+Return
+\family default
+ statement, if they are not themselves wrapped in a 
+\family typewriter
+Try
+\family default
+ block.
+ However, a model for exceptions is not particularly useful without the
+ corresponding 
+\family typewriter
+Try
+\family default
+ statement to handle them.
+\end_layout
+
+\begin_layout Standard
+A promising avenue of inquiry is a paper on 
+\begin_inset Quotes eld
+\end_inset
+
+Analysis of Programs With Exception-Handling Constructs
+\begin_inset Quotes erd
+\end_inset
+
+ **TODO: Ref http://pleuma.cc.gatech.edu/aristotle/pdffiles/icsm98-exceptions.pdf**
+ which attempts to deal with the analysis of exception handling constructs
+ in Java.
+ Java's exception handling is similar enough to JavaScript that their work
+ can likely be carried over.
+\end_layout
+
+\begin_layout Standard
+The problem is also trivially handled under a dynamic data tainting model.
+\end_layout
+
+\begin_layout Subsection
 With Statements
 \begin_inset CommandInset label
 LatexCommand label
@@ -4621,12 +5191,23 @@ And a rather poor one, by my own option.
  very little by disallowing it.
 \end_layout
 
-\begin_layout Subsection*
+\begin_layout Subsection
 Functions
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Functions"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
 **TODO: This bit is kind of messy**
+\end_layout
+
+\begin_layout Standard
+**TODO: Global Vars**
 \end_layout
 
 \begin_layout Standard
@@ -4642,6 +5223,10 @@ To put it mildly.
 
 , so their behaviour with respect to data tainting deserves special care
  and consideration.
+\end_layout
+
+\begin_layout Subsubsection*
+Function Calls
 \end_layout
 
 \begin_layout Standard
@@ -4660,6 +5245,10 @@ called
  This is on the principle that the result of any function a programmer would
  actually write almost certainly depends upon its arguments, and if this
  is not the case, they are always capable of rewriting it.
+\end_layout
+
+\begin_layout Subsubsection*
+Pass-By-Reference
 \end_layout
 
 \begin_layout Standard
@@ -4713,8 +5302,8 @@ obj.bar
 In general, if a parameter is treated as an object or array within a function,
  and as a result becomes tainted, then we must treated the parameter itself
  as tainted.
- The result is arguments to such parameters in a call of that function must
- also become tainted.
+ The result is that arguments to such parameters in a call of that function
+ must also become tainted.
  For example
 \end_layout
 
@@ -4886,7 +5475,7 @@ The solution is to create a relation between the parameters of a particular
 
 .
  we say that 
-\begin_inset Formula $\forall i,j\in\left\{ 1\dots\, n\right\} :\, p_{i}\overset{\text{taints}}{\to}p_{j}\iff(p_{j}$
+\begin_inset Formula $\forall i,j\in\left\{ 1,\dots,\, n\right\} :\, p_{i}\overset{\text{taints}}{\to}p_{j}\iff(p_{j}$
 \end_inset
 
  is an object or array, and 
@@ -4915,7 +5504,84 @@ Once this set of relations is computed, whenever we encounter a call to
  appropriately.
 \end_layout
 
-\begin_layout Subsection*
+\begin_layout Subsubsection*
+Out-of-Scope Variables
+\end_layout
+
+\begin_layout Standard
+JavaScript will happily use identifiers from out of a function's scope,
+ if no such identifier is found within its scope.
+ However, because such variables may be changed at many different points
+ in the program, it can be difficult to analyse their taint status.
+\end_layout
+
+\begin_layout Standard
+The simplest way to deal with such variables is to treat them as implicit
+ parameters to the function, and analyse them as such.
+ However, we must make the adjustment that such parameters do 
+\emph on
+not
+\emph default
+ need to reference parameters in order to have an effect outside the function.
+\end_layout
+
+\begin_layout Standard
+Once analysed in this way, whenever we encounter a call to a function which
+ makes use of identifiers outside its scope, we can use the current taint
+ status of such identifiers when analysing the effect of the function call.
+\end_layout
+
+\begin_layout Subsubsection*
+Recursive Function Calls
+\end_layout
+
+\begin_layout Standard
+As is always the case with static analysis techniques, recursion makes everythin
+g more difficult.
+ All rules which apply to non-recursive functions also apply to recursive
+ functions; however, we must also add in several additional rules in order
+ to make them behave properly.
+ As with loops, we disallow the untainting of identifiers within recursive
+ functions.
+ We then repeatedly iterate through the function calls until the taint status
+ of all identifiers within the function stabilises (i.e.
+ reaches a fixpoint).
+\end_layout
+
+\begin_layout Standard
+In the case of mutually recursive functions (or chains thereof), we iterate
+ through the recursion chain until the taint statuses of all functions in
+ the chain have stabilised.
+\end_layout
+
+\begin_layout Subsubsection*
+Objects
+\end_layout
+
+\begin_layout Standard
+**TODO: This**
+\end_layout
+
+\begin_layout Standard
+JavaScript encodes its objects as functions.
+\end_layout
+
+\begin_layout Subsection
+Web Workers
+\end_layout
+
+\begin_layout Standard
+The Web Workers API **TODO: Ref** provides a method of introducing genuine
+ concurrency into JavaScript applications.
+ While this is an 
+\emph on
+incredibly
+\emph default
+ useful feature, concurrency makes static analysis very difficult.
+ We therefore disallow the use of Web Workers under the model.
+\end_layout
+
+\begin_layout Section
 \begin_inset CommandInset label
 LatexCommand label
 name "sec:Initially-Tainted-Functions"
@@ -4926,7 +5592,7 @@ Initially Tainted Functions
 \end_layout
 
 \begin_layout Standard
-The ***nth*** thing we require for this approach is to define a set of initial
+The other thing we require for this approach is to define a set of initial
  tainted functions.
  Broadly, this is defined as any function with the capability to retrieve
  sensitive information from the DOM.
@@ -4960,8 +5626,24 @@ achieved
  or find a different but equally safe formulation.
 \end_layout
 
-\begin_layout Subsubsection*
+\begin_layout Subsection
 Specific Functions
+\end_layout
+
+\begin_layout Standard
+The set of initially tainted functions - along with their reason for inclusion
+ in the set - is detailed in Table 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "tab:Initially-Tainted-Functions"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+**TODO: Move to Table float**
 \end_layout
 
 \begin_layout Standard
@@ -4969,7 +5651,7 @@ Specific Functions
 \family typewriter
 document
 \family default
- itself is unsafe by the standards I'm using here.
+ itself is tainted by the standards I'm using here.
  Probably need to narrow scope a little.**
 \end_layout
 
@@ -4979,6 +5661,12 @@ document
 \end_layout
 
 \begin_layout Standard
+\begin_inset Float table
+wide false
+sideways false
+status collapsed
+
+\begin_layout Plain Layout
 \begin_inset Tabular
 <lyxtabular version="3" rows="23" columns="3">
 <features islongtable="true" longtabularalignment="center">
@@ -5037,7 +5725,11 @@ anchors
 \begin_inset Text
 
 \begin_layout Plain Layout
-Returns an array of all <a> elements in the DOM
+Returns an array of all 
+\family typewriter
+<a>
+\family default
+ elements in the DOM
 \end_layout
 
 \end_inset
@@ -5672,7 +6364,31 @@ Returns the textual content of a node, including all child nodes.
 
 \end_layout
 
-\begin_layout Subsubsection*
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+Initially Tainted Functions
+\begin_inset CommandInset label
+LatexCommand label
+name "tab:Initially-Tainted-Functions"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Subsection
 \begin_inset CommandInset label
 LatexCommand label
 name "sub:Preventing-Data-Laundering"
@@ -5698,13 +6414,8 @@ not
 \end_layout
 
 \begin_layout Standard
-This is an instance where dynamic data tainting has a substantial advantage
- over the static case, as using dynamic data tainting would allow us to
- mark DOM nodes themselves as tainted, thus neatly dealing with this issue.
-\end_layout
-
-\begin_layout Standard
-Because of this problem, need to include the functions listed in Table 
+Because of this problem, we need to include the functions listed in Table
+ 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "tab:Additional-tainted-functions."
@@ -5716,11 +6427,10 @@ reference "tab:Additional-tainted-functions."
 
 \begin_layout Standard
 \noindent
-\align center
 \begin_inset Float table
 wide false
 sideways false
-status open
+status collapsed
 
 \begin_layout Plain Layout
 \noindent
@@ -6322,7 +7032,13 @@ name "tab:Additional-tainted-functions."
 
 \end_layout
 
-\begin_layout Subsection*
+\begin_layout Standard
+This is an instance where dynamic data tainting has a substantial advantage
+ over the static case, as using dynamic data tainting would allow us to
+ mark DOM nodes themselves as tainted, thus neatly dealing with this issue.
+\end_layout
+
+\begin_layout Section
 Putting The Usability Back In
 \end_layout
 
@@ -6336,7 +7052,7 @@ reference "sec:Initially-Tainted-Functions"
 
  section as tainted, without offering some form of workaround, it would
  be virtually impossible to write any meaningfully useful application in
- JavaScript that did not (under that model) violate a user's privacy.
+ JavaScript that did not (under that model) appear to violate a user's privacy.
  We therefore need to offer some way that developers may use as many of
  those functions as possible, but in a way that we can be sure does not
  violate privacy.
@@ -6348,8 +7064,8 @@ The approach I would put forward is to wrap each of the tainted functions
  is actually trying to retrieve sensitive data.
  In the case where sensitive data would not be retrieved, the function would
  behave in the same was as its unchecked function.
- In the case where it would be retrieved, the wrapper function would be
- required to not return the sensitive data.
+ In the case where sensitive data would be retrieved, the wrapper function
+ would be required to not return the sensitive data.
  However, there are a number of different ways we could handle the specific
  behaviour of such functions:
 \end_layout
@@ -6404,6 +7120,7 @@ reference "alg:A-privacy-safe-version"
 getElementByID
 \family default
  function.
+ **TODO: Consider hierarchy**
 \end_layout
 
 \begin_layout Standard
@@ -6429,12 +7146,12 @@ function safeGetElementById(id) {
 
 \begin_layout Plain Layout
 
-  var class = elem.className;
+  var cls = elem.className;
 \end_layout
 
 \begin_layout Plain Layout
 
-  if(class.indexOf("sensitive") == -1) {
+  if(cls.indexOf("sensitive") == -1) {
 \end_layout
 
 \begin_layout Plain Layout
@@ -6497,8 +7214,10 @@ name "alg:A-privacy-safe-version"
 The result of this is the creation of a set of functions with similar functional
 ity to our set of tainted functions, but providing the guarantee that no
  sensitive data will be returned by them.
- This allows developers to utilise said functions without either the developer
- or the user being concerned about violation of privacy.
+ This allows our taint analysis model to work under the guarantee that such
+ functions cannot return tainted values.
+ This in turn provides developers with a way to access the DOM, without
+ either the developer or the user being concerned about violation of privacy.
 \end_layout
 
 \begin_layout Standard
@@ -6511,7 +7230,7 @@ It is still necessary to allow use of the tainted functions, as there are
  data, and updated as needed.
 \end_layout
 
-\begin_layout Subsubsection*
+\begin_layout Subsection
 Dealing With Writes
 \end_layout
 
@@ -6554,6 +7273,26 @@ This should not present a problem for developers, as it is always possible
 
 \begin_layout Standard
 **TODO: Specify which functions this affects**
+\end_layout
+
+\begin_layout Chapter
+Discussion & Further Work
+\end_layout
+
+\begin_layout Section
+Strengths and Weaknesses
+\end_layout
+
+\begin_layout Section
+Implications for Practice
+\end_layout
+
+\begin_layout Section
+Implications for Research
+\end_layout
+
+\begin_layout Chapter
+Conclusions
 \end_layout
 
 \begin_layout Chapter
