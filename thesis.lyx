@@ -110,10 +110,6 @@ Introduction
 \end_layout
 
 \begin_layout Standard
-**TODO: Introduce Service-Provider as threat**
-\end_layout
-
-\begin_layout Standard
 In the course of using a web-based service, users will often disclose an
  enormous amount of personal and private information to that service, without
  necessarily realising where that information may ultimately end up, or
@@ -681,10 +677,6 @@ Furthermore, we seek to allow users to verify that they are receiving such
 
 \begin_layout Standard
 **TODO: Consider moving the rationale to another section**
-\end_layout
-
-\begin_layout Standard
-**TODO: Note in Plugin section issues with navigator.plugins**
 \end_layout
 
 \begin_layout Section
@@ -1491,13 +1483,14 @@ The personal opinion of this author is that - for all the potential security
  issues - the third option is actually the most promising.
  The other two have been tried - to varying degrees of success - but the
  only solutions to achieve widespread use are the ones which come with the
- software that uses it, and do not require active user involvement to function.
+ software that uses them, and do not require active user involvement to
+ function.
  The third option at least potentially has both of those properties, if
  the security issues can be solved.
  In any case, given a choice between trying to solve the security issues
  with cryptographic code from an external source in JavaScript, and trying
- to convince the general public to use encryption - and educating them sufficien
-tly such that they can actually use it - the former is quite probably easier.
+ to convince and educate the general public to use encryption, the former
+ is quite probably easier.
 \end_layout
 
 \begin_layout Subsection
@@ -1699,7 +1692,14 @@ key "Mega"
 
 \begin_layout Standard
 Mega identifies three large-scale security vulnerabilities with respect
- to their service.
+ to their service 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "MegaSecurityAndPrivacy"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Itemize
@@ -1710,13 +1710,6 @@ A man-in-the-middle attack, involving
 issuing a valid duplicate SSL certificate in combination with DNS forging
  and/or attacks on our BGP routes
 \begin_inset Quotes erd
-\end_inset
-
- 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "MegaSecurityAndPrivacy"
-
 \end_inset
 
 .
@@ -1741,7 +1734,9 @@ CryptoCat
 \end_layout
 
 \begin_layout Standard
-**TODO: This**.
+**TODO: This.
+ Maybe.
+ If have time.**.
 \end_layout
 
 \begin_layout Subsection*
@@ -1984,7 +1979,7 @@ Solution Overview
 \begin_layout Standard
 Here we present an overview of the model solution to the problem of how
  web services can preserve the privacy of their users.
- It is intended to inform the discussion in chapters **TODO: Cross-reference**.
+ It is intended to inform the discussion in Chapters **TODO: Cross-reference**.
 \end_layout
 
 \begin_layout Standard
@@ -2023,9 +2018,9 @@ reference "chap:Service-Model"
  Under the correct operation of this model all sensitive user data is encrypted
  on the client before it is sent to the service (if it is sent at all).
  The decryption mechanisms are never conveyed in any usable form to the
- service, resulting perhaps the most important property of our model - that
- the service cannot read the sensitive data, and therefore neither can anyone
- else on the service side of the equation, nor anyone in between.
+ service, resulting in perhaps the most important property of our model
+ - that the service cannot read the sensitive data, and therefore neither
+ can anyone else on the service side of the equation, nor anyone in between.
 \end_layout
 
 \begin_layout Standard
@@ -2045,7 +2040,7 @@ However, additional measures are required if the service is to retain broad
  usability comparable to most popular web services, while still offering
  these guarantees.
  Most services which currently offer these sorts of features require the
- user to explicitly download, install and/or configure certain software
+ user to explicitly download, install and/or configure specialist software
  in order facilitate the security mechanisms.
  That is an outcome we would expressly like to avoid, as many users are
  either not willing or not able to take those additional steps to protect
@@ -2238,10 +2233,6 @@ key "Crypocat"
 \end_inset
 
 .
-\end_layout
-
-\begin_layout Standard
-**TODO: Those provisos, somewhere**
 \end_layout
 
 \begin_layout Standard
@@ -7769,24 +7760,11 @@ Discussion & Further Work
 \end_layout
 
 \begin_layout Standard
-- User-Data centric business model
-\end_layout
-
-\begin_layout Standard
-- Lack of implementation
-\end_layout
-
-\begin_layout Standard
 - Moving processing to client
 \end_layout
 
 \begin_layout Standard
-- Relative uniqueness of model
-\end_layout
-
-\begin_layout Standard
-- Applicability of model (Type of service.
- Inter-service)**
+- Relative uniqueness of model**
 \end_layout
 
 \begin_layout Section
@@ -7830,15 +7808,15 @@ exactly
 \begin_layout Standard
 The model is also very generic in nature.
  I have focused quite specifically on the HTML+JS+Browser stack, as that
- is by a wide margin the most used method for delivering web services -
- particularly among those uses who are not actively seeking to protect their
+ is - by a wide margin - the most used method for delivering web services,
+ particularly to those uses who are not actively seeking to protect their
  privacy.
  However, the only thing really restricting the model to that set of technologie
 s is the ability to access a web-page's JavaScript source-code.
- If that barrier can be gotten around - for example, by publishing the source-co
-de in other ways, or by analysing byte- or machine-code - then the model
- could easily be applied to other methods of web application delivery, such
- as mobile apps, and even (if it ever becomes necessary) general installed
+ If that barrier can be overcome - for example, by publishing the source-code
+ in other ways, or by analysing byte- or machine-code - then the model could
+ easily be applied to other methods of web application delivery, such as
+ mobile apps, and even (if it ever becomes necessary) general installed
  programs.
 \end_layout
 
@@ -7863,7 +7841,8 @@ key "ProtonMail"
 \end_inset
 
 , which have chosen to operate from New Zealand, and Switzerland, respectively.
- 
+ Whether a technical or legal solution is preferable is really a matter
+ of opinion.
 \end_layout
 
 \begin_layout Standard
@@ -7874,16 +7853,60 @@ The use of the service model alone is sufficient to guarantee user privacy
 \end_layout
 
 \begin_layout Standard
-There also exists another possibility which negates some of the need for
+There also exists another possibility which negates the need for many of
  the checks described in the plugin model.
  Briefly, the motivation behind that model is that we cannot 
 \emph on
 trust
 \emph default
- the code coming from the server.
- However, under the service model, most of the computing the service does
- is store/fetch operations, because it is unable to do any complex computations
- over encrypted data.
+ the code coming from the server, and must therefore verify that it isn't
+ doing something it isn't supposed to.
+ However, under the service model, most of the operations performed on the
+ server-end is store/fetch operations, as it is unable to do any complex
+ computations over the encrypted data.
+ This means that all the relevant application logic is present in the client
+ side code, with the result that a user - if they were so inclined - could
+ simply drop in their own client-side application which they 
+\emph on
+do
+\emph default
+ trust, and which cannot be modified by the service, and thereby negate
+ most of the remaining privacy and security concerns.
+ 
+\end_layout
+
+\begin_layout Standard
+Such a possibility is not without its drawbacks - in particular, it removes
+ the ability of a service-provider to easily deliver updates to its service
+ to all users.
+ However, that trade-off may be worth it, in the case of some services.
+ Mega notably provides a public API for its service, and explicitly states
+ on its website:
+\end_layout
+
+\begin_layout Quotation
+\begin_inset Quotes eld
+\end_inset
+
+
+\shape slanted
+If you don't trust us, you cannot run any code provided by us, which precludes
+ opening MEGA in your browser and entering your login credentials.
+ However, due to MEGA's end-to-end encryption paradigm, you can safely use
+ client applications written by someone you trust.
+\shape default
+
+\begin_inset Quotes erd
+\end_inset
+
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "MegaSecurityAndPrivacy"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Subsection
@@ -7904,12 +7927,13 @@ In the traditional, as opposed to mass-media sense of that word.
 
 \end_inset
 
- in nature; certainly they are not the sort of thing I wish to share.
+ in nature; certainly they are not the sort of thing I wish to share or
+ publish.
 \end_layout
 
 \begin_layout Standard
-Anyone seeking to use this model would need to create a complete and robust
- implementation of both the service model and the plugin.
+Anyone seeking to use this work presented here would need to create a complete
+ and robust implementation of both the service model and the plugin.
  While I'm all nigh on 100% certain everything presented in Chapter 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -7980,6 +8004,14 @@ Try ..
 With
 \family default
  statements, although possibly not web workers.
+\end_layout
+
+\begin_layout Subsection
+Strengths and Weaknesses of Taint Analysis Model
+\end_layout
+
+\begin_layout Standard
+**TODO: This**
 \end_layout
 
 \begin_layout Subsection
