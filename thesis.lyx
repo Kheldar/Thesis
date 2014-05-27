@@ -1469,6 +1469,7 @@ A second approach is the notion of a browser plugin.
  It suffers from the same problem as specialist software, in that it needs
  broad uptake to be particularly useful, and it is less likely to achieve
  that if the user must specifically install it.
+ **TODO: Mention easy access to browser resources**
 \end_layout
 
 \begin_layout Standard
@@ -1974,6 +1975,10 @@ Solution Overview
 **TODO: Some/all of this may get moved to other sections.
  I just needed somewhere to write this so I could put the broad picture
  down in words.**
+\end_layout
+
+\begin_layout Standard
+**TODO: Fact that sensitive data is service-defined**
 \end_layout
 
 \begin_layout Standard
@@ -3538,6 +3543,10 @@ name "chap:Plugin-Model"
 
 \begin_layout Standard
 **TODO: Syntax highlighting on all JS keywords.**
+\end_layout
+
+\begin_layout Standard
+**TODO: Data exchange**
 \end_layout
 
 \begin_layout Standard
@@ -7369,6 +7378,9 @@ reference "alg:jQuery-code-external"
  No sensitive data is actually communicated to the server, but the server
  is nevertheless able to discern the presence of sensitive data with that
  particular property on the page.
+ Given that the service controls both the JavaScript code, and the structure
+ of the page, there is virtually no limit to what information could be gained
+ using this method.
 \end_layout
 
 \begin_layout Standard
@@ -7455,6 +7467,36 @@ name "alg:jQuery-code-external"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+Any external resources which are loaded during page load (i.e.
+ before the JavaScript runtime starts) are safe, as their fetching cannot
+ be used to communicate any sensitive information.
+ We therefore only need to deal with 
+\end_layout
+
+\begin_layout Standard
+The most obvious way to deal with this issue is to interpose on individual
+ HTTP GET requests, and detect whether they are loading something which
+ is not already loaded.
+ This would have the unfortunately consequence of having to load in all
+ external resources at page-load, regardless of actual need for them.
+\end_layout
+
+\begin_layout Standard
+The alternative is to check all DOM nodes and HTML fragments before they
+ are added to the DOM, to determine whether they use an external resource
+ which has not already been loaded.
+ This is quite a complex check; there are a lot of elements capable of loading
+ in external resources - particularly since the introduction of HTML5 -
+ and traversing and interpreting a DOM tree is itself a moderately complex
+ exercise.
+ However, it can be done.
+ The upside to this approach is that such a check can be performed in JavaScript
+ at runtime, meaning that we can provide checked and unchecked versions
+ of functions which allow DOM modification, and apply taint analysis to
+ the unchecked ones.
 \end_layout
 
 \begin_layout Section
@@ -7722,12 +7764,380 @@ are
 Discussion & Further Work
 \end_layout
 
+\begin_layout Standard
+**TODO:
+\end_layout
+
+\begin_layout Standard
+- User-Data centric business model
+\end_layout
+
+\begin_layout Standard
+- Lack of implementation
+\end_layout
+
+\begin_layout Standard
+- Moving processing to client
+\end_layout
+
+\begin_layout Standard
+- Relative uniqueness of model
+\end_layout
+
+\begin_layout Standard
+- Applicability of model (Type of service.
+ Inter-service)**
+\end_layout
+
 \begin_layout Section
 Strengths and Weaknesses
 \end_layout
 
+\begin_layout Subsection
+General Discussion of Strengths
+\end_layout
+
+\begin_layout Standard
+The greatest strength of the work presented in this paper is that - assuming
+ there aren't any unsolvable flaws that have been missed - it's an 
+\emph on
+incredibly
+\emph default
+ effective way to ensure online privacy.
+ It is capable of putting an almost total stop to the problem of mass data
+ theft by criminals, and the practice of mass surveillance, while 
+\emph on
+retaining
+\emph default
+ the ability of surveillance agencies and law enforcement to perform specific,
+ targeted surveillance of individuals
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+In my personal opinion, that is 
+\emph on
+exactly
+\emph default
+ the way surveillance should work in a free and democratic society.
+\end_layout
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+The model is also very generic in nature.
+ I have focused quite specifically on the HTML+JS+Browser stack, as that
+ is by a wide margin the most used method for delivering web services -
+ particularly among those uses who are not actively seeking to protect their
+ privacy.
+ However, the only thing really restricting the model to that set of technologie
+s is the ability to access a web-page's JavaScript source-code.
+ If that barrier can be gotten around - for example, by publishing the source-co
+de in other ways, or by analysing byte- or machine-code - then the model
+ could easily be applied to other methods of web application delivery, such
+ as mobile apps, and even (if it ever becomes necessary) general installed
+ programs.
+\end_layout
+
+\begin_layout Standard
+If a service-provider wishes to attempt to guarantee their user's privacy
+ by legal means - for example, by operating in a country with strong privacy
+ laws - then they can forgo everything described in the plugin model and
+ rely on the legalistic protections instead.
+ This is the approach taken by several companies in the field, including
+ Mega 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Mega"
+
+\end_inset
+
+ and Proton Mail 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ProtonMail"
+
+\end_inset
+
+, which have chosen to operate from New Zealand, and Switzerland, respectively.
+ 
+\end_layout
+
+\begin_layout Standard
+The use of the service model alone is sufficient to guarantee user privacy
+ in every case except those where an adversary gains control of the application
+ servers or the service's encryption keys - that is to say, cases where
+ an adversary can send arbitrary malicious code to the client.
+\end_layout
+
+\begin_layout Standard
+There also exists another possibility which negates some of the need for
+ the checks described in the plugin model.
+ Briefly, the motivation behind that model is that we cannot 
+\emph on
+trust
+\emph default
+ the code coming from the server.
+ However, under the service model, most of the computing the service does
+ is store/fetch operations, because it is unable to do any complex computations
+ over encrypted data.
+\end_layout
+
+\begin_layout Subsection
+General Discussion of Weaknesses
+\end_layout
+
+\begin_layout Standard
+The most glaring weakness of this thesis, and the ideas presented within,
+ is the lack of a full implementation.
+ While sections of it were implemented, such implementations were almost
+ invariability prototypical, incomplete, and hackish
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+In the traditional, as opposed to mass-media sense of that word.
+\end_layout
+
+\end_inset
+
+ in nature; certainly they are not the sort of thing I wish to share.
+\end_layout
+
+\begin_layout Standard
+Anyone seeking to use this model would need to create a complete and robust
+ implementation of both the service model and the plugin.
+ While I'm all nigh on 100% certain everything presented in Chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Service-Model"
+
+\end_inset
+
+ works - particularly given that there are many implementations of quite
+ similar models in industry 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Mega,Crypocat,ProtonMail"
+
+\end_inset
+
+, as well as the Mylar paper 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Mylar"
+
+\end_inset
+
+ - I am less certain about the material on data-tainting presented in Chapter
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Plugin-Model"
+
+\end_inset
+
+.
+ While data tainting certainly 
+\emph on
+can
+\emph default
+ be done in JavaScript (some ancient versions of Netscape actually had it
+ as a browser feature 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "DataTaintingJS"
+
+\end_inset
+
+), all implementations and academic papers I have found on the issue utilise
+ dynamic tainting.
+ In hindsight, I suspect there is a good reason for that: while it certainly
+ requires a little technically wizardry to set up - namely hooking into
+ the JavaScript runtime - it has the benefit of it being 
+\emph on
+much
+\emph default
+ easier to be certain you are doing it correctly.
+ The required technical wizardry is actually not too difficult, either;
+ in Firefox at least, the Debugger API **TODO: Ref https://developer.mozilla.org/e
+n-US/docs/Tools/Debugger-API** provides hooks for plugins to both observe
+ and manipulate a page's JavaScript runtime.
+ The way it is used in both Firefox's internal development tools, and in
+ Firebug, suggest that it possesses all the features necessary.
+ Dynamic tainting would also neatly step around all of the parts of JavaScript
+ that are not covered under the data tainting model presented here, such
+ as 
+\family typewriter
+Try ..
+ Catch
+\family default
+ blocks, and 
+\family typewriter
+With
+\family default
+ statements, although possibly not web workers.
+\end_layout
+
+\begin_layout Subsection
+Password Security
+\end_layout
+
+\begin_layout Standard
+From a security standpoint, one of the more substantial issues with our
+ model is the fact that the password is the weakest link in the encryption
+ chain.
+ It is vulnerable to all the usual attacks on passwords, including key-loggers,
+ brute-force and dictionary-based attacks, and phishing.
+ In that respect, it is every bit as vulnerable as every other password-protecte
+d website.
+ On the plus side, it is at least not 
+\emph on
+more
+\emph default
+ vulnerable.
+\end_layout
+
 \begin_layout Section
 Implications for Practice
+\end_layout
+
+\begin_layout Subsection
+Password Recovery
+\end_layout
+
+\begin_layout Standard
+Under the service model described in Chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Service-Model"
+
+\end_inset
+
+, the user's password is used as a 
+\begin_inset Quotes eld
+\end_inset
+
+root
+\begin_inset Quotes erd
+\end_inset
+
+ security token, in the sense that it is used encrypt the master key, which
+ encrypts everything else.
+ The password is also never stored with the server.
+ An unfortunate side effect of this is that if the password is lost, the
+ account's data is unrecoverable.
+\end_layout
+
+\begin_layout Standard
+This risk can be mitigated by recommending to users that they back up either
+ their master key or their password.
+ However, that is very much a social patch to a technical problem, and not
+ one that gels well with the 
+\begin_inset Quotes eld
+\end_inset
+
+usable by everyone
+\begin_inset Quotes erd
+\end_inset
+
+ goal of this thesis.
+\end_layout
+
+\begin_layout Subsection
+Implications for Business Models
+\end_layout
+
+\begin_layout Standard
+Given that a substantial chunk of the business models of internet companies
+ depend upon having access to their user's data, we would be remiss not
+ to consider the affect of our model of ensuring privacy upon their business
+ models.
+\end_layout
+
+\begin_layout Standard
+The unfortunate truth is that targeted advertising as it is practised by
+ the likes of Google and Facebook is simply incompatible the method of ensuring
+ privacy presented in this thesis.
+ Those two companies - and many other like them - virtually strip-mine user
+ data to try and discover all possible connections to anything that someone
+ might want to sell.
+ If they do not have access to such data, then the scope of any data mining
+ they might wish to do is drastically reduced.
+\end_layout
+
+\begin_layout Standard
+Even if the data mining was moved to the client - and that is actually an
+ interesting possibility worth investigating in its own right - they would
+ not be able to pull in advertisements based on that information, as our
+ model would detect that as violating the user's privacy.
+ The only way I can see to work around this is to pull in the advertisements
+ independently of user data, and then combine the two on the client.
+ However, that solution does not scale well.
+ 
+\end_layout
+
+\begin_layout Standard
+This is not to say that there are not 
+\emph on
+other
+\emph default
+ models of targeted advertising which could work, or other business models
+ that could profit under these constraints.
+ Just that this one does not.
+\end_layout
+
+\begin_layout Standard
+It also bears mentioning that service critical data is, and always will
+ be available to the service - to take an obvious example, Google will always
+ know what you search for using its search engine, because it has to know
+ in order to give you the results.
+ There is nothing to stop a service from performing data mining on service
+ critical data, other than the users choosing not to use it.
+\end_layout
+
+\begin_layout Subsection
+Applicability to Service Models
+\end_layout
+
+\begin_layout Standard
+The overall model presented in this thesis is not applicable to all web-services.
+ Broadly speaking, it can be applied to two classes of web-service:
+\end_layout
+
+\begin_layout Itemize
+Those that store sensitive user data for later retrieval by the user.
+\end_layout
+
+\begin_layout Itemize
+Those that enable the sharing of sensitive data between users.
+\end_layout
+
+\begin_layout Standard
+Social networks, and file storage are the two most notable classes of web-servic
+e to which the model applies.
+\end_layout
+
+\begin_layout Standard
+It expressly does not apply to any service which requires all the information
+ it collects in order to operate - i.e.
+ a service in which all data is service-critical.
+ **TODO: More of this**
+\end_layout
+
+\begin_layout Standard
+Email is an interesting case - in principle, the model can be applied to
+ it.
+ However, it requires that both the sending and receiving email servers
+ are capable of handling the required key exchange.
+ In the event that the receiving server does not possess the capability,
+ the sending server must choose between sending the email as plain text
+ - which clearly does not protect the users' privacy - or sending it in
+ an encrypted format, and foisting the problem of how to decrypt it on to
+ the users.
 \end_layout
 
 \begin_layout Section
