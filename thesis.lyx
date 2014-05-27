@@ -1966,107 +1966,6 @@ key "IDTheftCost"
 .
 \end_layout
 
-\begin_layout Subsection*
-Client-Side Security Holes
-\end_layout
-
-\begin_layout Standard
-**TODO: Move all of this to the Plugin Model chapter**
-\end_layout
-
-\begin_layout Standard
-Assuming some way of securely delivering JavaScript code to the browser,
- we still require some way to check whether the code is doing something
- we would prefer it not to (for example, sending encryption keys or user
- data back to the server once it has decrypted).
-\end_layout
-
-\begin_layout Standard
-Suppose we wish to analyse (either automatically or manually) the JavaScript
- code for a particular webpage, and having done so certify that that particular
- code is `safe'.
- To do this in any sane way, we first need to ensure that the code is reasonably
- static - that is, the code that is analysed is the code that will actually
- be run on the user's machine.
- There are a number of barriers that first need to be overcome, before we
- can do this - most of them to do with how malleable browser-executed JavaScript
- can be.
- These are
-\end_layout
-
-\begin_layout Itemize
-The 
-\family typewriter
-eval
-\family default
- function, which accepts an arbitrary string, and will attempt to evaluate
- (i.e.
- execute) it in the JavaScript runtime environment.
- In other words, it enables arbitrary code execution.
- Even if the rest of the code is entirely static, if the server or some
- third party is able to manipulate the string(s) passed to 
-\family typewriter
-eval
-\family default
-, then all other analysis is useless.
- Thankfully, it is rarely actually necessary to use the 
-\family typewriter
-eval
-\family default
- function (most of what it's used for can easily be done in some other way),
- and most coding standards and security policies ban its use.
- The same may be said for string arguments to 
-\family typewriter
-setTimeout
-\family default
- and 
-\family typewriter
-setInterval
-\family default
-.
-\end_layout
-
-\begin_layout Itemize
-Inline JavaScript (e.g.
- 
-\family typewriter
-<script>...</script>
-\family default
-), allowing the embedding of arbitrary JavaScript into the HTML page itself.
- As this can be added/modified by the server at any time, it negates any
- other analysis that has been done.
- However, to the best of my knowledge there is nothing that can be accomplished
- by inline JavaScript that cannot also be accomplished by an external JavaScript
- file.
- The same can be said of DOM events such as 
-\family typewriter
-onclick
-\family default
-, and of links with an 
-\family typewriter
-href
-\family default
- attribute beginning with 
-\family typewriter
-javascript:
-\family default
-.
-\end_layout
-
-\begin_layout Itemize
-It is possible to dynamically load in scripts by appending a new 
-\family typewriter
-<script>
-\family default
- tag to the DOM, with the 
-\family typewriter
-src
-\family default
- attribute pointing to some external URI.
- Again, there are few circumstances where this is actually necessary.
- Generally it is merely convenient, and can thus generally be disallowed.
-\end_layout
-
 \begin_layout Chapter
 Solution Overview
 \end_layout
@@ -3718,7 +3617,7 @@ A definition of taint propagation in JavaScript.
 
 \begin_layout Standard
 We have the first (in-browser JavaScript is inherently open-source).
- The third is relatively easy to define: Ajax calls, and anything else which
+ The third is relatively easy to define: AJAX calls, and anything else which
  could be used to communicate information to the server.
  The fourth point will be defined in Section 
 \begin_inset CommandInset ref
@@ -5027,7 +4926,7 @@ Try ..
  Catch ..
  Finally
 \family default
- statements are disallowed under our model.
+ statements are not handled under our model.
  This is due to the considerable complexity in analysing them.
  Specifically, 
 \end_layout
@@ -5329,6 +5228,14 @@ And a rather poor one, by my own option.
 
 , rather than one that is necessary to the use of the language, so we lose
  very little by disallowing it.
+\end_layout
+
+\begin_layout Subsection
+Events
+\end_layout
+
+\begin_layout Standard
+**TODO: This**
 \end_layout
 
 \begin_layout Subsection
@@ -5669,6 +5576,14 @@ not
 Once analysed in this way, whenever we encounter a call to a function which
  makes use of identifiers outside its scope, we can use the current taint
  status of such identifiers when analysing the effect of the function call.
+\end_layout
+
+\begin_layout Subsubsection*
+Callbacks
+\end_layout
+
+\begin_layout Standard
+**TODO: This**
 \end_layout
 
 \begin_layout Subsubsection*
@@ -7413,6 +7328,394 @@ This should not present a problem for developers, as it is always possible
 
 \begin_layout Standard
 **TODO: Specify which functions this affects**
+\end_layout
+
+\begin_layout Section
+Detecting Incidental Communication
+\end_layout
+
+\begin_layout Standard
+AJAX calls are the method that I am aware of which can communicate with
+ the outside world from within JavaScript.
+ It is possible that there exists other methods - there are after all a
+ 
+\emph on
+lot
+\emph default
+ of Web APIs 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "WebAPIs"
+
+\end_inset
+
+.
+ However, any such methods that exist within JavaScript can be analysed
+ using the approach as described above for AJAX calls.
+\end_layout
+
+\begin_layout Standard
+A more difficult problem is presented by the ability of the JavaScript runtime
+ to communicate with a server via the loading of external resources.
+ Consider the code in Algorithm 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "alg:jQuery-code-external"
+
+\end_inset
+
+, which loads a CSS file based on some arbitrary property of a piece of
+ sensitive data.
+ No sensitive data is actually communicated to the server, but the server
+ is nevertheless able to discern the presence of sensitive data with that
+ particular property on the page.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Float algorithm
+wide false
+sideways false
+status open
+
+\begin_layout Plain Layout
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+$(document).ready(function() {
+\end_layout
+
+\begin_layout Plain Layout
+  // Lifts 
+sensitive
+\lang british
+ data from page
+\end_layout
+
+\begin_layout Plain Layout
+  var data = get
+Sensitive
+\lang british
+Data();
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+  if(hasInterestingProperty(data)) {
+\end_layout
+
+\begin_layout Plain Layout
+    $('head').append(
+\end_layout
+
+\begin_layout Plain Layout
+      "<link type='text/css' rel='stylesheet'
+\end_layout
+
+\begin_layout Plain Layout
+      href='innocentCSSFile.css'>");
+\end_layout
+
+\begin_layout Plain Layout
+  }
+\end_layout
+
+\begin_layout Plain Layout
+});
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Plain Layout
+\begin_inset Caption
+
+\begin_layout Plain Layout
+jQuery code to load an external CSS file.
+\begin_inset CommandInset label
+LatexCommand label
+name "alg:jQuery-code-external"
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Section
+Ensuring Analysability
+\end_layout
+
+\begin_layout Standard
+In order to analyse the JavaScript code for a particular webpage, we first
+ need to ensure that the code is reasonably static - that is, the code that
+ is analysed is the code that will actually be run on the user's machine.
+ JavaScript possesses a number of mechanisms capable of subverting this.
+\end_layout
+
+\begin_layout Standard
+Firstly there is the 
+\family typewriter
+eval
+\family default
+ function, which accepts an arbitrary string, and will attempt to evaluate
+ (i.e.
+ execute) it in the JavaScript runtime environment.
+ In other words, it enables arbitrary code execution.
+ Even if the rest of the code is entirely static, if the server or some
+ third party is able to manipulate the string(s) passed to a call to 
+\family typewriter
+eval
+\family default
+, then all other analysis is useless.
+ Thankfully, it is rarely actually necessary to use the 
+\family typewriter
+eval
+\family default
+ function (most of what it's used for can easily be done in some other way),
+ and most coding standards and security policies recommend against its use.
+ The same may be said for string arguments to 
+\family typewriter
+setTimeout
+\family default
+ and 
+\family typewriter
+setInterval
+\family default
+, both of which allow for arbitrary code execution.
+ For these reasons, we disallow the use of 
+\family typewriter
+eval
+\family default
+, and string arguments to 
+\family typewriter
+setTimeout
+\family default
+ and 
+\family typewriter
+setInterval
+\family default
+ under the model.
+ Function arguments to 
+\family typewriter
+setTimeout
+\family default
+ and 
+\family typewriter
+setInterval
+\family default
+ are fine.
+\end_layout
+
+\begin_layout Standard
+Secondly, it is possible to embed JavaScript code directly into the HTML
+ page, through the use of 
+\family typewriter
+<script>...</script>
+\family default
+ tags.
+ While such tags are not strictly speaking problematic in their own right,
+ they are largely unnecessary, as anything which can be done in them can
+ be done in an external file, and it is easier to analyse the behaviour
+ of a set of external files.
+ The bigger problem with such `inline' script tags, as opposed to ones which
+ load in an external file, is that they can be added in after page-load
+ with arbitrary contents.
+ For example:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+inline false
+status open
+
+\begin_layout Plain Layout
+
+function foo() {
+\end_layout
+
+\begin_layout Plain Layout
+
+    alert("Hello");
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+var s = document.createElement('script');
+\end_layout
+
+\begin_layout Plain Layout
+
+s.innerHTML="function foo() {alert('Goodbye');}";
+\end_layout
+
+\begin_layout Plain Layout
+
+document.head.appendChild(s);
+\end_layout
+
+\begin_layout Plain Layout
+
+foo(); //Alerts "Goodbye"
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+For this reason, we disallow the use of inline script tags under the model.
+\end_layout
+
+\begin_layout Standard
+For very similar reasons, the use of 
+\family typewriter
+onclick
+\family default
+ attributes, and of links with an 
+\family typewriter
+href
+\family default
+ attribute beginning with 
+\begin_inset Quotes eld
+\end_inset
+
+
+\family typewriter
+javascript:
+\family default
+
+\begin_inset Quotes erd
+\end_inset
+
+ are disallowed under the model.
+ Neither are necessary, in that everything they provide can equally be achieved
+ in an external file.
+\end_layout
+
+\begin_layout Standard
+Lastly, it is possible to dynamically load in external scripts by appending
+ a new 
+\family typewriter
+<script>
+\family default
+ tag to the DOM, with the 
+\family typewriter
+src
+\family default
+ attribute pointing to some external URI, or by altering an existing one.
+ Again, there are few circumstances where this is actually necessary.
+ Generally it is merely convenient.
+ We therefore disallow loading in scripts not present on the initial page.
+\end_layout
+
+\begin_layout Section
+Ensuring Indistinguishability
+\end_layout
+
+\begin_layout Standard
+It is necessary to ensure that a service cannot distinguish between users
+ who have the plugin described here installed, and those that do not.
+ If we cannot ensure this, then a service could simply serve different code
+ to the different user groups.
+\end_layout
+
+\begin_layout Standard
+It is currently possible to access a list of browser plugins from within
+ JavaScript via the 
+\family typewriter
+navigator.plugins
+\family default
+ object.
+ **TODO: Ref https://developer.mozilla.org/en-US/docs/Web/API/NavigatorPlugins.plug
+ins**.
+ Mozilla at least is planning to limit the ability of JavaScript code to
+ enumerate through this list, instead restricting it to a direct query for
+ specific plugins - however, that does not appear to have fully happened
+ yet.
+ In any case, we need to ensure two things:
+\end_layout
+
+\begin_layout Enumerate
+That the JavaScript code is not specifically querying for the plugin described
+ here.
+\end_layout
+
+\begin_layout Enumerate
+That the JavaScript code is not enumerating through the list of plugins,
+ at all.
+\end_layout
+
+\begin_layout Standard
+It should be noted that the 
+\family typewriter
+navigator.plugins
+\family default
+ object does not include things such as Firefox's AddOns.
+ However, it is also not a part of any standard (though it is widely supported),
+ so its behaviour with respect to what it reports may vary across browsers.
+\end_layout
+
+\begin_layout Section
+Flash, Java, Silverlight, et al.
+\end_layout
+
+\begin_layout Standard
+Flash has the capability to access the JavaScript runtime, and through it
+ sensitive information contained in the DOM.
+ Unlike JavaScript, the behaviour of Flash objects on a page is not easily
+ analysed, because their source code is not readily readable.
+ For this reason, Flash is incompatible with the model, and therefore its
+ use disallowed under the model.
+ **TODO: Ref http://stackoverflow.com/questions/2473053/can-an-embedded-flash-obj
+ect-access-the-dom-of-its-parent-document**
+\end_layout
+
+\begin_layout Standard
+Java applets face a similar issue, in that they are capable of accessing
+ and manipulating the DOM.
+ **TODO: Ref http://docs.oracle.com/javase/tutorial/deployment/applet/manipulating
+DOMFromApplet.html** Again, the behaviour of such applets is not easily analysed,
+ and their use is therefore disallowed under the model.
+\end_layout
+
+\begin_layout Standard
+I am not familiar enough with Microsoft's Silverlight to comment on its
+ analysability, but it is certainly also capable of accessing the DOM.
+ It - and any other third-party methods of delivering so called rich content
+ - must be disallowed under the model if they are both capable of accessing
+ the DOM, and not readily analysable.
+ In the event that they 
+\emph on
+are
+\emph default
+ analysable, it may be possible to perform some analysis similar to what
+ is described above with relation to JavaScript.
 \end_layout
 
 \begin_layout Chapter
