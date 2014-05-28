@@ -59,7 +59,7 @@
 \papercolumns 1
 \papersides 1
 \paperpagestyle default
-\listings_params "basicstyle={\ttfamily},comment={[l]{//}},commentstyle={\color{purple}\ttfamily},identifierstyle={\color{black}},keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break},keywordstyle={\color{blue}\bfseries},morecomment={[s]{/*}{*/}},ndkeywords={class, export, boolean, throw, implements, import, this},ndkeywordstyle={\color{darkgray}\bfseries},sensitive=false,stringstyle={\color{red}\ttfamily},xleftmargin=1cm"
+\listings_params "basicstyle={\ttfamily},comment={[l]{//}},commentstyle={\color{purple}\ttfamily},identifierstyle={\color{black}},keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break, for, each, with},keywordstyle={\color{blue}\bfseries},morecomment={[s]{/*}{*/}},ndkeywords={class, export, boolean, throw, implements, import, this},ndkeywordstyle={\color{darkgray}\bfseries},sensitive=false,stringstyle={\color{red}\ttfamily},xleftmargin=1cm"
 \tracking_changes false
 \output_changes false
 \html_math_output 0
@@ -131,6 +131,13 @@ This page unintentionally left blank.
 \end_layout
 
 \begin_layout Standard
+\noindent
+\align center
+Except for this bit.
+ This bit was intentional.
+\end_layout
+
+\begin_layout Standard
 \begin_inset VSpace vfill
 \end_inset
 
@@ -170,7 +177,17 @@ In the course of using a web-based service, users will often disclose an
  guarantee - legal, technical, or otherwise - that their data will not end
  up in the hands of some third party.
  Such third parties can include anyone from advertising firms, to hackers,
- to government agencies.
+ to government agencies
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+Not necessarily the agencies of the user's own government, either.
+\end_layout
+
+\end_inset
+
+.
  The means by which they may acquire such data is similarly varied, from
  being willingly handed it by the service operator, to acquiring it illegally
  by compromising the security of the server, to compelling the service operator
@@ -233,7 +250,7 @@ Five Eyes
 
  alliance, but also including that of Austria, India, Netherlands, Russia,
  China, Iran, Syria, and Israel - are all either known or alleged to be
- participating in this activity to varying degrees.
+ participating in such activity to varying degrees.
 \end_layout
 
 \begin_layout Standard
@@ -272,7 +289,7 @@ key "Target"
 .
  In 2011, hackers breached Sony's PlayStation Network, making off with around
  seventy million customer data records, including names addresses, dates
- of birth, hashed and salted, passwords, and security questions 
+ of birth, hashed and salted passwords, and security questions 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "PSN"
@@ -334,7 +351,7 @@ key "ProtonMail"
 \end_inset
 
 , all of which offer variants on the ideas that will be presented in this
- paper.
+ thesis.
 \end_layout
 
 \begin_layout Standard
@@ -399,8 +416,8 @@ in America, it is quite conceivable that organised crime syndicates could
 \end_layout
 
 \begin_layout Standard
-In this paper, we will present the fundamentals of a model for performing
- client-side encryption of user-data for web services.
+In this paper, the fundamentals of a model for performing client-side encryption
+ of user-data for web services will be presented.
  The naive version of such a model suffers from a number of serious security
  and usability concerns which (if unsolved) undermine its core purpose;
  we shall therefore address as many of these concerns as possible, and make
@@ -458,7 +475,7 @@ Fourthly, users must be able to have some certainty that their privacy,
 
 \begin_layout Standard
 This paper shall address all of these problems in detail.
- Additionally, we shall make careful note (though not attempt to solve)
+ Additionally, we shall make careful note of (though not attempt to solve)
  a number of other problems that arise, including the issues of password
  recovery, shifting application logic and processing to the client, and
  the impact that client-side encryption has on certain popular business
@@ -637,8 +654,8 @@ Data
 \series default
 Data without which a web-service is logically unable to perform its intended
  function.
- Examples include search terms for a search engine web-service, and the
- address field in an email.
+ Examples include search terms for a search engine, and the address field
+ in an email.
 \end_layout
 
 \begin_layout Standard
@@ -724,11 +741,7 @@ Furthermore, we seek to allow users to verify that they are receiving such
  In essence, we seek to create a digital version of the concept of herd
  immunity, whereby those users who verify their own protection by extension
  provide some measure of protection to those who do not, under the assumption
- that the service or any third party would be unable to tell the two apart.
-\end_layout
-
-\begin_layout Standard
-**TODO: Consider moving the rationale to another section**
+ that the service or any third party is unable to tell the two apart.
 \end_layout
 
 \begin_layout Section
@@ -833,26 +846,17 @@ For the purposes of our threat model, it is assumed that the user's own
 not
 \emph default
  compromised by a third party.
- Protecting against that possibility is beyond the scope of what this paper
+ Protecting against that possibility is beyond the scope of what this thesis
  is trying to accomplish; moreover, in the event that the user's machine
  is compromised, any attempt to protect sensitive data created on that machine
  is essentially moot, anyway.
 \end_layout
 
 \begin_layout Standard
-However, we 
-\emph on
-do
-\emph default
- consider the possibility that a 
-\emph on
-different
-\emph default
- user's machine is compromised.
- While it similarly would not be possible to protect the data belonging
- to this different user, it may be possible to protect the data of the original
- user from disclosure via the compromised user's machine.
- **TODO: Do I actually want to do this?**
+Similarly, we do not seek to protect against the actions of other users,
+ or what may occur on the machines of other users.
+ In particular, it is possible that a user might convey sensitive information
+ to another user, who then discloses it.
 \end_layout
 
 \begin_layout Subsection
@@ -1070,8 +1074,8 @@ key "sabelfeld2003InformationFlowSecurity"
  thereof) is being fed directly to a SQL database, or as a command to an
  operating system.
  However, the same technique may be used to determine if data derived from
- an HTML DOM is being fed into an XML HTTP Request via JavaScript, which
- is a use-case we are far more interested in.
+ an HTML DOM is being fed into an AJAX request via JavaScript, which is
+ a use-case we are far more interested in.
 \end_layout
 
 \begin_layout Standard
@@ -1091,8 +1095,8 @@ A set of initially tainted data sources - traditionally, this is anything
 
 \begin_layout Enumerate
 A taint propagation model for the particular programming language(s) that
- the software is written in, which is used to determine data paths through
- the program are (or at least may be) tainted.
+ the software is written in, that is used to which determine data paths
+ through the program are (or at least may be) tainted.
 \end_layout
 
 \begin_layout Enumerate
@@ -1122,18 +1126,25 @@ There are plenty of more modern attempts at implementing some form of taint
  analysis for JavaScript 
 \begin_inset CommandInset citation
 LatexCommand cite
-key "DataTainting,DataTaintingJS,Bloomgarden2012dataflow"
+key "Bloomgarden2012dataflow,DataTaintingJS,DataTainting,BlendedTaintAnalysisJS"
 
 \end_inset
 
 .
- All of the ones encountered while researching this paper used a dynamic
- analysis approach - that is, they analysed the application as it was running,
- and only analysed those data paths which were actually executed.
+ All but one 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "LaBaSec"
+
+\end_inset
+
+ of those encountered while researching this paper used a dynamic analysis
+ approach - that is, they analysed the application as it was running, and
+ only analysed those data paths which were actually executed.
  This is in contrast to the concept of static analysis, which analyses a
  program's source code before it is run, and examines all control flow paths.
  The former is more precise, and carries more computational overhead, while
- the latter is more thorough, and easier to implement.
+ the latter is more thorough, and in principle easier to implement.
 \end_layout
 
 \begin_layout Subsection
@@ -1188,8 +1199,9 @@ In order to turn the cyphertext back into cleartext, the cyphertext is used
  key.
  The decryption function is typically some form of reversal of the operations
  performed in the encryption algorithm, while the decryption key may either
- be the same as the encryption key, or another number which is mathematically
- related to the encryption key.
+ be the same as the encryption key (termed a symmetric key), or another
+ number which is mathematically related to the encryption key (termed an
+ asymmetric key).
 \end_layout
 
 \begin_layout Standard
@@ -1197,7 +1209,7 @@ In modern use, the encryption and decryption algorithms are typically public
  knowledge - largely on the basis that by exposing them to many trained
  mathematicians, any flaws are more likely to be discovered and fixed.
  The keys on the other hand, should always be kept secret, being made available
- only to whom the encrypting party wishes to allow access to the encrypted
+ only to those whom the encrypting party wishes to grant access to the encrypted
  information.
  It should be noted that since the keys are numbers, anyone may generate
  their own keys to use with the algorithm, assuming they know how to generate
@@ -1237,7 +1249,7 @@ Public Key Cryptography
 Public key cryptography 
 \begin_inset CommandInset citation
 LatexCommand cite
-key "HandbookAppliedCrypto,DiffieHellman"
+key "DiffieHellman,HandbookAppliedCrypto"
 
 \end_inset
 
@@ -1282,10 +1294,6 @@ End to End Encryption
 \end_layout
 
 \begin_layout Standard
-**TODO: Make this have a point**
-\end_layout
-
-\begin_layout Standard
 End-to-end encryption, sometimes also called client-side encryption, is
  a technique whereby information is encrypted by one party, communicated
  to a second party who possesses the capability to decrypt it, and at no
@@ -1315,6 +1323,21 @@ same
  party.
  That is, it is entirely reasonable that one might encrypt some information,
  send it a third party for storage, and later retrieve it for decryption.
+\end_layout
+
+\begin_layout Standard
+Thirdly, that while the contents of the messages are a secret, the sender
+ and recipient are not, as any intermediaries must know where to send the
+ message in order to send it.
+ There exist methods of anonymising the sender and receiver (e.g.
+ TOR 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "TOR"
+
+\end_inset
+
+), but those will not be dealt with in this thesis.
 \end_layout
 
 \begin_layout Standard
@@ -1501,13 +1524,8 @@ also
 \end_layout
 
 \begin_layout Standard
-**TODO: Work out whether I want to distinguish crypto that is intrinsic
- to the software from the above**.
-\end_layout
-
-\begin_layout Standard
 A second approach is the notion of a browser plugin.
- This also has the benefit of being installed on the client, but with that
+ This also has the benefit of being installed on the client, but with the
  drawback that plugins tend to be heavily sandboxed by the browser, thus
  keeping them away from the underlying operating system.
  It suffers from the same problem as specialist software, in that it needs
@@ -1516,13 +1534,15 @@ A second approach is the notion of a browser plugin.
  One advantage to using a plugin over specialist software is that a plugin
  generally has much more direct access to the browser's resources, potentially
  including the JavaScript runtime and DOM of arbitrary pages.
+ This can greatly assist in providing secure cryptographic operations to
+ the browser.
 \end_layout
 
 \begin_layout Standard
 A third approach is the idea of an on-demand download.
  Under this approach, code to perform cryptographic operations is loaded
- onto the client from an external source whenever there is a potential need
- for it.
+ onto the client from an external source whenever there is - or may be -
+ a need for it.
  This has the potential to very neatly sidestep the issues of uptake and
  usability.
  However, it suffers from the very serious security issue of having cryptographi
@@ -1533,7 +1553,7 @@ c code originate from an external source.
 \end_layout
 
 \begin_layout Standard
-The third option is actually very promising, as is the one investigated
+The third option is actually very promising, and is the one investigated
  within this thesis.
  The first two have been tried - to varying degrees of success - but the
  only solutions to achieve widespread use are the ones which come with the
@@ -1542,9 +1562,9 @@ The third option is actually very promising, as is the one investigated
  The third option at least potentially has both of those properties, if
  the security issues can be solved.
  In any case, given a choice between trying to solve the security issues
- with cryptographic code from an external source in JavaScript, and trying
- to convince and educate the general public to use encryption, the former
- is quite probably easier.
+ related to using cryptographic code from an external source in JavaScript,
+ and trying to convince and educate the general public to use encryption,
+ the former is quite probably easier.
 \end_layout
 
 \begin_layout Subsection
@@ -1555,13 +1575,13 @@ Cryptography in JavaScript
 Historically, encryption in JavaScript (the de facto scripting language
  of web-browsers and related software) has been quite problematic, because
  JavaScript has until quite recently lacked a cryptographically secure random
- number generator, meaning that developers either had to use JavaScript's
- 
+ number generator.
+ This meant that developers either had to use JavaScript's 
 \family typewriter
 Math.random()
 \family default
-, which is not cryptographically secure; or use Java applets, or a plugin,
- or to generate the number elsewhere (e.g.
+ function (which is not cryptographically secure), or use Java applets,
+ or a plugin, or to generate the number elsewhere (e.g.
  on the server) and send it to the client, all of which have their own associate
 d problems.
 \end_layout
@@ -1750,6 +1770,7 @@ Mega.co.nz has created a file storage/sharing service which attempts to ensure
  itself encrypted using a hash derived from the user's password.
  This allows the encryption keys to be stored on the company's servers without
  actually disclosing them.
+ 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "MegaDoc"
@@ -1760,12 +1781,12 @@ key "MegaDoc"
 \end_layout
 
 \begin_layout Standard
-Additionally, each user has account has an RSA key pair associated with
- it.
+Additionally, each user's account has an RSA key pair associated with it.
  The private portion is encrypted with the symmetric master key, allowing
  it to also be stored on the server.
  The key pair is used to allow users to exchange files, and also for authenticat
 ion.
+ 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "Mega"
@@ -1867,8 +1888,8 @@ This is indeed one of the most substantial problems blocking widespread
 \begin_layout Standard
 Another substantial criticism they level is the lack of a cryptographically
  secure RNG in JavaScript.
- However, I believe this problem has been solved (or at least, is in the
- process of being solved) by 
+ However, this problem has been solved (or at least, is in the process of
+ being solved) by 
 \family typewriter
 window.crypto.getRandomValues
 \family default
@@ -1934,9 +1955,10 @@ Man In The Middle Attack
 \end_layout
 
 \begin_layout Standard
-In any situation where users may exchange data using a service, there is
- the potential for a man-in-the-middle attack to be executed by that service
- (or by some third party who as gained access to their servers) 
+In any situation where users may exchange encrypted sensitive data using
+ a service, there is the potential for a man-in-the-middle attack to be
+ executed by that service (or by some third party who as gained access to
+ their servers) 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "ThoughtsOnJSCrypto"
@@ -1957,8 +1979,8 @@ In order to negate this possibility, it is necessary for there to be some
  way to verify that a particular public key belongs to the user that the
  service claims it belongs to.
  The most common methods of doing this are to either pre-distribute the
- keys to end users, or to use a third party to facilitate key exchange,
- or to verify acquired keys.
+ keys to end users, or to use a side channel to facilitate key exchange,
+ or to verify the authenticity of keys via some side channel.
 \end_layout
 
 \begin_layout Subsection*
@@ -1992,12 +2014,12 @@ at rest
  (i.e.
  after it received them).
  The mechanisms it used to do this meant that it still retained some ability
- to access those emails, at certain points in the chain, although it actively
+ to access those emails at certain points in the chain, although it actively
  chose not to do so.
 \end_layout
 
 \begin_layout Standard
-Recently unsealed court documents show that the FBI demanded (via a court)
+Recently unsealed court documents show that the FBI demanded (via the court)
  that LavaBit.com hand over its SSL keys 
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -2021,8 +2043,8 @@ Possession of the SSL keys would in principle allow the FBI to intercept
 The ability for governments to forcibly acquire SSL keys entirely undermines
  the type of security that SSL is supposed to provide - i.e.
  ensuring that the information content of a communication is only available
- to the intended parties, and that those involved in it are who they say
- they are.
+ to the intended parties, and that those involved in the communication are
+ who they say they are.
 \end_layout
 
 \begin_layout Subsection*
@@ -2076,7 +2098,7 @@ key "IDTheftCost"
 \end_layout
 
 \begin_layout Section
-Conclusion of Current Literature
+Summary of Current Literature
 \end_layout
 
 \begin_layout Standard
@@ -2085,6 +2107,13 @@ Conclusion of Current Literature
 
 \begin_layout Chapter
 Solution Overview
+\begin_inset CommandInset label
+LatexCommand label
+name "chap:Solution-Overview"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -2187,8 +2216,8 @@ Firstly, and most importantly, web-pages and all of their associated content
  does not tend to persist between requests.
  This means that the service is supplying to the user the cryptographic
  code (in the form of JavaScript) that is intended to protect the user's
- privacy, and that they may modify this code at any time, without explicitly
- notifying the user.
+ privacy, and that the service may modify this code at any time, without
+ explicitly notifying the user.
  Obviously this is a serious security problem, given that a compromised
  service is the primary threat we wish to defend against.
 \end_layout
@@ -2200,8 +2229,9 @@ The issue is not insurmountable, however.
 \end_layout
 
 \begin_layout Itemize
-That the code the client receives is the code that service intended to send;
- that is, it has not been tampered with by some unauthorised third party.
+That the code the client receives is the code that the service intended
+ to send; that is, it has not been tampered with by some unauthorised third
+ party.
 \end_layout
 
 \begin_layout Itemize
@@ -2260,7 +2290,7 @@ This will become important in a moment.
 \begin_layout Standard
 The service cannot be relied upon to supply a way to check these things,
  for the same reasons we cannot completely rely on it to supply code which
- preserves the user's privacy.
+ is guaranteed to preserve the user's privacy.
  Because we wish to maintain the service's usability, we also cannot rely
  on all users installing something which performs the checks.
 \end_layout
@@ -2304,11 +2334,29 @@ Keep the bastards honest
 \end_inset
 
 .
- In the case of trying to protect privacy against server/service compromise,
+ In the case of trying to ensure privacy against server/service compromise,
  knowing that the violation exists is extremely useful, since if the data
  is encrypted then ceasing to use the service unless/until the issue is
  fixed is an entirely valid way for a user to protect their privacy and
  data.
+\end_layout
+
+\begin_layout Standard
+How to deliver software to perform such checks is a fairly dull question.
+ Browser plugins cannot be tampered with by a service; they offer the integratio
+n with the browser necessary to perform the checks above; as we are not
+ performing any sort of cryptography (particularly key-generation) within
+ the software, we do not need the access to the operating system that an
+ independent program provides; they also tend to be easier to install than
+ an independent program.
+ For these reasons, delivering these checks via a plugin seems the best
+ route.
+ If we wished to check code running in some environment other than the browser,
+ then an independent program would likely be necessary.
+ The only constraint we must place on such software is that its source-code
+ be available, so that its correct operation can be independently checked
+ and verified.
+ 
 \end_layout
 
 \begin_layout Standard
@@ -2319,7 +2367,8 @@ reference "chap:Plugin-Model"
 
 \end_inset
 
- will describe software capable of performing the necessary checks.
+ will describe the details of software capable of performing the necessary
+ checks.
 \end_layout
 
 \begin_layout Chapter
@@ -2403,7 +2452,7 @@ All sensitive information which one user decides to make available to another
 
 \begin_layout Itemize
 The client-side portion of the service does not contain code with the potential
- to subvert the measures any privacy preserving measures.
+ to subvert any of the privacy preserving measures.
 \end_layout
 
 \begin_layout Standard
@@ -2459,12 +2508,14 @@ We consider the intermediaries between the client and the service (i.e.
  for passing data from one to the other.
  As both the connection and any sensitive data travelling on it is encrypted,
  there is very little they could actively do anyway.
+ **TODO: This as part of security section**
 \end_layout
 
 \begin_layout Standard
 Similarly the server - and any supporting software running on it, such as
  web servers and database servers - are assumed to perform their intended
  functions correctly when interacting with the client and the service.
+ **TODO: This as part of security section**
 \end_layout
 
 \begin_layout Section
@@ -2503,7 +2554,7 @@ reference "fig:Encryption Scheme"
 
 \begin_layout Standard
 All encryption described under this scheme is performed on the client (e.g.
- in a web-browser).
+ in the web-browser).
 \end_layout
 
 \begin_layout Standard
@@ -2595,7 +2646,7 @@ The master key is a symmetric key, which is used to encrypt/decrypt the
 The local keys are symmetric keys, which correspond one-to-one with an instance
  of sensitive data, which they may be used to encrypt/decrypt.
  An instance of sensitive data may be any logically distinct piece of informatio
-n, such as the body of an email, a PDF document, or a blog post.
+n, such as the body of an email, a PDF document, or a post on a social network.
 \end_layout
 
 \begin_layout Standard
@@ -2619,7 +2670,7 @@ e that another user could decrypt all of that data, rather that just the
 The master key could potentially be replaced by the public/private pair.
  However, asymmetric encryption schemes tend to be computationally much
  slower than symmetric ones, so it is preferable to minimise the use of
- the asymmetric pair to only when they are actually needed.
+ the asymmetric keys to only when they are actually needed.
 \end_layout
 
 \begin_layout Section
@@ -2650,8 +2701,8 @@ The server responds by sending the appropriate resources.
 
 \begin_deeper
 \begin_layout Enumerate
-Among the JavaScript sent to the client is code for performing the cryptographic
- operations, described below.
+Among the JavaScript sent to the client is code for performing the necessary
+ cryptographic operations.
 \end_layout
 
 \end_deeper
@@ -2663,7 +2714,13 @@ reference "fig:Common-Elements"
 
 \end_inset
 
- provides a visual representation of these steps..
+ provides a visual representation of these steps.
+\end_layout
+
+\begin_layout Standard
+Users may optionally install a plugin in order to verify that their privacy
+ is ensured.
+ This is represented appropriately throughout the diagrams for this model.
 \end_layout
 
 \begin_layout Standard
@@ -2760,12 +2817,12 @@ On the client, the private key is encrypted using this master key.
 \begin_layout Enumerate
 On the client, the user fills out a web-form, supplying at minimum a unique
  identifier (e.g.
- username, email) and password.
+ a username, or email address) and password.
 \end_layout
 
 \begin_deeper
 \begin_layout Enumerate
-This may happen concurrent to steps 5-7.
+This may happen concurrent to steps 2-4.
 \end_layout
 
 \end_deeper
@@ -2782,11 +2839,12 @@ The public key, the encrypted private key, and the encrypted master key
 \begin_deeper
 \begin_layout Enumerate
 The unencrypted private key, the unencrypted master key, and the password
- (or any derivation of it) are 
+ (or anything derived from it) are 
 \emph on
 not
 \emph default
  transmitted to the server.
+ **TODO: In plugin, ensure these aren't being dicked with**
 \end_layout
 
 \end_deeper
@@ -3203,18 +3261,25 @@ The user indicates the specific user(s) they would like to make the information
 
 \begin_layout Enumerate
 The public key corresponding to each of the specified unique identifiers
- is requested from, and supplied by the server.
+ is requested from, and supplied by the server
 \begin_inset Foot
 status collapsed
 
 \begin_layout Plain Layout
-There is obvious potential for a man-in-the-middle attack here, which will
- be addressed later.
+There is obvious potential for a man-in-the-middle attack here, which is
+ addressed in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Data-Exchange"
+
+\end_inset
+
+.
 \end_layout
 
 \end_inset
 
- **TODO: Address footnote later**.
+.
 \end_layout
 
 \begin_layout Enumerate
@@ -3289,6 +3354,42 @@ Making sensitive Information Available to Others
 
 \end_layout
 
+\begin_layout Section
+Specification of Sensitive Data
+\end_layout
+
+\begin_layout Standard
+One important aspect that must be noted is this: what specifically is considered
+ 
+\begin_inset Quotes eld
+\end_inset
+
+sensitive data
+\begin_inset Quotes erd
+\end_inset
+
+ as utilised under this model is defined 
+\emph on
+by the service
+\emph default
+.
+ This means that a service is only as privacy-preserving as its creator
+ wishes it to be.
+ Once data 
+\emph on
+is
+\emph default
+ designated as being sensitive (and therefore encrypted), it cannot then
+ be undesignated as such, and at that point such data will never be available
+ to the service.
+\end_layout
+
+\begin_layout Standard
+This is necessary so that the the service can delineate between sensitive
+ data and service-critical data, but it must be reiterated, these designations
+ are defined by the service, not the user.
+\end_layout
+
 \begin_layout Chapter
 Implementation Overview
 \end_layout
@@ -3304,8 +3405,14 @@ Implementation Overview
 \begin_layout Standard
 In this chapter, we will describe the necessary portions of an implementation
  of this model.
- For sections involving JavaScript, jQuery's **TODO: Ref** notation will
- be used for conciseness.
+ For sections involving JavaScript, jQuery's 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "jQuery"
+
+\end_inset
+
+ notation will be used for conciseness.
  This is not strictly necessary for implementation.
 \end_layout
 
@@ -3316,8 +3423,22 @@ Cryptography
 \begin_layout Standard
 We require an appropriate implementation of both a symmetric key algorithm
  (e.g.
- AES) and an asymmetric key algorithm (e.g.
- RSA) **TODO: Ref** in JavaScript.
+ AES 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "AES"
+
+\end_inset
+
+) and an asymmetric key algorithm (e.g.
+ RSA 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "RSA"
+
+\end_inset
+
+) in JavaScript.
  These implementations must provide encryption, decryption, and key generation
  functions for both algorithms.
 \end_layout
@@ -3340,12 +3461,12 @@ key "MozGetRandomValues"
 \end_layout
 
 \begin_layout Section
-Sensitive Information Encoding
+Sensitive Information Designation
 \end_layout
 
 \begin_layout Standard
-We require that all sensitive information included as a part of the initial
- HTML page be encoded like so:
+In the case of text, we require that all sensitive information included
+ as a part of the initial HTML page be designated like so:
 \end_layout
 
 \begin_layout Standard
@@ -3376,11 +3497,19 @@ status open
 \end_layout
 
 \begin_layout Standard
-The “sensitive” class is a flag for the cryptography library to indicate
- both that the tag contains sensitive information, and that it should be
- decrypted for the user.
+The “
+\family typewriter
+sensitive
+\family default
+” class is a flag for the cryptography library to indicate both that the
+ tag contains sensitive information, and that it should be decrypted for
+ the user.
  As per normal HTML rules, the class attribute may contain other values
- in addition to “sensitive”, and this will not interfere with the decryption.
+ in addition to “
+\family typewriter
+sensitive
+\family default
+”, and this will not interfere with the decryption.
 \end_layout
 
 \begin_layout Standard
@@ -3426,6 +3555,7 @@ The first method applies if an encrypted form of the data is present in
 
 \begin_layout Standard
 \begin_inset listings
+lstparams "tabsize=4"
 inline false
 status open
 
@@ -3546,6 +3676,7 @@ The second method applies if an encrypted form of the data is loaded in
 
 \begin_layout Standard
 \begin_inset listings
+lstparams "tabsize=4"
 inline false
 status open
 
@@ -3661,6 +3792,10 @@ function (cyphertext, key, DOMReference) {
 
 \end_layout
 
+\begin_layout Standard
+**TODO: Traverse up tree to mark parents**
+\end_layout
+
 \begin_layout Chapter
 Plugin Model
 \lang english
@@ -3675,15 +3810,32 @@ name "chap:Plugin-Model"
 \end_layout
 
 \begin_layout Standard
-**TODO: Syntax highlighting on all JS keywords.**
+In this chapter we will describe a browser plugin intended to allow users
+ to perform the checks outlined in Chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Solution-Overview"
+
+\end_inset
+
+.
+ We will describe all the relevant elements required to analyse JavaScript
+ code, in order to determine whether it has the capability to 
+\begin_inset Quotes eld
+\end_inset
+
+leak
+\begin_inset Quotes erd
+\end_inset
+
+ private information.
+ **TODO: More of this**
 \end_layout
 
 \begin_layout Standard
-**TODO: Data exchange**
-\end_layout
-
-\begin_layout Standard
-Here we will describe a browser plugin **TODO: This**.
+**TODO: What happens when something below fails.
+ i.e.
+ alert user**
 \end_layout
 
 \begin_layout Section
@@ -3700,12 +3852,19 @@ key "DataTainting"
 
  in order to detect cases where sensitive data may be accessed from within
  JavaScript.
- Briefly, data tainting is a concept whereby we mark a particular set of
- initial functions and operations as being tainted, and then any operations
- which depend on something tainted also become tainted.
- In our particular case, we may mark functions which have the potential
- to retrieve sensitive information as being tainted.
- This information can then be used to detect whether sensitive information
+ Briefly, data tainting is a form of control-flow analysis 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "DragonBook"
+
+\end_inset
+
+ whereby we mark a particular set of initial functions and operations as
+ being tainted, and then any operations which depend on something tainted
+ also become tainted.
+ In our case, we may mark functions which have the potential to retrieve
+ sensitive information as being tainted.
+ These taint markings can then be used to detect whether sensitive information
  is being used inappropriately; for example, we could check if the arguments
  to an AJAX call are tainted, indicating that sensitive data could be transmitte
 d to a server.
@@ -3779,14 +3938,9 @@ reference "sec:Initially-Tainted-Functions"
 \end_layout
 
 \begin_layout Standard
-**TODO: Reread the below in context.
- Possibly move it to the end of prop.
- model.**
-\end_layout
-
-\begin_layout Standard
-An important point to note is that our propagation model attempts to minimise
- or eliminate false-negatives, which is to say that everything which 
+An important point to note is that our propagation model present here attempts
+ to minimise or eliminate false-negatives, which is to say that everything
+ which 
 \emph on
 could
 \emph default
@@ -4963,7 +5117,7 @@ status open
 
 \begin_layout Plain Layout
 
-for (var in object) {
+for (variable in object) {
 \end_layout
 
 \begin_layout Plain Layout
@@ -4987,7 +5141,7 @@ for (var in object) {
 
 \begin_layout Plain Layout
 
-for each (var in object) {
+for each (variable in object) {
 \end_layout
 
 \begin_layout Plain Layout
@@ -5016,13 +5170,6 @@ If
 object
 \family default
  is tainted, then we generate a tainted scope across the body of the loop.
-\end_layout
-
-\begin_layout Standard
-***TODO: These may be the only loops where it isn't necessary to generate
- a tainted scope.
- May be sufficient to taint var.
- Should check.***
 \end_layout
 
 \begin_layout Subsubsection*
@@ -5279,6 +5426,7 @@ With
 
 \begin_layout Standard
 \begin_inset listings
+lstparams "tabsize=4"
 inline false
 status open
 
@@ -5377,7 +5525,66 @@ Events
 \end_layout
 
 \begin_layout Standard
-**TODO: This**
+Events are problematic because they are capable of running code outside
+ the normal execution flow.
+ They are also a source of potentially tainted data.
+ Their use cannot be disallowed, as they area vital part of creating interactive
+ applications.
+\end_layout
+
+\begin_layout Standard
+We therefore need to deal with three aspects of events:
+\end_layout
+
+\begin_layout Itemize
+The attaching of events to tainted entities.
+\end_layout
+
+\begin_layout Itemize
+Their interaction with the broader execution flow.
+\end_layout
+
+\begin_layout Itemize
+Event bubbling.
+\end_layout
+
+\begin_layout Standard
+In the first case, we say that the 
+\emph on
+entirety
+\emph default
+ of any event attached to a tainted entity is itself tainted, as is everything
+ which occurs within the event handler.
+\end_layout
+
+\begin_layout Standard
+If an event is attached to an untainted object, we must still consider its
+ associated callback function.
+ If the callback function does not interact with identifiers out of scope
+ of the function, then we can analyse it as normal.
+ If, on the other hand, it does interact with out of scope identifiers,
+ we must consider those identifiers to be tainted within the event handler
+ if those identifiers become tainted at any point in the control flow analysis,
+ even if they are later untainted.
+ This is necessary, because we do not know at what point the event handlers
+ will be triggered in the execution flow.
+\end_layout
+
+\begin_layout Standard
+Finally, if an event occurs, and there is no handler attached to the inner-most
+ DOM node that it occurs on, then the event will bubble up DOM nodes until
+ it fines an appropriate handler, or until it reaches the outer-most DOM
+ node without finding one 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Events"
+
+\end_inset
+
+.
+ The event object specifies the original target of the event.
+ This original target may contain sensitive data.
+ We must therefore consider the original target tainted.
 \end_layout
 
 \begin_layout Subsection
@@ -5389,10 +5596,6 @@ name "sub:Functions"
 \end_inset
 
 
-\end_layout
-
-\begin_layout Standard
-**TODO: This bit is kind of messy**
 \end_layout
 
 \begin_layout Standard
@@ -5769,16 +5972,131 @@ In the case of mutually recursive functions (or chains thereof), we iterate
  the chain have stabilised.
 \end_layout
 
-\begin_layout Subsubsection*
-Objects
+\begin_layout Subsection
+Objects & Classes
 \end_layout
 
 \begin_layout Standard
-**TODO: This**
+JavaScript encodes its classes as functions
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+If I may take a moment to personally comment on this situation: What on
+ Earth were the language designers smoking when they decided that 
+\emph on
+that
+\emph default
+ was a good idea?
+\end_layout
+
+\end_inset
+
+.
+ This makes analysing them somewhat challenging.
 \end_layout
 
 \begin_layout Standard
-JavaScript encodes its objects as functions.
+As noted above, if a property of a specific instantiation of an object becomes
+ tainted, the whole object must be tainted.
+ We must taint the whole object as opposed to just the property, because
+ information could potentially be gained by the existence or non
+\emph on
+-
+\emph default
+existence of specific object properties.
+ For example:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "tabsize=4"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+var sens = getSensitiveInformation();
+\end_layout
+
+\begin_layout Plain Layout
+
+var myObj = {};
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+if(hasInterestingProperty(sens) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	myObj.yes = true;
+\end_layout
+
+\begin_layout Plain Layout
+
+	myObj.stillYes = true;
+\end_layout
+
+\begin_layout Plain Layout
+
+} else {
+\end_layout
+
+\begin_layout Plain Layout
+
+	myObj.no = true;
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+if(Object.keys(myObj).length == 2){
+\end_layout
+
+\begin_layout Plain Layout
+
+	//Object has interesting property.
+\end_layout
+
+\begin_layout Plain Layout
+
+	//Send this info to server.
+\end_layout
+
+\begin_layout Plain Layout
+
+}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+As for classes, if any of the member functions or properties is tainted,
+ or if any of the classes in the prototype chain are tainted, then the class
+ itself is considered tainted, and therefore any time it is instantiated,
+ the instantiated object will be considered tainted.
+\end_layout
+
+\begin_layout Standard
+A class does not automatically become tainted by another class using it
+ as a prototype.
 \end_layout
 
 \begin_layout Subsection
@@ -5850,6 +6168,13 @@ achieved
 
 \begin_layout Subsection
 Specific Functions
+\begin_inset CommandInset label
+LatexCommand label
+name "sub:Specific-Functions"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -5862,20 +6187,38 @@ reference "tab:Initially-Tainted-Functions"
 \end_inset
 
 .
+ 
 \end_layout
 
 \begin_layout Standard
-**TODO: Work out how to work around the fact that 
+In addition to these functions, all accesses of the section of the 
+\family typewriter
+localStorage
+\family default
+ object used to store the private key and master key are tainted.
+ This is expressly so that the elementary cryptography functions cannot
+ be reimplemented in application code in order to create untainted versions
+ of them, and also so they cannot be communicated to the server.
+ Access to other sections of the 
+\family typewriter
+localStorage
+\family default
+ object are not tainted.
+\end_layout
+
+\begin_layout Standard
+The 
 \family typewriter
 document
 \family default
- itself is tainted by the standards I'm using here.
- Probably need to narrow scope a little.**
-\end_layout
-
-\begin_layout Standard
-**TODO: Cross-reference Mozilla DOM ref., and time-permitting W3C specs,
- to ensure I've got all relevant functions**
+ object is specifically designated as not tainted, as otherwise almost every
+ useful inbuilt method and object in the DOM and JavaScript runtime would
+ be tainted by extension.
+ This does preclude adding new properties and functions to the 
+\family typewriter
+document
+\family default
+ object.
 \end_layout
 
 \begin_layout Standard
@@ -5886,10 +6229,10 @@ status collapsed
 
 \begin_layout Plain Layout
 \begin_inset Tabular
-<lyxtabular version="3" rows="23" columns="3">
+<lyxtabular version="3" rows="26" columns="3">
 <features islongtable="true" longtabularalignment="center">
-<column alignment="center" valignment="middle" width="0">
-<column alignment="left" valignment="middle" width="0">
+<column alignment="center" valignment="top" width="0pt">
+<column alignment="left" valignment="top" width="0pt">
 <column alignment="left" valignment="middle" width="50col%">
 <row>
 <cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
@@ -5930,7 +6273,7 @@ document
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -5963,7 +6306,7 @@ Returns an array of all
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -5996,7 +6339,7 @@ Returns the
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -6029,7 +6372,7 @@ Returns the
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -6062,7 +6405,7 @@ Returns an array of all
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -6091,7 +6434,7 @@ Returns the element with a specified ID
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -6120,7 +6463,7 @@ Returns all elements with a specified name.
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -6149,7 +6492,7 @@ Returns all elements of a specific tag.
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -6169,7 +6512,7 @@ Returns an array of all links in the DOM.
 </cell>
 </row>
 <row>
-<cell multirow="3" alignment="center" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell multirow="3" alignment="center" valignment="middle" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -6178,7 +6521,7 @@ element
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -6207,7 +6550,7 @@ Returns an array of the child nodes of an element.
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -6236,7 +6579,7 @@ Returns the first child node of an element.
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -6265,7 +6608,7 @@ Returns the child node so of an element that are a specific tag.
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -6294,7 +6637,7 @@ Returns an elements ID attribute.
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -6323,7 +6666,7 @@ Returns the HTML within an element.
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -6353,7 +6696,7 @@ Tests if two nodes are equal.
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -6382,7 +6725,7 @@ Returns the last child node of an element.
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -6411,7 +6754,7 @@ Gets the next sibling element of a node.
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -6440,7 +6783,7 @@ Returns the value of an element, which may include sensitive text.
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -6469,7 +6812,7 @@ Returns the parent node of an element.
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -6498,7 +6841,7 @@ Gets the previous sibling element of a node.
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -6527,7 +6870,7 @@ Returns the element removed.
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -6547,7 +6890,7 @@ Returns the element replaced.
 </cell>
 </row>
 <row>
-<cell multirow="4" alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -6556,7 +6899,7 @@ Returns the element replaced.
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" leftline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
@@ -6565,11 +6908,136 @@ textContent
 
 \end_inset
 </cell>
-<cell alignment="left" valignment="top" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+<cell alignment="left" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
 \begin_inset Text
 
 \begin_layout Plain Layout
 Returns the textual content of a node, including all child nodes.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="3" alignment="center" valignment="middle" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+event
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+target
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="3" alignment="left" valignment="middle" topline="true" bottomline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+Can be used to access DOM nodes other than the one the event is attached
+ to.
+ These nodes could contain sensitive information.
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+originalTarget
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+</row>
+<row>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\end_inset
+</cell>
+<cell alignment="center" valignment="top" topline="true" bottomline="true" leftline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
+\family roman
+\series medium
+\shape up
+\size normal
+\emph off
+\bar no
+\strikeout off
+\uuline off
+\uwave off
+\noun off
+\color none
+explicitOriginalTarget
+\end_layout
+
+\end_inset
+</cell>
+<cell multirow="4" alignment="center" valignment="top" topline="true" leftline="true" rightline="true" usebox="none">
+\begin_inset Text
+
+\begin_layout Plain Layout
+
 \end_layout
 
 \end_inset
@@ -7500,7 +7968,8 @@ Detecting Incidental Communication
 \begin_layout Standard
 AJAX calls are the primary method used to communicate with the outside world
  from within JavaScript.
- There may be other specific  - there are after all a 
+ There may be other such methods of communication available to JavaScript
+ - there are after all a 
 \emph on
 lot
 \emph default
@@ -7511,9 +7980,9 @@ key "WebAPIs"
 
 \end_inset
 
-.
- However, any such methods that exist within JavaScript can be analysed
- using the approach as described above for AJAX calls.
+, and I have not been able to check all of them.
+ However, the analysis conducted with respect to AJAX can be applied to
+ all such possibilities.
 \end_layout
 
 \begin_layout Standard
@@ -7935,6 +8404,13 @@ are
 
 \begin_layout Section
 Data Exchange
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Data-Exchange"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -8026,6 +8502,109 @@ key "OpenPGP"
  work along side one another.
 \end_layout
 
+\begin_layout Section
+Ensuring Integrity of Cryptographic Code
+\end_layout
+
+\begin_layout Standard
+We assume that there is available a reference implementation of the cryptographi
+c code, and all privacy preserving functions defined above.
+ Said reference implementation must be available to both the creators of
+ the service, and the creators of the plugin.
+ Said reference implementation must be used verbatim by the service.
+\end_layout
+
+\begin_layout Standard
+With these assumptions, the plugin may take a hash of the reference implementati
+on, and check for its presence at page load.
+ There may, of course, be multiple different reference implementations for
+ different purposes.
+\end_layout
+
+\begin_layout Standard
+Additionally, we must ensure that the rest of the application code does
+ not interfere with the cryptographic code.
+ This is reasonable straightforward - we check that there are no assignments
+ to any of the identifiers in the reference implementation.
+\end_layout
+
+\begin_layout Subsection
+Key Integrity
+\end_layout
+
+\begin_layout Standard
+While reads from the master key and private key are tainted (see §
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Specific-Functions"
+
+\end_inset
+
+), writes to the master and private key by anything other than the cryptographic
+ code are expressly disallowed.
+ This is to ensure application code does not substitute these keys with
+ ones it controls.
+\end_layout
+
+\begin_layout Section
+Ensuring Integrity of Application Code
+\end_layout
+
+\begin_layout Standard
+In order to ensure that the application code received by the user is the
+ code that the service intended to send, we require that the service do
+ three things.
+ 
+\end_layout
+
+\begin_layout Itemize
+Firstly, that it create a public/private key-pair, and attach the public
+ key to its SSL certificate.
+\end_layout
+
+\begin_layout Itemize
+Secondly, that it uses this public key to sign a hash of the top-level HTML
+ page, and includes this signed hash in the response headers for the page.
+\end_layout
+
+\begin_layout Itemize
+Thirdly, that all references to external resources on the HTML page include
+ a 
+\begin_inset Quotes eld
+\end_inset
+
+hash=
+\emph on
+h
+\emph default
+
+\begin_inset Quotes erd
+\end_inset
+
+ parameter in their query string, where 
+\emph on
+h
+\emph default
+ is a hash of the external resource.
+\end_layout
+
+\begin_layout Standard
+The plugin may then check the hashes of each of the external resources against
+ the ones provided in the query string.
+ This approach is taken directly from 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Mylar"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Section
+Summary
+\end_layout
+
 \begin_layout Chapter
 Discussion & Further Work
 \end_layout
@@ -8047,7 +8626,11 @@ Discussion & Further Work
 \end_layout
 
 \begin_layout Standard
-- Same origin policy**
+- Same origin policy
+\end_layout
+
+\begin_layout Standard
+- XSS attacks from other users**
 \end_layout
 
 \begin_layout Section
@@ -8059,14 +8642,11 @@ General Discussion of Strengths
 \end_layout
 
 \begin_layout Standard
-The greatest strength of the work presented in this paper is that - assuming
- there aren't any unsolvable flaws that have been missed - it's an 
-\emph on
-incredibly
-\emph default
- effective way to ensure online privacy.
- It is capable of putting an almost total stop to the problem of mass data
- theft by criminals, and the practice of mass surveillance, while 
+The greatest strength of the work presented in this paper is that it's an
+ effective and usable way to ensure online privacy, not just for those who
+ seek such privacy, but for all users.
+ It is capable of providing strong protection against the problem of mass
+ data theft by criminals, and the practice of mass surveillance, while 
 \emph on
 retaining
 \emph default
@@ -8076,11 +8656,8 @@ retaining
 status collapsed
 
 \begin_layout Plain Layout
-In my personal opinion, that is 
-\emph on
-exactly
-\emph default
- the way surveillance should work in a free and democratic society.
+That is to say, nothing in this thesis stops them from performing surveillance
+ on specific individual users or client machines.
 \end_layout
 
 \end_inset
@@ -8200,68 +8777,59 @@ General Discussion of Weaknesses
 The most glaring weakness of this thesis, and the ideas presented within,
  is the lack of a full implementation.
  While sections of it were implemented, such implementations were almost
- invariability prototypical, incomplete, and hackish
-\begin_inset Foot
-status collapsed
-
-\begin_layout Plain Layout
-In the traditional, as opposed to mass-media sense of that word.
-\end_layout
-
-\end_inset
-
- in nature; certainly they are not the sort of thing I wish to share or
- publish.
+ invariability prototypical and incomplete in nature.
 \end_layout
 
 \begin_layout Standard
-Anyone seeking to use this work presented here would need to create a complete
+Anyone seeking to use the work presented here would need to create a complete
  and robust implementation of both the service model and the plugin.
- While I'm all nigh on 100% certain everything presented in Chapter 
+ The model described in Chapter 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "chap:Service-Model"
 
 \end_inset
 
- works - particularly given that there are many implementations of quite
- similar models in industry 
+ draws upon a wide body of existing literature, as well as some existing
+ implementations 
 \begin_inset CommandInset citation
 LatexCommand cite
-key "Mega,Crypocat,ProtonMail"
+key "Mega,Crypocat,ProtonMail,Mylar"
 
 \end_inset
 
-, as well as the Mylar paper 
-\begin_inset CommandInset citation
-LatexCommand cite
-key "Mylar"
-
-\end_inset
-
- - I am less certain about the material on data-tainting presented in Chapter
- 
+, and is presented with considerable confidence.
+ The model presented in Chapter 
 \begin_inset CommandInset ref
 LatexCommand ref
 reference "chap:Plugin-Model"
 
 \end_inset
 
-.
- While data tainting certainly 
+ - especially the parts relating to data tainting - have not been validated,
+ and should not be relied upon as an authoritative implementation.
+ It is presented firstly as a demonstration of the implementability of the
+ declared requirements, and secondly as indication of how to go about a
+ full implementation.
+ 
+\end_layout
+
+\begin_layout Standard
+This is not to say that there is doubt about whether taint analysis 
 \emph on
 can
 \emph default
- be done in JavaScript (some ancient versions of Netscape actually had it
- as a browser feature 
+ be performed in JavaScript; indeed, some ancient versions of Netscape actually
+ had it as a browser feature 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "DataTaintingJS"
 
 \end_inset
 
-), all implementations and academic papers I have found on the issue utilise
- dynamic tainting.
+, and there are a number of academic papers on the subject **TODO: Ref**.
+ However, all implementations and academic papers I have found on the issue
+ utilise dynamic tainting.
  In hindsight, I suspect there is a good reason for that: while it certainly
  requires a little technically wizardry to set up - namely hooking into
  the JavaScript runtime - it has the benefit of it being 
@@ -8270,14 +8838,27 @@ much
 \emph default
  easier to be certain you are doing it correctly.
  The required technical wizardry is actually not too difficult, either;
- in Firefox at least, the Debugger API **TODO: Ref https://developer.mozilla.org/e
-n-US/docs/Tools/Debugger-API** provides hooks for plugins to both observe
- and manipulate a page's JavaScript runtime.
+ in Firefox at least, the Debugger API 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "DebuggerAPI"
+
+\end_inset
+
+ provides hooks for plugins to both observe and manipulate a page's JavaScript
+ runtime.
  The way it is used in both Firefox's internal development tools, and in
  Firebug, suggest that it possesses all the features necessary.
  Dynamic tainting would also neatly step around all of the parts of JavaScript
- that are not covered under the data tainting model presented here, such
- as 
+ that are not covered under the data tainting model presented in Chapter
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Plugin-Model"
+
+\end_inset
+
+, such as 
 \family typewriter
 Try ..
  Catch
@@ -8294,7 +8875,118 @@ Strengths and Weaknesses of Taint Analysis Model
 \end_layout
 
 \begin_layout Standard
-**TODO: This**
+The model for taint analysis of JavaScript presented in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Taint-Propagation-Model"
+
+\end_inset
+
+ possesses definite room for improvement.
+ In the first instance, there is a need for validation of the correctness
+ and completeness of the model as a whole.
+ That is to say, it needs to be thoroughly tested to ensure all its components
+ work, that all of its components work together, and that no corner cases
+ or obscure sections of the ECMAScript
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+JavaScript is an implementation of ECMAScript.
+\end_layout
+
+\end_inset
+
+ language specification have been missed.
+ Whether such validation is done through rigorous systems testing, formal
+ verification, or some other method really depends on how certain one needs
+ to be about it.
+\end_layout
+
+\begin_layout Standard
+Secondly, I believe there is considerable scope to define it more narrowly.
+ The model given in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Taint-Propagation-Model"
+
+\end_inset
+
+ is defined in a way which is intended to ensure no false negatives (i.e.
+ no possible violations of user privacy), and to have relatively simple
+ rules.
+ The result is that the model will report many false positives (instances
+ where it thinks user privacy could be violated, but in actuality it is
+ not).
+ It is highly likely that different/more complex rules could be devised
+ which still ensure a lack of false negatives, but which drastically reduce
+ false positives.
+ There is also the possibility of defining a model which permits some false
+ negatives in exchange for greatly reduced false positives, without unduly
+ risking user privacy - although such a model would inherently be more risky.
+\end_layout
+
+\begin_layout Standard
+As for its strengths, I believe this is the first instance of the use of
+ static taint analysis to detect privacy leakage in JavaScript.
+ There exists some work on the individual components 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "LaBaSec,DataTaintingJS,jovanovic2006pixy,sandhutaintsniffer,DynamicTaintAnalysisPrivacy,DataTainting,BlendedTaintAnalysisJS"
+
+\end_inset
+
+, but I am unaware of any other instances of work on the topic as a whole.
+ I also believe that while what I have described is certainly not perfect,
+ the core concept of using taint analysis to detect privacy vulnerabilities
+ has the potential to allow a 
+\emph on
+lot
+\emph default
+ of web-service creators to guarantee their users' privacy.
+\end_layout
+
+\begin_layout Standard
+It should be noted that while there is most definitely other work in the
+ broader field (see the above references), I independently 
+\begin_inset Quotes eld
+\end_inset
+
+invented
+\begin_inset Quotes erd
+\end_inset
+
+ a lot of the material in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Taint-Propagation-Model"
+
+\end_inset
+
+ (and quite late in the project at that), and 
+\emph on
+then
+\emph default
+ went searching for other people's work on the subject.
+ It was only by coincidence that I actually discovered the terms 
+\begin_inset Quotes eld
+\end_inset
+
+taint analysis
+\begin_inset Quotes erd
+\end_inset
+
+ and 
+\begin_inset Quotes eld
+\end_inset
+
+flow-control analysis
+\begin_inset Quotes erd
+\end_inset
+
+, which are the prevailing terms for the techniques in academia.
+ This unfortunately meant that there was insufficient time to integrate
+ much of the other existing work into this thesis.
 \end_layout
 
 \begin_layout Subsection
@@ -8411,7 +9103,14 @@ It also bears mentioning that service critical data is, and always will
  know what you search for using its search engine, because it has to know
  in order to give you the results.
  There is nothing to stop a service from performing data mining on service
- critical data, other than the users choosing not to use it.
+ critical data, other than the users choosing not to use that service.
+\end_layout
+
+\begin_layout Standard
+Business models for which user privacy is a strength and/or a selling point
+ obviously stand to benefit, as the work presented here provides not only
+ a generic technique for providing user privacy, but also for allowing the
+ user to ensure it.
 \end_layout
 
 \begin_layout Subsection
@@ -8455,6 +9154,31 @@ Email is an interesting case - in principle, the model can be applied to
  the users.
 \end_layout
 
+\begin_layout Standard
+The same principle applies to any 
+\begin_inset Quotes eld
+\end_inset
+
+meta-service
+\begin_inset Quotes erd
+\end_inset
+
+ which operates across the boundaries of individual services.
+ 
+\end_layout
+
+\begin_layout Subsection
+Cross-Site Scripting Attacks
+\end_layout
+
+\begin_layout Standard
+Because the service is not capable examining encrypted information, there
+ exists the possibility that other users can launch cross-site scripting
+ attacks by embedding malicious code into information they send to other
+ users via the service.
+ 
+\end_layout
+
 \begin_layout Section
 Implications for Research
 \end_layout
@@ -8480,6 +9204,8 @@ Also to my partner, Claire, who kept me from going insane while doing this,
 also
 \emph default
  trying to write a thesis.
+ Also, for ensuring we both have reasonable diets - I would have been a
+ very unhealthy man by the end of this without her.
 \end_layout
 
 \begin_layout Standard
