@@ -33,7 +33,7 @@
 \bibtex_command default
 \index_command default
 \paperfontsize default
-\spacing single
+\spacing onehalf
 \use_hyperref false
 \papersize default
 \use_geometry false
@@ -54,7 +54,7 @@
 \secnumdepth 3
 \tocdepth 3
 \paragraph_separation skip
-\defskip smallskip
+\defskip medskip
 \quotes_language english
 \papercolumns 1
 \papersides 1
@@ -83,6 +83,58 @@ Joshua Korner-Godsiff - u4685222
 \end_inset
 
 Supervised by Roger Clarke
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset ERT
+status open
+
+\begin_layout Plain Layout
+
+
+\backslash
+thispagestyle{empty}
+\end_layout
+
+\begin_layout Plain Layout
+
+
+\backslash
+mbox{}
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace vfill
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\noindent
+\align center
+
+\size larger
+This page unintentionally left blank.
+\end_layout
+
+\begin_layout Standard
+\begin_inset VSpace vfill
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1427,7 +1479,7 @@ Of particular interest is the idea of supplying encryption and decryption
 
 \begin_layout Standard
 Firstly, there is the idea of supplying cryptographic functionality via
- a specialist library of piece of software, through which all communications
+ a specialist library or piece of software, through which all communications
  are piped.
  From a purely technical perspective, this is the preferred option.
  Its chief benefit is that the software is installed on the client, and
@@ -1461,7 +1513,9 @@ A second approach is the notion of a browser plugin.
  It suffers from the same problem as specialist software, in that it needs
  broad uptake to be particularly useful, and it is less likely to achieve
  that if the user must specifically install it.
- **TODO: Mention easy access to browser resources**
+ One advantage to using a plugin over specialist software is that a plugin
+ generally has much more direct access to the browser's resources, potentially
+ including the JavaScript runtime and DOM of arbitrary pages.
 \end_layout
 
 \begin_layout Standard
@@ -1479,9 +1533,9 @@ c code originate from an external source.
 \end_layout
 
 \begin_layout Standard
-The personal opinion of this author is that - for all the potential security
- issues - the third option is actually the most promising.
- The other two have been tried - to varying degrees of success - but the
+The third option is actually very promising, as is the one investigated
+ within this thesis.
+ The first two have been tried - to varying degrees of success - but the
  only solutions to achieve widespread use are the ones which come with the
  software that uses them, and do not require active user involvement to
  function.
@@ -1495,10 +1549,6 @@ The personal opinion of this author is that - for all the potential security
 
 \begin_layout Subsection
 Cryptography in JavaScript
-\end_layout
-
-\begin_layout Standard
-**TODO: Ref**
 \end_layout
 
 \begin_layout Standard
@@ -1555,8 +1605,7 @@ The second issue is that the technology relies on the browser to provide
 not
 \emph default
  defined in the specification.
- Specifically: **TODO: Ref https://dvcs.w3.org/hg/webcrypto-api/raw-file/tip/spec/
-Overview.html**
+ Specifically:
 \end_layout
 
 \begin_layout Quotation
@@ -1575,10 +1624,13 @@ lished cryptographic pseudo-random number generators seeded with high-quality
 \end_inset
 
  
-\end_layout
+\begin_inset CommandInset citation
+LatexCommand cite
+key "W3CWebCryptoAPI"
 
-\begin_layout Quotation
-- W3C Cryptography API Specification
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1630,8 +1682,14 @@ equest - is a well-established technique for performing communications between
  It is one of the few ways in which a JavaScript runtime running in a browser
  can communicate with the outside world.
  It forms the basis of many modern web applications, due to its ability
- to exchange data with a server after page load.
- **TODO: Ref https://developer.mozilla.org/en/docs/AJAX**
+ to exchange data with a server after page load 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "AJAX"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Section
@@ -1648,7 +1706,34 @@ Despite persistent searching, there nevertheless seems to exists a dearth
 not
 \emph default
  seem to lack interest or activity in this area - particularly since the
- Edward Snowden leaks **TODO: Reference**.
+ Edward Snowden leaks 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "PRISM"
+
+\end_inset
+
+.
+ Mega, CryptoCat, ProtonMail, and a host of enterprises are all attempting
+ to supply a range of private services
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+A simple Google search for 
+\begin_inset Quotes eld
+\end_inset
+
+Private <class of service>
+\begin_inset Quotes erd
+\end_inset
+
+ will tend to turn these up
+\end_layout
+
+\end_inset
+
+.
  Because of this, it seems prudent to touch on the major points of interest
  that exist on the industrial side, and from less traditional sources.
 \end_layout
@@ -1881,14 +1966,38 @@ LavaBit, and the Assumed Security of TLS/SSL
 \end_layout
 
 \begin_layout Standard
-**TODO: Brief description of LavaBit**
-\end_layout
-
-\begin_layout Standard
 Most discussions of internet- and web-centric security assume that TLS/SSL
  is as secure as it reasonably can be.
  However, there is reason to believe that this is not necessarily the case.
- Recently unsealed court documents show that the FBI demanded (via a court)
+\end_layout
+
+\begin_layout Standard
+LavaBit.com 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "LavaBit"
+
+\end_inset
+
+ was an email provider (it has since shut down) specialising in providing
+ privacy to its customers.
+ It did so by encrypting emails 
+\begin_inset Quotes eld
+\end_inset
+
+at rest
+\begin_inset Quotes erd
+\end_inset
+
+ (i.e.
+ after it received them).
+ The mechanisms it used to do this meant that it still retained some ability
+ to access those emails, at certain points in the chain, although it actively
+ chose not to do so.
+\end_layout
+
+\begin_layout Standard
+Recently unsealed court documents show that the FBI demanded (via a court)
  that LavaBit.com hand over its SSL keys 
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -1902,14 +2011,18 @@ key "LavaBitCourtDocs,WiredLavaBitCryptoKeys"
 
 \begin_layout Standard
 Possession of the SSL keys would in principle allow the FBI to intercept
- any traffic to and from LavaBit.com.
- It would also permit the undetected impersonation of LavaBit's server,
- allowing for material not originating from LavaBit.com to be sent to its
- users.
+ any and all traffic to and from LavaBit.com.
+ It would also allow for the impersonation of LavaBit's servers, in a way
+ which would be undetectable, allowing for material not originating from
+ LavaBit.com to be sent to its users.
 \end_layout
 
 \begin_layout Standard
-**TODO: Brief bit on HeartBleed**
+The ability for governments to forcibly acquire SSL keys entirely undermines
+ the type of security that SSL is supposed to provide - i.e.
+ ensuring that the information content of a communication is only available
+ to the intended parties, and that those involved in it are who they say
+ they are.
 \end_layout
 
 \begin_layout Subsection*
@@ -1960,6 +2073,14 @@ key "IDTheftCost"
 \end_inset
 
 .
+\end_layout
+
+\begin_layout Section
+Conclusion of Current Literature
+\end_layout
+
+\begin_layout Standard
+**TODO**
 \end_layout
 
 \begin_layout Chapter
@@ -2164,7 +2285,25 @@ Without some form of intervention this assumption is not actually true,
 
 , then the service provider (or anyone else) would be unable to change their
  code in a way which violates privacy en mass, without someone noticing
- and making that information public.
+ and making that information public
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+This approach belonging to the Don Chipp model of security; namely 
+\begin_inset Quotes eld
+\end_inset
+
+Keep the bastards honest
+\begin_inset Quotes erd
+\end_inset
+
+.
+\end_layout
+
+\end_inset
+
+.
  In the case of trying to protect privacy against server/service compromise,
  knowing that the violation exists is extremely useful, since if the data
  is encrypted then ceasing to use the service unless/until the issue is
@@ -2192,10 +2331,6 @@ name "chap:Service-Model"
 \end_inset
 
 
-\end_layout
-
-\begin_layout Standard
-***TODO: Brief discussion on Homomorphic Encryption***
 \end_layout
 
 \begin_layout Standard
@@ -3037,6 +3172,13 @@ name "fig:Retrieving-sensitive-Information"
 
 \begin_layout Section
 Making Sensitive Information Available to Other Users
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Making-Sensitive-Information"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -5254,10 +5396,6 @@ name "sub:Functions"
 \end_layout
 
 \begin_layout Standard
-**TODO: Global Vars**
-\end_layout
-
-\begin_layout Standard
 JavaScript's functions are a heavily overloaded construct
 \begin_inset Foot
 status collapsed
@@ -5579,11 +5717,33 @@ Once analysed in this way, whenever we encounter a call to a function which
 \end_layout
 
 \begin_layout Subsubsection*
-Callbacks
+Function Arguments
 \end_layout
 
 \begin_layout Standard
-**TODO: This**
+JavaScript allows functions to be passed as arguments to function calls.
+ Functions which utilise this feature are more difficult to analyse than
+ those that do not, as a function's parameters may be tainted or not, rather
+ than just the function itself.
+ In order to analyse such functions, we defer their analysis until a call
+ to said function is encountered, in which case we can substitute in the
+ actual function used for the placeholder.
+ This does mean that we must re-analyse such functions at each call point,
+ though some caching may be possible.
+\end_layout
+
+\begin_layout Standard
+It 
+\emph on
+might
+\emph default
+ be possible to pre-compute the effects in the same way we do for function
+ parameters.
+ However, JavaScript's lack of an explicit or strong type system, combined
+ with the variadic nature of its functions, makes that prospect something
+ best left to the realms of theory for now.
+ Additionally, it is still possible to pre-compute the effects of all non-functi
+on parameters.
 \end_layout
 
 \begin_layout Subsubsection*
@@ -5626,8 +5786,15 @@ Web Workers
 \end_layout
 
 \begin_layout Standard
-The Web Workers API **TODO: Ref** provides a method of introducing genuine
- concurrency into JavaScript applications.
+The Web Workers API 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "WebWorkers"
+
+\end_inset
+
+ provides a method of introducing genuine concurrency into JavaScript applicatio
+ns.
  While this is an 
 \emph on
 incredibly
@@ -5695,10 +5862,6 @@ reference "tab:Initially-Tainted-Functions"
 \end_inset
 
 .
-\end_layout
-
-\begin_layout Standard
-**TODO: Move to Table float**
 \end_layout
 
 \begin_layout Standard
@@ -7114,7 +7277,7 @@ reference "sec:Initially-Tainted-Functions"
 \end_layout
 
 \begin_layout Standard
-The approach I would put forward is to wrap each of the tainted functions
+A simple yet powerful approach is to wrap each of the tainted functions
  in function which - when run - checks to see if the attempted operation
  is actually trying to retrieve sensitive data.
  In the case where sensitive data would not be retrieved, the function would
@@ -7335,10 +7498,9 @@ Detecting Incidental Communication
 \end_layout
 
 \begin_layout Standard
-AJAX calls are the method that I am aware of which can communicate with
- the outside world from within JavaScript.
- It is possible that there exists other methods - there are after all a
- 
+AJAX calls are the primary method used to communicate with the outside world
+ from within JavaScript.
+ There may be other specific  - there are after all a 
 \emph on
 lot
 \emph default
@@ -7386,21 +7548,18 @@ inline false
 status open
 
 \begin_layout Plain Layout
+
 $(document).ready(function() {
 \end_layout
 
 \begin_layout Plain Layout
-  // Lifts 
-sensitive
-\lang british
- data from page
+
+  // Lifts sensitive data from page
 \end_layout
 
 \begin_layout Plain Layout
-  var data = get
-Sensitive
-\lang british
-Data();
+
+  var data = getSensitiveData();
 \end_layout
 
 \begin_layout Plain Layout
@@ -7408,26 +7567,32 @@ Data();
 \end_layout
 
 \begin_layout Plain Layout
+
   if(hasInterestingProperty(data)) {
 \end_layout
 
 \begin_layout Plain Layout
+
     $('head').append(
 \end_layout
 
 \begin_layout Plain Layout
+
       "<link type='text/css' rel='stylesheet'
 \end_layout
 
 \begin_layout Plain Layout
+
       href='innocentCSSFile.css'>");
 \end_layout
 
 \begin_layout Plain Layout
+
   }
 \end_layout
 
 \begin_layout Plain Layout
+
 });
 \end_layout
 
@@ -7684,9 +7849,14 @@ It is currently possible to access a list of browser plugins from within
 \family typewriter
 navigator.plugins
 \family default
- object.
- **TODO: Ref https://developer.mozilla.org/en-US/docs/Web/API/NavigatorPlugins.plug
-ins**.
+ object 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "NavigatorPlugins"
+
+\end_inset
+
+.
  Mozilla at least is planning to limit the ability of JavaScript code to
  enumerate through this list, instead restricting it to a direct query for
  specific plugins - however, that does not appear to have fully happened
@@ -7724,17 +7894,29 @@ Flash has the capability to access the JavaScript runtime, and through it
  Unlike JavaScript, the behaviour of Flash objects on a page is not easily
  analysed, because their source code is not readily readable.
  For this reason, Flash is incompatible with the model, and therefore its
- use disallowed under the model.
- **TODO: Ref http://stackoverflow.com/questions/2473053/can-an-embedded-flash-obj
-ect-access-the-dom-of-its-parent-document**
+ use disallowed under the model 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "FlashAccessJS"
+
+\end_inset
+
+.
+ 
 \end_layout
 
 \begin_layout Standard
 Java applets face a similar issue, in that they are capable of accessing
- and manipulating the DOM.
- **TODO: Ref http://docs.oracle.com/javase/tutorial/deployment/applet/manipulating
-DOMFromApplet.html** Again, the behaviour of such applets is not easily analysed,
- and their use is therefore disallowed under the model.
+ and manipulating the DOM 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "JavaAccessDOM"
+
+\end_inset
+
+.
+ Again, the behaviour of such applets is not easily analysed, and their
+ use is therefore disallowed under the model.
 \end_layout
 
 \begin_layout Standard
@@ -7751,6 +7933,99 @@ are
  is described above with relation to JavaScript.
 \end_layout
 
+\begin_layout Section
+Data Exchange
+\end_layout
+
+\begin_layout Standard
+**TODO: Ref.
+ Specifically, Cert Auth.**
+\end_layout
+
+\begin_layout Standard
+As noted in Section 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Making-Sensitive-Information"
+
+\end_inset
+
+, there is a very obvious potential man-in-the-middle attack related to
+ the exchange of sensitive data between users.
+ In particular, if the service is the entity facilitating the exchange of
+ public keys between the users, then it can easily substitute the user's
+ public keys with ones that it controls, allowing it to read the messages.
+ Moreover, this attack is not easily detectable on the client side, because
+ it can re-encrypt the messages with the keys the users expect.
+\end_layout
+
+\begin_layout Standard
+The general approach to solving this problem is to perform the key exchange
+ via a side-channel not controlled by the service.
+ Unfortunately, to ensure usability for those not capable of doing this,
+ the service does still need to perform the key exchange.
+ However, we can 
+\emph on
+verify
+\emph default
+ key-identity pairings via an independent side-channel.
+ Specifically, what we need is some third party which is trusted by the
+ user that can attest to the authenticity of the public keys supplied by
+ the service.
+ This in turn requires that there exists a third party (or third parties)
+ which possess those bindings.
+\end_layout
+
+\begin_layout Standard
+The simplest way is for the service-provided JavaScript code to automatically
+ report the username‒public-key binding to a third party service - which
+ we shall term the identify verifier - at signup.
+ The JavaScript code can then use both the main service, and the identity
+ verifier in order to verify the authenticity of the keys, and the plugin
+ can check that this is actually occuring.
+ This approach is still somewhat vulnerable, in that an adversary could
+ potentially take control of both services.
+ However, two services are safer than one, in that regard.
+\end_layout
+
+\begin_layout Standard
+There are some additional measures that we can take within the plugin to
+ ensure key authenticity.
+ Firstly, individual users of the plugin are able to verify the authenticity
+ of their own keys.
+ That does not assist in the problem of data exchange, but it can be used
+ to detect misreporting on the part of the service or the identity verifier,
+ which could indicate a security/privacy breach.
+\end_layout
+
+\begin_layout Standard
+Secondly, there is no technical reason to restrict ourselves to a single
+ identity verifier.
+ The more such services which exist, preferably in disparate geographical
+ locations and legal jurisdictions, the less likely that any one adversary
+ can compromise them all.
+ Having multiple verifiers also allows the user to chose to use ones that
+ they trust most.
+\end_layout
+
+\begin_layout Standard
+Thirdly, there is no requirement that identity verification be a centralised
+ operation.
+ OpenPGP has demonstrated that so called webs-of-trust 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "OpenPGP"
+
+\end_inset
+
+ are a viable method of performing key acquisition and verification.
+ Such a system would actually be highly applicable in cases where users
+ are only trying to communicate with a few individuals who are known to
+ them - for example, in the case of a social network.
+ There is also no reason that centralised and decentralised methods cannot
+ work along side one another.
+\end_layout
+
 \begin_layout Chapter
 Discussion & Further Work
 \end_layout
@@ -7764,7 +8039,15 @@ Discussion & Further Work
 \end_layout
 
 \begin_layout Standard
-- Relative uniqueness of model**
+- Relative uniqueness of model
+\end_layout
+
+\begin_layout Standard
+- Homomorphic encryption
+\end_layout
+
+\begin_layout Standard
+- Same origin policy**
 \end_layout
 
 \begin_layout Section
