@@ -149,6 +149,44 @@ Except for this bit.
 \end_inset
 
 
+\end_layout
+
+\begin_layout Chapter*
+Abstract
+\end_layout
+
+\begin_layout Standard
+Internet users are facing increasingly far-reaching and sophisticated threats
+ to their privacy, from a broad range of sources.
+ Such users are storing more and more of their data on other people's servers,
+ and anyone who gains access to these servers can obtain all the data stored
+ there.
+ I will detail these threats, and argue that there exists a need for a method
+ of protecting against them.
+ Moreover, I will argue that this method needs to be usable by the vast
+ majority of internet users if any real progress is to be made in terms
+ of protecting the privacy of the general public.
+\end_layout
+
+\begin_layout Standard
+I will then present a model by which organisations that supply services
+ over the internet can protect the privacy of their users, with minimal
+ user involvement necessary in this process.
+ In particular, this model will ensure that even if someone gains access
+ to the servers of these organisations, they cannot obtain access to the
+ data stored there.
+\end_layout
+
+\begin_layout Standard
+I will then present an additional model, under which users can verify that
+ their privacy is in fact being protected under the first model.
+\end_layout
+
+\begin_layout Standard
+\begin_inset Newpage newpage
+\end_inset
+
+
 \begin_inset CommandInset toc
 LatexCommand tableofcontents
 
@@ -480,7 +518,6 @@ This paper shall address all of these problems in detail.
  recovery, shifting application logic and processing to the client, and
  the impact that client-side encryption has on certain popular business
  models.
- **TODO: Make sure I've done this last bit**
 \end_layout
 
 \begin_layout Section
@@ -514,7 +551,78 @@ reference "chap:Literature-Review"
 \end_layout
 
 \begin_layout Standard
-**TODO: Rest of this**
+Chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Solution-Overview"
+
+\end_inset
+
+ will provide an overview of the solution, along with a discussion of why
+ the particular approach presented in this thesis was chosen.
+\end_layout
+
+\begin_layout Standard
+Chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Service-Model"
+
+\end_inset
+
+ will present a model of how to construct a web-service with the intent
+ to protect the privacy of the service's users.
+\end_layout
+
+\begin_layout Standard
+Chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Implementation-Details"
+
+\end_inset
+
+ will present some of the specific implementation details needed.
+ Specifically, those required by the plugin in Chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Plugin-Model"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Plugin-Model"
+
+\end_inset
+
+ will present details of a browser-plugin which allows any user who wishes
+ to do so to verify that their privacy is in fact protected by services
+ utilising the model presented in Chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Service-Model"
+
+\end_inset
+
+.
+\end_layout
+
+\begin_layout Standard
+Chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Discussion-&-Further"
+
+\end_inset
+
+ will discuss the strengths and weaknesses of the work presented in this
+ thesis, and suggest promising avenues of further research.
 \end_layout
 
 \begin_layout Chapter
@@ -535,14 +643,6 @@ Definition of Terms
 \begin_layout Standard
 We shall firstly define, in as unambiguous a manner as possible, the specific
  meaning of the terms used throughout this document:
-\end_layout
-
-\begin_layout Standard
-**TODO: Work out if I actually want to limit this to the WWW.**
-\end_layout
-
-\begin_layout Standard
-**TODO: Change some of these to what Roger suggested?**
 \end_layout
 
 \begin_layout Labeling
@@ -1152,13 +1252,17 @@ Cryptography & Storing Sensitive Data
 \end_layout
 
 \begin_layout Standard
-**TODO: Reference this section**
-\end_layout
-
-\begin_layout Standard
 Cryptography is a well established field of mathematics, dealing chiefly
  with methods of securing information, such that only those who are authorised
  to do so may discover the contents of said information.
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "HandbookAppliedCrypto"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -1287,10 +1391,6 @@ The most important result of this (at least for our purposes) is that one
 
 \begin_layout Subsection
 End to End Encryption
-\end_layout
-
-\begin_layout Standard
-**TODO: Ref this section**
 \end_layout
 
 \begin_layout Standard
@@ -1489,10 +1589,6 @@ In-Browser Cryptography
 \end_layout
 
 \begin_layout Standard
-**TODO: Ref**
-\end_layout
-
-\begin_layout Standard
 Of particular interest is the idea of supplying encryption and decryption
  functionality within a web-browser, or other similar software such as an
  HTML-enabled email client.
@@ -1510,10 +1606,17 @@ Firstly, there is the idea of supplying cryptographic functionality via
  the client itself.
  Additionally, such an approach has full access to the underlying operating
  system, and thus easy access to things such as high-quality sources of
- high entropy, and security supportive hardware.
- This is the approach that SSL has taken, and it has achieved great success
- in doing so - though a large part of that success is due to the fact that
- it is comes packaged with most web-browsers.
+ entropy, and security supportive hardware.
+ This is the approach that SSL 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "TLS"
+
+\end_inset
+
+ has taken, and it has achieved great success in doing so - though a large
+ part of that success is due to the fact that it is comes packaged with
+ most web-browsers.
  In order to have similar success, any such approach would likely 
 \emph on
 also
@@ -1533,7 +1636,14 @@ A second approach is the notion of a browser plugin.
  that if the user must specifically install it.
  One advantage to using a plugin over specialist software is that a plugin
  generally has much more direct access to the browser's resources, potentially
- including the JavaScript runtime and DOM of arbitrary pages.
+ including the JavaScript runtime and DOM of arbitrary pages 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "DebuggerAPI"
+
+\end_inset
+
+.
  This can greatly assist in providing secure cryptographic operations to
  the browser.
 \end_layout
@@ -1542,7 +1652,14 @@ A second approach is the notion of a browser plugin.
 A third approach is the idea of an on-demand download.
  Under this approach, code to perform cryptographic operations is loaded
  onto the client from an external source whenever there is - or may be -
- a need for it.
+ a need for it 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ThoughtsOnJSCrypto"
+
+\end_inset
+
+.
  This has the potential to very neatly sidestep the issues of uptake and
  usability.
  However, it suffers from the very serious security issue of having cryptographi
@@ -1836,16 +1953,6 @@ They claim that the latter two vulnerabilities are detectable in the client.
 \end_layout
 
 \begin_layout Subsection*
-CryptoCat
-\end_layout
-
-\begin_layout Standard
-**TODO: This.
- Maybe.
- If have time.**.
-\end_layout
-
-\begin_layout Subsection*
 Criticisms of JavaScript-based Encryption
 \end_layout
 
@@ -2102,7 +2209,20 @@ Summary of Current Literature
 \end_layout
 
 \begin_layout Standard
-**TODO**
+This chapter has summarised the relevant literature, and established the
+ key techniques of data tainting and cryptography, including the storage
+ and exchange of sensitive data.
+ It has also established a number of key problems with, and gaps in those
+ techniques, especially as they relate to their operation in a web-browser.
+\end_layout
+
+\begin_layout Standard
+It has also established the current state of attempts to provide privacy-preserv
+ing services to internet users, some of their deficiencies, and the need
+ to improve upon them.
+ On this basis, the following chapter will define an abstract solution while
+ will be expanded throughout the remainder of this thesis, in the specific
+ context of JavaScript enabled web-browsers.
 \end_layout
 
 \begin_layout Chapter
@@ -2117,19 +2237,37 @@ name "chap:Solution-Overview"
 \end_layout
 
 \begin_layout Standard
-**TODO: Some/all of this may get moved to other sections.
- I just needed somewhere to write this so I could put the broad picture
- down in words.**
-\end_layout
-
-\begin_layout Standard
-**TODO: Fact that sensitive data is service-defined**
-\end_layout
-
-\begin_layout Standard
 Here we present an overview of the model solution to the problem of how
  web services can preserve the privacy of their users.
- It is intended to inform the discussion in Chapters **TODO: Cross-reference**.
+ It is intended to inform the discussion in Chapters 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Service-Model"
+
+\end_inset
+
+, 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Implementation-Details"
+
+\end_inset
+
+, 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Plugin-Model"
+
+\end_inset
+
+, and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Discussion-&-Further"
+
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -2152,7 +2290,6 @@ appear
  the one which already exists for web-service users at the moment; nevertheless
  our solution treats this case as a security breach, and deals with it appropria
 tely.
- **TODO: Make sure I have.**
 \end_layout
 
 \begin_layout Standard
@@ -2447,7 +2584,6 @@ The client-side portion of the service has not been tampered with by a third
 All sensitive information which one user decides to make available to another
  user via the service is made available only to that user, and not to another
  user, to the server, or to a third party.
- **TODO: Make sure I've done this**.
 \end_layout
 
 \begin_layout Itemize
@@ -2468,9 +2604,15 @@ reference "chap:Plugin-Model"
 \end_layout
 
 \begin_layout Standard
-Potential adversaries of, and deviations from the model are handled in the
- security section **TODO: Security section**, as opposed to in the model
- itself.
+Potential adversaries of, and deviations from the model are dealt with in
+ Chapter 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "chap:Plugin-Model"
+
+\end_inset
+
+, as opposed to in the model itself.
 \end_layout
 
 \begin_layout Section
@@ -2508,14 +2650,12 @@ We consider the intermediaries between the client and the service (i.e.
  for passing data from one to the other.
  As both the connection and any sensitive data travelling on it is encrypted,
  there is very little they could actively do anyway.
- **TODO: This as part of security section**
 \end_layout
 
 \begin_layout Standard
 Similarly the server - and any supporting software running on it, such as
  web servers and database servers - are assumed to perform their intended
  functions correctly when interacting with the client and the service.
- **TODO: This as part of security section**
 \end_layout
 
 \begin_layout Section
@@ -2538,6 +2678,13 @@ n, but attempting to avoid that is a) likely impossible, and b) outside
 
 \begin_layout Section
 Encryption Scheme
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Encryption-Scheme"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -2844,7 +2991,6 @@ The unencrypted private key, the unencrypted master key, and the password
 not
 \emph default
  transmitted to the server.
- **TODO: In plugin, ensure these aren't being dicked with**
 \end_layout
 
 \end_deeper
@@ -3013,6 +3159,13 @@ name "fig:Authentication-and-Log-In"
 
 \begin_layout Section
 Storing Sensitive Information
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:Storing-Sensitive-Information"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
@@ -3391,20 +3544,19 @@ This is necessary so that the the service can delineate between sensitive
 \end_layout
 
 \begin_layout Chapter
-Implementation Overview
+Implementation Details
+\begin_inset CommandInset label
+LatexCommand label
+name "chap:Implementation-Details"
+
+\end_inset
+
+
 \end_layout
 
 \begin_layout Standard
-**TODO: This may be moved elsewhere.**
-\end_layout
-
-\begin_layout Standard
-**TODO: More of this**
-\end_layout
-
-\begin_layout Standard
-In this chapter, we will describe the necessary portions of an implementation
- of this model.
+In this chapter, we will describe portions of an implementation of this
+ model which are necessary for the plugin to function correctly.
  For sections involving JavaScript, jQuery's 
 \begin_inset CommandInset citation
 LatexCommand cite
@@ -3534,6 +3686,11 @@ div
 n.
 \end_layout
 
+\begin_layout Standard
+Non-textual information should be similarly designated, but in a format
+ appropriate to the type of information.
+\end_layout
+
 \begin_layout Section
 Decryption
 \end_layout
@@ -3550,7 +3707,7 @@ decrypt
 \begin_layout Standard
 The first method applies if an encrypted form of the data is present in
  the HTML page at load time, as described above.
- In that instance, we use the following function: **TODO: Test this.**
+ In that instance, we use the following function:
 \end_layout
 
 \begin_layout Standard
@@ -3581,75 +3738,97 @@ $(document).ready(function() {
 
 \begin_layout Plain Layout
 
-		//Grab the cyphertext
+		//Do not want to decrypt input.
 \end_layout
 
 \begin_layout Plain Layout
 
-		var cypherText = $(this).html();
+		//(See below)
 \end_layout
 
 \begin_layout Plain Layout
 
+		if($(this).not("input") {
 \end_layout
 
 \begin_layout Plain Layout
 
-		//Grab the key
+			//Grab the cyphertext
 \end_layout
 
 \begin_layout Plain Layout
 
-		var localKey = $(this).attr("key");
+			var cypherText = $(this).html();
 \end_layout
 
 \begin_layout Plain Layout
 
-		
+	
 \end_layout
 
 \begin_layout Plain Layout
 
-		//Decrypt the local key
+			//Grab the key
 \end_layout
 
 \begin_layout Plain Layout
 
-		//(masterKey is assumed to be in scope/retrievable)
+			var localKey = $(this).attr("key");
 \end_layout
 
 \begin_layout Plain Layout
 
-		localKey = decrypt(localKey, masterKey);
+			
 \end_layout
 
 \begin_layout Plain Layout
 
+			//Decrypt the local key
 \end_layout
 
 \begin_layout Plain Layout
 
-		//Decrypt to cleartext
+			//(masterKey is assumed to be in scope/retrievable)
 \end_layout
 
 \begin_layout Plain Layout
 
-		var clearText = decrypt(html, key);
+			localKey = decrypt(localKey, masterKey);
 \end_layout
 
 \begin_layout Plain Layout
 
-		
+	
 \end_layout
 
 \begin_layout Plain Layout
 
-		//Replace cyphertext with cleartext
+			//Decrypt to cleartext
 \end_layout
 
 \begin_layout Plain Layout
 
-		$(this).html(clearText);
+			var clearText = decrypt(html, key);
+\end_layout
+
+\begin_layout Plain Layout
+
+			
+\end_layout
+
+\begin_layout Plain Layout
+
+			//Replace cyphertext with cleartext
+\end_layout
+
+\begin_layout Plain Layout
+
+			$(this).html(clearText);
+\end_layout
+
+\begin_layout Plain Layout
+
+		}
 \end_layout
 
 \begin_layout Plain Layout
@@ -3671,7 +3850,7 @@ $(document).ready(function() {
 The second method applies if an encrypted form of the data is loaded in
  after the initial page load (e.g.
  via an AJAX call), and needs to be added to the DOM.
- In that instance, we use the following function: **TODO: Test this.**
+ In that instance, we use the following function:
 \end_layout
 
 \begin_layout Standard
@@ -3792,8 +3971,236 @@ function (cyphertext, key, DOMReference) {
 
 \end_layout
 
+\begin_layout Section
+Creating & Encrypting Sensitive Data
+\end_layout
+
 \begin_layout Standard
-**TODO: Traverse up tree to mark parents**
+Input fields who's contents are intended to become sensitive information
+ must be designated as such.
+ For example:
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "tabsize=4"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+<form id="aSensitiveForm" action="A_URI">
+\end_layout
+
+\begin_layout Plain Layout
+
+	<input type="text" name="foo" class="sensitive" />
+\end_layout
+
+\begin_layout Plain Layout
+
+	<input type="text" name="bar" class="sensitive" />
+\end_layout
+
+\begin_layout Plain Layout
+
+	<input type="submit" value="Submit" />
+\end_layout
+
+\begin_layout Plain Layout
+
+</form>
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+The implementation must be careful that the automatic decryption does not
+ accidentally try to decrypt a form due to the 
+\begin_inset Quotes eld
+\end_inset
+
+sensitive
+\begin_inset Quotes erd
+\end_inset
+
+ class.
+\end_layout
+
+\begin_layout Standard
+Upon submission of these input fields by the user, their contents should
+ 
+\emph on
+NOT
+\emph default
+ be sent to the server.
+ Instead it should be encrypted according to the scheme described in Sections
+ 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Encryption-Scheme"
+
+\end_inset
+
+ and 
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sec:Storing-Sensitive-Information"
+
+\end_inset
+
+, before being sent from within the JavaScript runtime.
+ Example code for doing this is below.
+ In practice, it would be more appropriate to serialise the form properly
+ instead of writing back to it.
+\end_layout
+
+\begin_layout Standard
+\begin_inset listings
+lstparams "tabsize=4"
+inline false
+status open
+
+\begin_layout Plain Layout
+
+$("#aSensitiveForm").submit(function(e) {
+\end_layout
+
+\begin_layout Plain Layout
+
+	$(this).children("input.sensitive").each(function() {
+\end_layout
+
+\begin_layout Plain Layout
+
+		//Create local key for input field.
+\end_layout
+
+\begin_layout Plain Layout
+
+		var local = createLocalKey();
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+		//Encrypt field
+\end_layout
+
+\begin_layout Plain Layout
+
+		var cypher = encrypt($(this).val(), local);
+\end_layout
+
+\begin_layout Plain Layout
+
+		
+\end_layout
+
+\begin_layout Plain Layout
+
+		//Encrypt local key
+\end_layout
+
+\begin_layout Plain Layout
+
+		var eLocal = encrypt(local, masterKey);
+\end_layout
+
+\begin_layout Plain Layout
+
+\end_layout
+
+\begin_layout Plain Layout
+
+		//Write back encrypted data
+\end_layout
+
+\begin_layout Plain Layout
+
+		//(For example purposes only.
+ Should not
+\end_layout
+
+\begin_layout Plain Layout
+
+		//be done in practice).
+\end_layout
+
+\begin_layout Plain Layout
+
+		$(this).val("key:"+eLocal+",val:"+cypher);
+\end_layout
+
+\begin_layout Plain Layout
+
+	});
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\end_layout
+
+\begin_layout Plain Layout
+
+	//Submit via Ajax.
+\end_layout
+
+\begin_layout Plain Layout
+
+	$.post(
+\end_layout
+
+\begin_layout Plain Layout
+
+		$(this).attr("action"),
+\end_layout
+
+\begin_layout Plain Layout
+
+		$(this).serialize()
+\end_layout
+
+\begin_layout Plain Layout
+
+	);
+\end_layout
+
+\begin_layout Plain Layout
+
+	
+\end_layout
+
+\begin_layout Plain Layout
+
+	//Stops the browser from submitting the form
+\end_layout
+
+\begin_layout Plain Layout
+
+	e.preventDefault();
+\end_layout
+
+\begin_layout Plain Layout
+
+});
+\end_layout
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+Obviously, input elements which are not marked as needing encryption should
+ not be encrypted.
 \end_layout
 
 \begin_layout Chapter
@@ -3828,18 +4235,29 @@ leak
 \begin_inset Quotes erd
 \end_inset
 
- private information.
- **TODO: More of this**
+ sensitive information.
+ We will also describe how to perform the relevant checks in order to ensure
+ that the JavaScript code is actually analysable; that the integrity of
+ the cryptographic code is maintained; that the application code has not
+ been tampered with; that an exchange of data between users is as secure
+ as it reasonably can be; as well as a number of other checks and constraints
+ which are relevant in practice.
 \end_layout
 
 \begin_layout Standard
-**TODO: What happens when something below fails.
- i.e.
- alert user**
+If any of the checks described in this chapter fails, or we encounter a
+ case which is disallowed under this model, two things must happen.
+ Firstly, the plugin must suspend the execution of JavaScript code on the
+ page that has failed the checks.
+ Secondly, the user must be informed of the failure, along with any relevant
+ information about the failure.
+ At least two options must then be available to the user: Allow the continueed
+ execution of the code, or permanently suspend execution.
+ Behaviour beyond that is left as an implementation decision.
 \end_layout
 
 \begin_layout Section
-Static Data Tainting in JavaScript
+Static Data Tainting for JavaScript
 \end_layout
 
 \begin_layout Standard
@@ -3862,8 +4280,8 @@ key "DragonBook"
  whereby we mark a particular set of initial functions and operations as
  being tainted, and then any operations which depend on something tainted
  also become tainted.
- In our case, we may mark functions which have the potential to retrieve
- sensitive information as being tainted.
+ In our case, we mark functions which have the potential to return sensitive
+ information as being tainted.
  These taint markings can then be used to detect whether sensitive information
  is being used inappropriately; for example, we could check if the arguments
  to an AJAX call are tainted, indicating that sensitive data could be transmitte
@@ -3938,9 +4356,9 @@ reference "sec:Initially-Tainted-Functions"
 \end_layout
 
 \begin_layout Standard
-An important point to note is that our propagation model present here attempts
- to minimise or eliminate false-negatives, which is to say that everything
- which 
+An important point to note is that the propagation model presented here
+ attempts to minimise or eliminate false-negatives, which is to say that
+ everything which 
 \emph on
 could
 \emph default
@@ -4009,10 +4427,6 @@ reference "sec:Initially-Tainted-Functions"
 
 \begin_layout Subsection
 Expressions
-\end_layout
-
-\begin_layout Standard
-**TODO: Be more precise.**
 \end_layout
 
 \begin_layout Standard
@@ -4312,13 +4726,21 @@ reference "sub:Tainted-Scopes"
 ), until it is assigned another tainted value.
 \end_layout
 
+\begin_layout Standard
+Everything above also applies to the other assignment operators: 
+\family typewriter
++=, -=, *=, /= %=, x <<= y, x >>= y, x >>>= y, x &= y, x ^= y, x |= y
+\family default
+.
+\end_layout
+
 \begin_layout Subsection
 References
 \end_layout
 
 \begin_layout Standard
 Suppose we have a identifier which is really just a reference to another
- variable.
+ identifier.
  If one of these entities becomes tainted, the other must also become tainted.
  For example:
 \end_layout
@@ -4883,8 +5305,8 @@ not
  This is due to the possibility that there exists an entity which is not
  tainted prior to the loop being analysed, but which becomes tainted during
  the loop analysis.
- Such an entity could conceivably taint entities syntactically before it
- during subsequent passes of the loop.
+ Such an entity could conceivably taint entities which syntactically occur
+ before it, during subsequent passes of the loop.
  For example:
 \end_layout
 
@@ -5250,8 +5672,14 @@ status collapsed
 \begin_layout Plain Layout
 There does exist a so-called conditional catch block, but it is a non-standard
  feature, and not on a standards track.
- **TODO: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Stateme
-nts/try...catch**
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "TryCatch"
+
+\end_inset
+
+
 \end_layout
 
 \end_inset
@@ -5391,7 +5819,13 @@ Analysis of Programs With Exception-Handling Constructs
 \begin_inset Quotes erd
 \end_inset
 
- **TODO: Ref http://pleuma.cc.gatech.edu/aristotle/pdffiles/icsm98-exceptions.pdf**
+ 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "ExceptionHandling"
+
+\end_inset
+
  which attempts to deal with the analysis of exception handling constructs
  in Java.
  Java's exception handling is similar enough to JavaScript that their work
@@ -5528,8 +5962,8 @@ Events
 Events are problematic because they are capable of running code outside
  the normal execution flow.
  They are also a source of potentially tainted data.
- Their use cannot be disallowed, as they area vital part of creating interactive
- applications.
+ Their use cannot be disallowed, as they are a vital part of creating interactiv
+e applications.
 \end_layout
 
 \begin_layout Standard
@@ -5560,8 +5994,8 @@ entirety
 \begin_layout Standard
 If an event is attached to an untainted object, we must still consider its
  associated callback function.
- If the callback function does not interact with identifiers out of scope
- of the function, then we can analyse it as normal.
+ If the callback function does not interact with identifiers outside the
+ scope of the function, then we can analyse it as normal.
  If, on the other hand, it does interact with out of scope identifiers,
  we must consider those identifiers to be tainted within the event handler
  if those identifiers become tainted at any point in the control flow analysis,
@@ -5733,8 +6167,8 @@ foo
 \end_layout
 
 \begin_layout Standard
-It is worth noting that even if a parameter is an object or array, only
- altering its members has an effect outside the function.
+It is worth noting that even if a parameter is treated an object or array,
+ only altering its members has an effect outside the function.
  Reassigning the parameter itself will not.
  Thus:
 \end_layout
@@ -5787,7 +6221,6 @@ a[b]
 \family default
  notation - and if it is not treated as such, then it does not matter if
  it is an object or array.
- **TODO: Make sure this is actually true.**
 \end_layout
 
 \begin_layout Standard
@@ -5879,7 +6312,7 @@ The solution is to create a relation between the parameters of a particular
 \end_inset
 
 .
- Because of the idempotent nature of the taint property, and they way in
+ Because of the idempotent nature of the taint property, and the way in
  which it spreads, it is sufficient to test each of the function parameters
  in turn - that is, mark one parameter as tainted and observe its effects
  upon the other parameters, then un-mark it and repeat for the next parameter.
@@ -5897,8 +6330,8 @@ Out-of-Scope Variables
 \end_layout
 
 \begin_layout Standard
-JavaScript will happily use identifiers from out of a function's scope,
- if no such identifier is found within its scope.
+JavaScript functions will happily use identifiers from outside their own
+ scope, if no such identifier is found within their scope.
  However, because such variables may be changed at many different points
  in the program, it can be difficult to analyse their taint status.
 \end_layout
@@ -5910,13 +6343,15 @@ The simplest way to deal with such variables is to treat them as implicit
 \emph on
 not
 \emph default
- need to reference parameters in order to have an effect outside the function.
+ need to be reference parameters in order to have an effect outside the
+ function.
 \end_layout
 
 \begin_layout Standard
 Once analysed in this way, whenever we encounter a call to a function which
- makes use of identifiers outside its scope, we can use the current taint
- status of such identifiers when analysing the effect of the function call.
+ makes use of identifiers outside its scope, we can use the taint status
+ of such identifiers at the point we encounter the function call when analysing
+ its effects.
 \end_layout
 
 \begin_layout Subsubsection*
@@ -5930,7 +6365,7 @@ JavaScript allows functions to be passed as arguments to function calls.
  than just the function itself.
  In order to analyse such functions, we defer their analysis until a call
  to said function is encountered, in which case we can substitute in the
- actual function used for the placeholder.
+ actual function used for the parameter.
  This does mean that we must re-analyse such functions at each call point,
  though some caching may be possible.
 \end_layout
@@ -5968,8 +6403,8 @@ g more difficult.
 
 \begin_layout Standard
 In the case of mutually recursive functions (or chains thereof), we iterate
- through the recursion chain until the taint statuses of all functions in
- the chain have stabilised.
+ through the recursion chain until the taint status of all functions in
+ the chain has stabilised.
 \end_layout
 
 \begin_layout Subsection
@@ -6196,9 +6631,9 @@ In addition to these functions, all accesses of the section of the
 localStorage
 \family default
  object used to store the private key and master key are tainted.
- This is expressly so that the elementary cryptography functions cannot
+ This is expressly so that the elementary cryptographic functions cannot
  be reimplemented in application code in order to create untainted versions
- of them, and also so they cannot be communicated to the server.
+ of them, and also so the keys cannot be communicated to the server.
  Access to other sections of the 
 \family typewriter
 localStorage
@@ -7749,7 +8184,7 @@ A simple yet powerful approach is to wrap each of the tainted functions
  in function which - when run - checks to see if the attempted operation
  is actually trying to retrieve sensitive data.
  In the case where sensitive data would not be retrieved, the function would
- behave in the same was as its unchecked function.
+ behave in the same was as its unchecked counterpart.
  In the case where sensitive data would be retrieved, the wrapper function
  would be required to not return the sensitive data.
  However, there are a number of different ways we could handle the specific
@@ -7806,7 +8241,6 @@ reference "alg:A-privacy-safe-version"
 getElementByID
 \family default
  function.
- **TODO: Consider hierarchy**
 \end_layout
 
 \begin_layout Standard
@@ -7900,8 +8334,8 @@ name "alg:A-privacy-safe-version"
 The result of this is the creation of a set of functions with similar functional
 ity to our set of tainted functions, but providing the guarantee that no
  sensitive data will be returned by them.
- This allows our taint analysis model to work under the guarantee that such
- functions cannot return tainted values.
+ This allows our taint analysis model to work under the guarantee that the
+ results of such functions are, and will remain untainted.
  This in turn provides developers with a way to access the DOM, without
  either the developer or the user being concerned about violation of privacy.
 \end_layout
@@ -7940,14 +8374,15 @@ We therefore create another set of wrapper functions, this time to guard
  writes to the DOM.
  Specifically, such functions designate any data written via them as being
  sensitive.
- **TODO: Investigate possibility of tainting the DOM node.** This enables
- our read functions to detect privacy, and act accordingly.
+ This enables our read functions to detect sensitive data written in this
+ manner, and act accordingly.
 \end_layout
 
 \begin_layout Standard
 On the data taint detection side, we outright disallow the use of unwrapped
  write functions on tainted data.
- The unwrapped functions may still be used on untainted data.
+ The unwrapped functions can and indeed should still be used on untainted
+ data.
 \end_layout
 
 \begin_layout Standard
@@ -7957,8 +8392,18 @@ This should not present a problem for developers, as it is always possible
  by design - should not have an effect on the way the DOM itself behaves.
 \end_layout
 
+\begin_layout Section
+Input Fields
+\end_layout
+
 \begin_layout Standard
-**TODO: Specify which functions this affects**
+The section on dealing with writes should ensure that any sensitive data
+ written to an input field results in the field being marked as sensitive.
+ However, we must additionally ensure that the contents all input fields
+ which are marked as sensitive are encrypted before transmission.
+ If this is not the case, sensitive data could be written to a form, and
+ the form then submitted, resulting in unencrypted sensitive data being
+ sent to the server.
 \end_layout
 
 \begin_layout Section
@@ -8098,15 +8543,16 @@ name "alg:jQuery-code-external"
 Any external resources which are loaded during page load (i.e.
  before the JavaScript runtime starts) are safe, as their fetching cannot
  be used to communicate any sensitive information.
- We therefore only need to deal with 
+ We therefore only need to deal with the case of external resources being
+ fetched after page load.
 \end_layout
 
 \begin_layout Standard
 The most obvious way to deal with this issue is to interpose on individual
  HTTP GET requests, and detect whether they are loading something which
  is not already loaded.
- This would have the unfortunately consequence of having to load in all
- external resources at page-load, regardless of actual need for them.
+ This would have the unfortunate consequence of needing to load in all external
+ resources at page-load, regardless of actual need for them.
 \end_layout
 
 \begin_layout Standard
@@ -8132,7 +8578,8 @@ Ensuring Analysability
 In order to analyse the JavaScript code for a particular webpage, we first
  need to ensure that the code is reasonably static - that is, the code that
  is analysed is the code that will actually be run on the user's machine.
- JavaScript possesses a number of mechanisms capable of subverting this.
+ JavaScript possesses a number of mechanisms capable of subverting this
+ assumption, which we must disallow.
 \end_layout
 
 \begin_layout Standard
@@ -8295,10 +8742,14 @@ Lastly, it is possible to dynamically load in external scripts by appending
 \family typewriter
 src
 \family default
- attribute pointing to some external URI, or by altering an existing one.
+ attribute pointing to some external URI, or by altering an existing tag.
  Again, there are few circumstances where this is actually necessary.
  Generally it is merely convenient.
  We therefore disallow loading in scripts not present on the initial page.
+\end_layout
+
+\begin_layout Standard
+In short, only static external JavaScript files are allowed under the model.
 \end_layout
 
 \begin_layout Section
@@ -8348,7 +8799,8 @@ It should be noted that the
 \family typewriter
 navigator.plugins
 \family default
- object does not include things such as Firefox's AddOns.
+ object does not report things such as Firefox's AddOns (which are a distinct
+ concept from plugins).
  However, it is also not a part of any standard (though it is widely supported),
  so its behaviour with respect to what it reports may vary across browsers.
 \end_layout
@@ -8363,7 +8815,7 @@ Flash has the capability to access the JavaScript runtime, and through it
  Unlike JavaScript, the behaviour of Flash objects on a page is not easily
  analysed, because their source code is not readily readable.
  For this reason, Flash is incompatible with the model, and therefore its
- use disallowed under the model 
+ use disallowed 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "FlashAccessJS"
@@ -8414,11 +8866,6 @@ name "sec:Data-Exchange"
 \end_layout
 
 \begin_layout Standard
-**TODO: Ref.
- Specifically, Cert Auth.**
-\end_layout
-
-\begin_layout Standard
 As noted in Section 
 \begin_inset CommandInset ref
 LatexCommand ref
@@ -8437,7 +8884,14 @@ reference "sec:Making-Sensitive-Information"
 
 \begin_layout Standard
 The general approach to solving this problem is to perform the key exchange
- via a side-channel not controlled by the service.
+ via a side-channel not controlled by the service 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "OpenPGP,CertAuths"
+
+\end_inset
+
+.
  Unfortunately, to ensure usability for those not capable of doing this,
  the service does still need to perform the key exchange.
  However, we can 
@@ -8454,11 +8908,11 @@ verify
 
 \begin_layout Standard
 The simplest way is for the service-provided JavaScript code to automatically
- report the username‒public-key binding to a third party service - which
+ report the username-to-public-key binding to a third party service - which
  we shall term the identify verifier - at signup.
  The JavaScript code can then use both the main service, and the identity
  verifier in order to verify the authenticity of the keys, and the plugin
- can check that this is actually occuring.
+ can check that this is actually occurring.
  This approach is still somewhat vulnerable, in that an adversary could
  potentially take control of both services.
  However, two services are safer than one, in that regard.
@@ -8500,50 +8954,6 @@ key "OpenPGP"
  them - for example, in the case of a social network.
  There is also no reason that centralised and decentralised methods cannot
  work along side one another.
-\end_layout
-
-\begin_layout Section
-Ensuring Integrity of Cryptographic Code
-\end_layout
-
-\begin_layout Standard
-We assume that there is available a reference implementation of the cryptographi
-c code, and all privacy preserving functions defined above.
- Said reference implementation must be available to both the creators of
- the service, and the creators of the plugin.
- Said reference implementation must be used verbatim by the service.
-\end_layout
-
-\begin_layout Standard
-With these assumptions, the plugin may take a hash of the reference implementati
-on, and check for its presence at page load.
- There may, of course, be multiple different reference implementations for
- different purposes.
-\end_layout
-
-\begin_layout Standard
-Additionally, we must ensure that the rest of the application code does
- not interfere with the cryptographic code.
- This is reasonable straightforward - we check that there are no assignments
- to any of the identifiers in the reference implementation.
-\end_layout
-
-\begin_layout Subsection
-Key Integrity
-\end_layout
-
-\begin_layout Standard
-While reads from the master key and private key are tainted (see §
-\begin_inset CommandInset ref
-LatexCommand ref
-reference "sub:Specific-Functions"
-
-\end_inset
-
-), writes to the master and private key by anything other than the cryptographic
- code are expressly disallowed.
- This is to ensure application code does not substitute these keys with
- ones it controls.
 \end_layout
 
 \begin_layout Section
@@ -8601,36 +9011,148 @@ key "Mylar"
 .
 \end_layout
 
+\begin_layout Standard
+The first and second points ensure that the HTML sent is what the service
+ intended to send.
+ The third that all external resources are as intended.
+\end_layout
+
+\begin_layout Section
+Ensuring Integrity of Cryptographic Code
+\end_layout
+
+\begin_layout Standard
+We assume that there exists a reference implementation of the cryptographic
+ code in JavaScript, and all privacy preserving functions defined above.
+ Said reference implementation must be available to both the creators of
+ the service, and the creators of the plugin.
+ Said reference implementation must be used verbatim by the service to provide
+ its cryptographic and privacy preserving functions.
+\end_layout
+
+\begin_layout Standard
+With these assumptions, the plugin may take a hash of the reference implementati
+on file, and check for its presence at page load.
+ There may, of course, be multiple different reference implementations for
+ different purposes.
+\end_layout
+
+\begin_layout Standard
+Additionally, we must ensure that the rest of the application code does
+ not interfere with the cryptographic code.
+ This is reasonable straightforward - we check that there are no assignments
+ to any of the identifiers in the reference implementation.
+\end_layout
+
+\begin_layout Subsection
+Key Integrity
+\end_layout
+
+\begin_layout Standard
+While reads from the master key and private key are tainted (see §
+\begin_inset CommandInset ref
+LatexCommand ref
+reference "sub:Specific-Functions"
+
+\end_inset
+
+), writes to the master and private key by anything other than the cryptographic
+ code are expressly disallowed.
+ This is to ensure application code does not substitute these keys with
+ ones it controls.
+\end_layout
+
+\begin_layout Section
+Detecting When to Use the Plugin
+\end_layout
+
+\begin_layout Standard
+It is necessary to distinguish sites which intend to provide their users
+ with privacy under the model described in this thesis, from those that
+ do not.
+\end_layout
+
+\begin_layout Standard
+The simplest way to do this is for the plugin to detect the presence of
+ the reference implementation described above, and maintain a list of sites
+ which it has previously detected its use on.
+ This list can be used to detect if a site suddenly ceases to use this model,
+ which would suggest a potential security or privacy violation.
+ Such a list could either be maintained locally, or on a central server.
+\end_layout
+
 \begin_layout Section
 Summary
 \end_layout
 
+\begin_layout Standard
+In summary, the above attempts to ensure the following things:
+\end_layout
+
+\begin_layout Itemize
+That we are aware of all cases of sensitive, decrypted user data entering
+ the JavaScript runtime.
+\end_layout
+
+\begin_layout Itemize
+That we are aware of all cases of sensitive, decrypted user data being written
+ out to the DOM, and that these are marked appropriately.
+\end_layout
+
+\begin_layout Itemize
+That sensitive, decrypted user data - and information derived from it -
+ can be tracked throughout the JavaScript runtime, and that we can detect
+ such data transmitted beyond the browser.
+\end_layout
+
+\begin_layout Itemize
+That all sensitive user data is encrypted prior to being transmitted beyond
+ the browser.
+\end_layout
+
+\begin_layout Itemize
+That sensitive user data made available to other users is made available
+ only to those users.
+\end_layout
+
+\begin_layout Itemize
+That the JavaScript code sent to the browser is analysable.
+\end_layout
+
+\begin_layout Itemize
+That the JavaScript code sent to the browser is what the service intended
+ to send, and has not been tampered with.
+\end_layout
+
+\begin_layout Itemize
+That the integrity of the cryptographic code, and the cryptographic keys
+ is maintained.
+\end_layout
+
+\begin_layout Itemize
+That neither the HTML code nor the JavaScript code sent to the browser attempt
+ to subvert any of our security mechanisms.
+\end_layout
+
+\begin_layout Itemize
+That those people who use plugin described here are indistingishable to
+ an outside observer from those who do not.
+\end_layout
+
+\begin_layout Itemize
+And that, in ensuring the above things, we do not make programming against
+ this model unduly burdensome.
+\end_layout
+
 \begin_layout Chapter
 Discussion & Further Work
-\end_layout
+\begin_inset CommandInset label
+LatexCommand label
+name "chap:Discussion-&-Further"
 
-\begin_layout Standard
-**TODO:
-\end_layout
+\end_inset
 
-\begin_layout Standard
-- Moving processing to client
-\end_layout
 
-\begin_layout Standard
-- Relative uniqueness of model
-\end_layout
-
-\begin_layout Standard
-- Homomorphic encryption
-\end_layout
-
-\begin_layout Standard
-- Same origin policy
-\end_layout
-
-\begin_layout Standard
-- XSS attacks from other users**
 \end_layout
 
 \begin_layout Section
@@ -8669,7 +9191,7 @@ That is to say, nothing in this thesis stops them from performing surveillance
 The model is also very generic in nature.
  I have focused quite specifically on the HTML+JS+Browser stack, as that
  is - by a wide margin - the most used method for delivering web services,
- particularly to those uses who are not actively seeking to protect their
+ particularly to those users who are not actively seeking to protect their
  privacy.
  However, the only thing really restricting the model to that set of technologie
 s is the ability to access a web-page's JavaScript source-code.
@@ -8700,7 +9222,7 @@ key "ProtonMail"
 
 \end_inset
 
-, which have chosen to operate from New Zealand, and Switzerland, respectively.
+, which have chosen to operate from New Zealand, and Switzerland respectively.
  Whether a technical or legal solution is preferable is really a matter
  of opinion.
 \end_layout
@@ -8722,7 +9244,7 @@ trust
  the code coming from the server, and must therefore verify that it isn't
  doing something it isn't supposed to.
  However, under the service model, most of the operations performed on the
- server-end is store/fetch operations, as it is unable to do any complex
+ server-end are store/fetch operations, as it is unable to do any complex
  computations over the encrypted data.
  This means that all the relevant application logic is present in the client
  side code, with the result that a user - if they were so inclined - could
@@ -8827,9 +9349,16 @@ key "DataTaintingJS"
 
 \end_inset
 
-, and there are a number of academic papers on the subject **TODO: Ref**.
- However, all implementations and academic papers I have found on the issue
- utilise dynamic tainting.
+, and there are a number of academic papers on the subject 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "DataTaintingJS,DataTainting,BlendedTaintAnalysisJS,LaBaSec"
+
+\end_inset
+
+.
+ However, all but one of the implementations and academic papers I have
+ found on the issue utilise dynamic tainting.
  In hindsight, I suspect there is a good reason for that: while it certainly
  requires a little technically wizardry to set up - namely hooking into
  the JavaScript runtime - it has the benefit of it being 
@@ -8868,6 +9397,8 @@ Try ..
 With
 \family default
  statements, although possibly not web workers.
+ Were I to attempt this project from scratch, I would likely use dynamic
+ tainting over static, or possibly a hybrid approach.
 \end_layout
 
 \begin_layout Subsection
@@ -8929,21 +9460,60 @@ reference "sec:Taint-Propagation-Model"
 \begin_layout Standard
 As for its strengths, I believe this is the first instance of the use of
  static taint analysis to detect privacy leakage in JavaScript.
- There exists some work on the individual components 
+ There exists some work on the individual components of that 
 \begin_inset CommandInset citation
 LatexCommand cite
 key "LaBaSec,DataTaintingJS,jovanovic2006pixy,sandhutaintsniffer,DynamicTaintAnalysisPrivacy,DataTainting,BlendedTaintAnalysisJS"
 
 \end_inset
 
-, but I am unaware of any other instances of work on the topic as a whole.
+, but I am unaware of any instances of work on the topic as a whole.
  I also believe that while what I have described is certainly not perfect,
  the core concept of using taint analysis to detect privacy vulnerabilities
- has the potential to allow a 
+ is sound, and has the potential to allow a 
 \emph on
 lot
 \emph default
  of web-service creators to guarantee their users' privacy.
+\end_layout
+
+\begin_layout Standard
+Additionally, the specifics of the taint analysis model presented here are
+ quite advanced and detailed, compared to much of the other work in the
+ field.
+ A notable point is the fact that much of the other work lacks the concept
+ of a tainted scope, so for example if a tainted entity was used as the
+ condition for an if statement, it would not taint the body of the statement
+ - something which is vital for our privacy model to function correctly.
+ I am also unaware of any other work regarding taint analysis which takes
+ into consideration the interaction between JavaScript and the DOM, something
+ which I have consistently tried to account for throughout (and which greatly
+ complicates the model).
+\end_layout
+
+\begin_layout Standard
+A benefit of the way the model is set up - especially with regards to the
+ inclusion of untainted wrapper functions around tainted data sources -
+ is that it is 
+\emph on
+much
+\emph default
+ easier to program around than it might seem on the surface.
+ In particular, if a developer takes the time to isolate those sections
+ of an application which 
+\emph on
+do
+\emph default
+ deal with sensitive data from those which don't, they can otherwise create
+ the application 
+\begin_inset Quotes eld
+\end_inset
+
+as normal
+\begin_inset Quotes erd
+\end_inset
+
+.
 \end_layout
 
 \begin_layout Standard
@@ -9008,6 +9578,35 @@ more
  vulnerable.
 \end_layout
 
+\begin_layout Subsection
+Malicious External Resources and the Same Origin Policy
+\end_layout
+
+\begin_layout Standard
+There exists the possibility that an external resource loaded into the HTML
+ page could contain malicious JavaScript code, and that it could be loaded
+ in such a way that this is not detected by the plugin.
+ If it is loaded as a top-level page, then it could execute with full privileges
+, and potentially make off with user data or encryption keys.
+ 
+\end_layout
+
+\begin_layout Standard
+Mylar presents a possible solution to this.
+ Namely, the use of two separate domains to host the site's content.
+ One hosts the top-level HTML page, and the other hosts all other resources.
+ This would result in the browser's same-origin policy being invoked, meaning
+ malicious resources would not be able to run with the privileges of the
+ root page 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Mylar"
+
+\end_inset
+
+.
+\end_layout
+
 \begin_layout Section
 Implications for Practice
 \end_layout
@@ -9052,6 +9651,7 @@ usable by everyone
 \end_inset
 
  goal of this thesis.
+ Any possible solutions to this problem are therefore worth investigating.
 \end_layout
 
 \begin_layout Subsection
@@ -9067,8 +9667,8 @@ Given that a substantial chunk of the business models of internet companies
 
 \begin_layout Standard
 The unfortunate truth is that targeted advertising as it is practised by
- the likes of Google and Facebook is simply incompatible the method of ensuring
- privacy presented in this thesis.
+ the likes of Google and Facebook is simply incompatible with the method
+ of ensuring privacy presented in this thesis.
  Those two companies - and many other like them - virtually strip-mine user
  data to try and discover all possible connections to anything that someone
  might want to sell.
@@ -9139,7 +9739,7 @@ e to which the model applies.
 It expressly does not apply to any service which requires all the information
  it collects in order to operate - i.e.
  a service in which all data is service-critical.
- **TODO: More of this**
+ Search engines are a notable instance of this.
 \end_layout
 
 \begin_layout Standard
@@ -9155,6 +9755,14 @@ Email is an interesting case - in principle, the model can be applied to
 \end_layout
 
 \begin_layout Standard
+In the event that the sending server does not possess the capability, the
+ receiving server should encrypt the data upon arrival using the appropriate
+ user's public key.
+ This method is sufficient to protect against compromise of the data store,
+ though not against compromise of the service, or against legal compromise.
+\end_layout
+
+\begin_layout Standard
 The same principle applies to any 
 \begin_inset Quotes eld
 \end_inset
@@ -9164,7 +9772,8 @@ meta-service
 \end_inset
 
  which operates across the boundaries of individual services.
- 
+ Such services can in principle interoperate, but they require a way to
+ perform key exchange with each other.
 \end_layout
 
 \begin_layout Subsection
@@ -9172,19 +9781,114 @@ Cross-Site Scripting Attacks
 \end_layout
 
 \begin_layout Standard
-Because the service is not capable examining encrypted information, there
+Because the service is not capable of examining encrypted information, there
  exists the possibility that other users can launch cross-site scripting
  attacks by embedding malicious code into information they send to other
  users via the service.
- 
+\end_layout
+
+\begin_layout Standard
+This can be dealt with, but doing so requires that information from other
+ users be parsed and checked for such vulnerabilities before it is added
+ to the DOM.
+ These checks must be performed on the receiving side.
+ They cannot reliably be performed on the sending side, because the sender
+ could disable them.
 \end_layout
 
 \begin_layout Section
 Implications for Research
 \end_layout
 
+\begin_layout Subsection
+Moving Computation to the Client
+\end_layout
+
+\begin_layout Standard
+Because the service is no longer capable of performing computations over
+ much of the user data, it is necessary to move at least some of these computati
+ons to the client.
+ This may seem relatively simple, but it raises interesting points about
+ how one should go about performing tasks such as indexing without the help
+ of a MapReduce implementation, or search without the the assistance of
+ supporting database software.
+ JavaScript is hardly known for its speed, so performance could very easily
+ become an issue with computationally heavy operations.
+\end_layout
+
+\begin_layout Standard
+Additionally, techniques may need to be developed which allow for incremental
+ updates to the data-structures backing such operations, rather than doing
+ a full re-computation each time there is an alteration.
+\end_layout
+
+\begin_layout Subsection
+Homomorphic Encryption
+\end_layout
+
+\begin_layout Standard
+An alternative to moving computation to the client is to utilise the concept
+ of homomorphic encryption 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "HomomorphicEncrypt"
+
+\end_inset
+
+ to perform computations over the encrypted data, while it is still encrypted.
+ This is a concept used by Mylar 
+\begin_inset CommandInset citation
+LatexCommand cite
+key "Mylar"
+
+\end_inset
+
+, in order to perform an encrypted search, which is a keyword search over
+ multiple encrypted documents on the server.
+\end_layout
+
+\begin_layout Standard
+To my knowledge
+\begin_inset Foot
+status collapsed
+
+\begin_layout Plain Layout
+And I am 
+\emph on
+really
+\emph default
+ not an expert on the matter.
+\end_layout
+
+\end_inset
+
+, the general issues with homomorphic encryption are that it is many orders
+ of magnitude slower than the equivalent computation over unencrypted data,
+ and that it is difficult to use it for arbitrary computations.
+ If the concept is to achieve widespread uptake - and thus assist in ensuring
+ the privacy of the broader internet community - it will need to overcome
+ such barriers to its use.
+\end_layout
+
 \begin_layout Chapter
 Conclusions
+\end_layout
+
+\begin_layout Standard
+In this paper, I have presented a model under which genuine privacy can
+ be delivered to the general population of internet users, in a way which
+ is very close to being as usable as the services that they are currently
+ used to using.
+ This model protects against a very broad range of threats to user privacy,
+ while simultaneously protecting the services operating it against the consequen
+ces of large-scale security breaches and data theft.
+\end_layout
+
+\begin_layout Standard
+Furthermore, the privacy offered under the model is automatically verifiable,
+ and a method for performing this verification was presented.
+ While the details of this method still require work, they provide a means
+ for users to have genuine peace of mind with regards to their privacy online.
 \end_layout
 
 \begin_layout Chapter
@@ -9204,8 +9908,11 @@ Also to my partner, Claire, who kept me from going insane while doing this,
 also
 \emph default
  trying to write a thesis.
- Also, for ensuring we both have reasonable diets - I would have been a
- very unhealthy man by the end of this without her.
+\end_layout
+
+\begin_layout Standard
+And to Afnan Hannan and Jae Lee, with whom I worked on a rather interesting
+ project, which sewed the seeds for this one.
 \end_layout
 
 \begin_layout Standard
